@@ -31,8 +31,8 @@ export default function ContactoPage() {
       </form>
       <p className="text-xs text-crema/50">
         Nota técnica: este formulario aún no está conectado a un backend.
-        Fase 2 de automatización: registrar cada envío como "mensaje
-        directo" para la métrica de éxito del manual de marca.
+        Fase 2 de automatización: registrar cada envío como «mensaje
+        directo» para la métrica de éxito del manual de marca.
       </p>
     </article>
   );

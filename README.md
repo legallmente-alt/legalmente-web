@@ -20,7 +20,7 @@ No se agregan más páginas sin justificación: la métrica única de éxito del
 
 ## Stack
 
-Next.js (React) más TypeScript más Tailwind. Consistente con Psyche-creation (React/TypeScript) y compatible con envolver el sitio como PWA o reutilizar lógica en una futura app (React Native / Expo).
+Next.js 16, React 19, TypeScript y Tailwind. Consistente con Psyche-creation (React/TypeScript) y compatible con envolver el sitio como PWA o reutilizar lógica en una futura app (React Native / Expo).
 
 ## Estructura de carpetas propuesta
 
@@ -35,6 +35,18 @@ src/styles -> tokens de la paleta: crema/oro/tinta
 
 CI/CD de build y deploy en cada push a main, con el mismo patrón que ya usa Psyche-creation. Sincronización del catálogo editorial con las piezas ya generadas en el pipeline de Remotion/Canva. Formulario de contacto conectado a un servicio simple, midiendo "mensajes directos" en el mismo tablero que usan las redes.
 
+## MVP de documentos guiados
+
+La ruta `/documentos` incorpora el primer experimento comercial supervisado: una preclasificación de convenio bilateral de confidencialidad para México.
+
+- No solicita nombres, documentos ni secretos empresariales.
+- No envía ni almacena respuestas.
+- Distingue un posible documento guiado de los casos que requieren revisión profesional obligatoria.
+- Genera un brief local descargable, no un contrato.
+- No firma, certifica ni promete validez jurídica.
+
+La siguiente fase solo puede activarse cuando el banco de cláusulas y el documento modelo hayan sido revisados y aprobados por el abogado responsable: ensamblado determinista de cláusulas versionadas, salida Word/PDF, trazabilidad y un canal real de contratación. Firma electrónica, pagos y automatización integral quedan fuera de este MVP.
+
 ## Estado
 
-Repositorio recién creado — esqueleto de carpetas y documentación en progreso. Próximo paso: validar copy de cada sección y generar las primeras piezas visuales con el sistema vigente descrito arriba.
+La base pública sigue siendo un sitio en construcción. El MVP de documentos guiados permite comprobar el recorrido y las exclusiones antes de conectar datos personales, pagos, generación contractual o entrega profesional.
