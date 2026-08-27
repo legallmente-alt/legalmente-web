@@ -18,26 +18,26 @@ export default function HomePage() {
         </p>
         <div className="flex flex-wrap justify-center gap-4 pt-4">
           <Link
-            href="/documentos"
+            href="/catalogo"
             className="rounded-sm bg-oro px-6 py-3 text-sm uppercase tracking-wide text-tinta hover:bg-crema"
           >
-            Preparar un documento
+            Explorar el archivo educativo
           </Link>
           <Link
-            href="/catalogo"
+            href="/documentos"
             className="rounded-sm border border-oro px-6 py-3 text-sm uppercase tracking-wide text-oro hover:bg-oro hover:text-tinta"
           >
-            Ver catálogo editorial
+            Área profesional · México
           </Link>
         </div>
       </section>
 
       <section className="grid gap-6 sm:grid-cols-3">
-        <Link href="/documentos" className="rounded-sm border border-oro/40 bg-oro/[0.06] p-6 hover:border-oro">
-          <p className="mb-2 text-xs uppercase tracking-[0.16em] text-oro">Nuevo</p>
-          <h2 className="mb-2 font-serif text-xl text-oro">Documentos guiados</h2>
+        <Link href="/catalogo" className="rounded-sm border border-oro/40 bg-oro/[0.06] p-6 hover:border-oro">
+          <p className="mb-2 text-xs uppercase tracking-[0.16em] text-oro">Educación panhispánica</p>
+          <h2 className="mb-2 font-serif text-xl text-oro">Archivo LegalMente</h2>
           <p className="text-sm text-crema/70">
-            Preclasifica un NDA corporativo y detecta cuándo necesita revisión profesional.
+            Conceptos, diferencias y situaciones cotidianas explicadas con jurisdicción y límites visibles.
           </p>
         </Link>
         <div className="rounded-sm border border-oro/20 p-6">
@@ -58,6 +58,26 @@ export default function HomePage() {
             explicados.
           </p>
         </div>
+      </section>
+
+      <section className="grid gap-6 border-y border-oro/25 py-10 md:grid-cols-[1fr_auto] md:items-center">
+        <div className="max-w-3xl space-y-3">
+          <p className="text-xs uppercase tracking-[0.18em] text-oro">
+            Área profesional separada · México
+          </p>
+          <h2 className="font-serif text-2xl text-crema">
+            Un primer servicio pequeño, con alcance claro.
+          </h2>
+          <p className="text-sm leading-6 text-crema/70">
+            El piloto de NDA corporativo preclasifica la operación y prepara un brief. No genera un contrato ni convierte el contenido educativo en asesoría; la revisión profesional se contrata por separado.
+          </p>
+        </div>
+        <Link
+          href="/documentos"
+          className="rounded-sm bg-oro px-6 py-3 text-center text-sm font-medium text-tinta hover:bg-crema"
+        >
+          Probar la preclasificación
+        </Link>
       </section>
     </div>
   );

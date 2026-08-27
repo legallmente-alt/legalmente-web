@@ -2,10 +2,10 @@ import Link from "next/link";
 
 const links = [
   { href: "/", label: "Inicio" },
-  { href: "/documentos", label: "Documentos guiados" },
+  { href: "/catalogo", label: "Archivo educativo" },
+  { href: "/documentos", label: "Área profesional · México" },
   { href: "/sobre", label: "Sobre LegalMente" },
   { href: "/areas-de-practica", label: "Áreas de práctica" },
-  { href: "/catalogo", label: "Catálogo editorial" },
   { href: "/casos", label: "Casos y ejemplos" },
   { href: "/contacto", label: "Contacto" },
 ];

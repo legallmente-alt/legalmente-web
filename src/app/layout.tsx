@@ -15,8 +15,16 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className="min-h-screen font-serif">
+        <a
+          href="#contenido-principal"
+          className="sr-only z-50 rounded-sm bg-oro px-4 py-3 text-sm font-medium text-tinta focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        >
+          Saltar al contenido
+        </a>
         <NavBar />
-        <main className="mx-auto max-w-6xl px-6 py-12">{children}</main>
+        <main id="contenido-principal" className="mx-auto max-w-6xl px-6 py-12">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

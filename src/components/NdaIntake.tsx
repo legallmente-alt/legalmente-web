@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 
 type Intake = {
@@ -125,10 +125,22 @@ export default function NdaIntake() {
   const [stepIndex, setStepIndex] = useState(0);
   const [intake, setIntake] = useState<Intake>(initialIntake);
   const [complete, setComplete] = useState(false);
+  const initialRender = useRef(true);
+  const stepLegendRef = useRef<HTMLLegendElement>(null);
 
   const step = steps[stepIndex];
   const selected = intake[step.key];
   const result = useMemo(() => evaluate(intake), [intake]);
+
+  useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+      return;
+    }
+    if (!complete) {
+      stepLegendRef.current?.focus();
+    }
+  }, [complete, stepIndex]);
 
   const summary = useMemo(
     () =>
@@ -195,7 +207,7 @@ export default function NdaIntake() {
           <p className="max-w-2xl text-sm leading-6 text-crema/75">
             {needsReview
               ? "La operación contiene elementos que no deben resolverse con una plantilla automática. El brief sirve para preparar una revisión profesional; todavía no es un contrato."
-              : "La operación cabe preliminarmente en el alcance del NDA bilateral simple para México. La futura versión podrá ensamblar un borrador con cláusulas aprobadas, siempre sujeto a revisión antes de firma."}
+              : "La operación cabe preliminarmente en el alcance del NDA bilateral simple para México. El brief permite solicitar una cotización y revisión; todavía no es un contrato."}
           </p>
         </div>
 
@@ -223,7 +235,7 @@ export default function NdaIntake() {
             href="/contacto"
             className="rounded-sm border border-oro px-5 py-3 text-sm text-oro hover:bg-oro hover:text-tinta"
           >
-            Preparar revisión profesional
+            Solicitar revisión de este brief
           </Link>
           <button
             type="button"
@@ -243,7 +255,14 @@ export default function NdaIntake() {
         <p className="text-xs uppercase tracking-[0.18em] text-oro">
           Paso {stepIndex + 1} de {steps.length}
         </p>
-        <div className="h-1.5 w-32 overflow-hidden rounded-full bg-crema/10" aria-hidden="true">
+        <div
+          className="h-1.5 w-32 overflow-hidden rounded-full bg-crema/10"
+          role="progressbar"
+          aria-label="Progreso del cuestionario"
+          aria-valuemin={1}
+          aria-valuemax={steps.length}
+          aria-valuenow={stepIndex + 1}
+        >
           <div
             className="h-full bg-oro transition-all"
             style={{ width: `${((stepIndex + 1) / steps.length) * 100}%` }}
@@ -251,9 +270,17 @@ export default function NdaIntake() {
         </div>
       </div>
 
-      <fieldset className="space-y-5">
-        <legend className="font-serif text-2xl text-crema">{step.title}</legend>
-        <p className="text-sm leading-6 text-crema/65">{step.description}</p>
+      <fieldset className="space-y-5" aria-describedby={`step-description-${stepIndex}`}>
+        <legend
+          ref={stepLegendRef}
+          tabIndex={-1}
+          className="font-serif text-2xl text-crema"
+        >
+          {step.title}
+        </legend>
+        <p id={`step-description-${stepIndex}`} className="text-sm leading-6 text-crema/65">
+          {step.description}
+        </p>
         <div className="grid gap-3 pt-2 sm:grid-cols-2">
           {step.options.map(([value, label, description]) => {
             const active = selected === value;

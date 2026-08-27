@@ -10,12 +10,17 @@ export default function DocumentosPage() {
   return (
     <div className="space-y-12">
       <header className="max-w-3xl space-y-5">
-        <p className="text-sm uppercase tracking-[0.2em] text-oro">MVP supervisado · México</p>
+        <p className="text-sm uppercase tracking-[0.2em] text-oro">
+          Área profesional separada · MVP supervisado · México
+        </p>
         <h1 className="font-serif text-4xl leading-tight text-crema sm:text-5xl">
-          Prepara un documento sin fingir que todos los casos son iguales.
+          Preclasifica un NDA antes de contratar su revisión.
         </h1>
         <p className="text-base leading-7 text-crema/75">
-          Esta herramienta identifica si una negociación puede usar el futuro modelo guiado de convenio de confidencialidad o si necesita revisión profesional desde el inicio.
+          Esta herramienta identifica si una negociación cabe en el alcance de un convenio bilateral simple o si necesita revisión profesional desde el inicio. No redacta ni entrega un contrato.
+        </p>
+        <p className="border-l-2 border-oro/50 pl-4 text-sm leading-6 text-crema/65">
+          Esta ruta profesional para México está separada del archivo educativo panhispánico de LegalMente.
         </p>
         <div className="grid gap-4 pt-3 sm:grid-cols-3">
           {[

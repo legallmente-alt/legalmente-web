@@ -7,7 +7,7 @@ export default function Footer() {
         asesoría legal.
       </p>
       <p className="mx-auto mt-2 max-w-2xl">
-        Los briefs y borradores guiados no sustituyen la revisión de la legislación, la operación y las partes antes de firmar.
+        El archivo educativo y el área profesional México son recorridos separados. Los briefs no son contratos y no sustituyen la revisión de la legislación, la operación y las partes antes de firmar.
       </p>
     </footer>
   );

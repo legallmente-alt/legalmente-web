@@ -10,7 +10,7 @@ El mismo que en redes: generar mensajes directos que se conviertan en consulta. 
 
 **Realismo cinematográfico editorial** — el definido en `Psyche-creation/docs/legalmente-marca-y-estilo.md`, Sección 3 (Librería de Prompts Maestros para Imágenes). Paleta base: Crema `#EDE7DA`, Oro `#C8A24A`, Tinta profunda `#0E1A24`. Estilo: cinematic legal realism con restrained symbolic surrealism, fotorrealista, composición tipo still-life editorial. Formato 9:16 vertical para redes, 16:9 para portadas de YouTube.
 
-Existe un segundo sistema (óleo cinematográfico / claroscuro, paleta Nogal/Marfil/Azul Petróleo/Latón) documentado en el skill `legalmente-visual-system`, sincronizado desde el Drive del proyecto. Ese sistema quedó descartado para este proyecto — si el skill se sigue activando y sugiriendo esa dirección de arte, es una inconsistencia pendiente de corregir en el Drive/skill, no una alternativa válida. No mezclar ambos sistemas en la misma pieza o colección.
+El Sistema Operativo V3 de Drive conserva Nogal/Marfil/Azul Petróleo/Latón para las piezas editoriales. La web mantiene por ahora Crema/Oro/Tinta hasta completar una revisión visual comparativa. Esta diferencia está documentada: no debe interpretarse como permiso para mezclar ambos sistemas en una misma colección.
 
 ## Mapa del sitio
 
@@ -37,13 +37,14 @@ CI/CD de build y deploy en cada push a main, con el mismo patrón que ya usa Psy
 
 ## MVP de documentos guiados
 
-La ruta `/documentos` incorpora el primer experimento comercial supervisado: una preclasificación de convenio bilateral de confidencialidad para México.
+La ruta `/documentos` es un área profesional México, explícitamente separada del archivo educativo panhispánico. Incorpora el primer experimento comercial supervisado: una preclasificación de convenio bilateral de confidencialidad.
 
 - No solicita nombres, documentos ni secretos empresariales.
 - No envía ni almacena respuestas.
 - Distingue un posible documento guiado de los casos que requieren revisión profesional obligatoria.
 - Genera un brief local descargable, no un contrato.
 - No firma, certifica ni promete validez jurídica.
+- El contacto profesional funciona por correo con asunto predefinido; no existe todavía formulario, CRM, pago ni almacenamiento de datos.
 
 La siguiente fase solo puede activarse cuando el banco de cláusulas y el documento modelo hayan sido revisados y aprobados por el abogado responsable: ensamblado determinista de cláusulas versionadas, salida Word/PDF, trazabilidad y un canal real de contratación. Firma electrónica, pagos y automatización integral quedan fuera de este MVP.
 

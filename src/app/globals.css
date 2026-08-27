@@ -16,3 +16,8 @@ body {
 a {
   color: var(--color-oro);
 }
+
+:focus-visible {
+  outline: 2px solid var(--color-oro);
+  outline-offset: 3px;
+}
