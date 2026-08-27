@@ -6,6 +6,9 @@ export default function Footer() {
         panhispánica. Contenido con fines educativos; no constituye
         asesoría legal.
       </p>
+      <p className="mx-auto mt-2 max-w-2xl">
+        El archivo educativo y el área profesional México son recorridos separados. Los briefs no son contratos y no sustituyen la revisión de la legislación, la operación y las partes antes de firmar.
+      </p>
     </footer>
   );
 }

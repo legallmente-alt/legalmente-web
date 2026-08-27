@@ -2,9 +2,10 @@ import Link from "next/link";
 
 const links = [
   { href: "/", label: "Inicio" },
+  { href: "/catalogo", label: "Archivo educativo" },
+  { href: "/documentos", label: "Área profesional · México" },
   { href: "/sobre", label: "Sobre LegalMente" },
   { href: "/areas-de-practica", label: "Áreas de práctica" },
-  { href: "/catalogo", label: "Catálogo editorial" },
   { href: "/casos", label: "Casos y ejemplos" },
   { href: "/contacto", label: "Contacto" },
 ];
@@ -12,7 +13,7 @@ const links = [
 export default function NavBar() {
   return (
     <nav className="w-full border-b border-oro/30 bg-tinta/95 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
         <Link href="/" className="font-serif text-lg tracking-wide text-oro">
           LegalMente
         </Link>

@@ -16,23 +16,30 @@ export default function HomePage() {
           sin anclar el contenido a un solo país salvo que sea
           estrictamente necesario.
         </p>
-        <div className="flex justify-center gap-4 pt-4">
+        <div className="flex flex-wrap justify-center gap-4 pt-4">
           <Link
             href="/catalogo"
-            className="rounded-sm border border-oro px-6 py-3 text-sm uppercase tracking-wide text-oro hover:bg-oro hover:text-tinta"
+            className="rounded-sm bg-oro px-6 py-3 text-sm uppercase tracking-wide text-tinta hover:bg-crema"
           >
-            Ver catálogo editorial
+            Explorar el archivo educativo
           </Link>
           <Link
-            href="/sobre"
-            className="rounded-sm border border-crema/30 px-6 py-3 text-sm uppercase tracking-wide text-crema hover:border-crema"
+            href="/documentos"
+            className="rounded-sm border border-oro px-6 py-3 text-sm uppercase tracking-wide text-oro hover:bg-oro hover:text-tinta"
           >
-            Sobre LegalMente
+            Área profesional · México
           </Link>
         </div>
       </section>
 
-      <section className="grid gap-6 sm:grid-cols-2">
+      <section className="grid gap-6 sm:grid-cols-3">
+        <Link href="/catalogo" className="rounded-sm border border-oro/40 bg-oro/[0.06] p-6 hover:border-oro">
+          <p className="mb-2 text-xs uppercase tracking-[0.16em] text-oro">Educación panhispánica</p>
+          <h2 className="mb-2 font-serif text-xl text-oro">Archivo LegalMente</h2>
+          <p className="text-sm text-crema/70">
+            Conceptos, diferencias y situaciones cotidianas explicadas con jurisdicción y límites visibles.
+          </p>
+        </Link>
         <div className="rounded-sm border border-oro/20 p-6">
           <h2 className="mb-2 font-serif text-xl text-oro">
             Áreas de práctica
@@ -51,6 +58,26 @@ export default function HomePage() {
             explicados.
           </p>
         </div>
+      </section>
+
+      <section className="grid gap-6 border-y border-oro/25 py-10 md:grid-cols-[1fr_auto] md:items-center">
+        <div className="max-w-3xl space-y-3">
+          <p className="text-xs uppercase tracking-[0.18em] text-oro">
+            Área profesional separada · México
+          </p>
+          <h2 className="font-serif text-2xl text-crema">
+            Un primer servicio pequeño, con alcance claro.
+          </h2>
+          <p className="text-sm leading-6 text-crema/70">
+            El piloto de NDA corporativo preclasifica la operación y prepara un brief. No genera un contrato ni convierte el contenido educativo en asesoría; la revisión profesional se contrata por separado.
+          </p>
+        </div>
+        <Link
+          href="/documentos"
+          className="rounded-sm bg-oro px-6 py-3 text-center text-sm font-medium text-tinta hover:bg-crema"
+        >
+          Probar la preclasificación
+        </Link>
       </section>
     </div>
   );
