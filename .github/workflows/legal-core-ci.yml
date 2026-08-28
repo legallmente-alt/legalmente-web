@@ -1,9 +1,10 @@
-name: LegalMente legal core CI
+name: LegalMente product core CI
 
 on:
   pull_request:
     branches: [main]
     paths:
+      - 'src/app/**'
       - 'src/lib/legal-core/**'
       - 'src/lib/visual-system/**'
       - 'src/components/legalmente/**'
@@ -14,6 +15,7 @@ on:
       - main
       - feat/legalmente-deterministic-product-core-v1
     paths:
+      - 'src/app/**'
       - 'src/lib/legal-core/**'
       - 'src/lib/visual-system/**'
       - 'src/components/legalmente/**'
