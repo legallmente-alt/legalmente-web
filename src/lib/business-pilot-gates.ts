@@ -22,7 +22,7 @@ const pending = (): EvidenceItem => ({
 // Este repositorio es público. Nunca guardar aquí nombres, cédulas, RFC,
 // domicilios, URLs privadas ni documentos de evidencia. El detalle probatorio
 // vive fuera del repo; el código solo puede referenciar un ID opaco de aprobación.
-export const PILOT_G2_EVIDENCE = {
+export const POWERS_G2_EVIDENCE = {
   providerIdentity: pending(),
   professionalCredential: pending(),
   mexicoTerritorialScope: pending(),
@@ -34,7 +34,7 @@ export const PILOT_G2_EVIDENCE = {
   taxAndInvoicingModel: pending(),
 } as const;
 
-export const PILOT_G4_ACTIVATION_EVIDENCE = {
+export const POWERS_G4_ACTIVATION_EVIDENCE = {
   publicPrice: pending(),
   serviceTerms: pending(),
   cancellationAndRefund: pending(),
@@ -59,13 +59,13 @@ function pendingKeys(items: EvidenceMap): string[] {
     .map(([key]) => key);
 }
 
-export type PilotActivationState = {
+export type PowersActivationState = {
   g2Ready: boolean;
   g4ActivationReady: boolean;
   missingG2: string[];
   missingG4: string[];
   capabilities: {
-    canCollectPilotPII: boolean;
+    canCollectServicePII: boolean;
     canReceiveDocuments: boolean;
     canShowActiveCommercialOffer: boolean;
     canAcceptPayment: boolean;
@@ -73,15 +73,15 @@ export type PilotActivationState = {
   };
 };
 
-export function evaluatePilotActivation(
-  g2: EvidenceMap = PILOT_G2_EVIDENCE,
-  g4: EvidenceMap = PILOT_G4_ACTIVATION_EVIDENCE,
-): PilotActivationState {
+export function evaluatePowersActivation(
+  g2: EvidenceMap = POWERS_G2_EVIDENCE,
+  g4: EvidenceMap = POWERS_G4_ACTIVATION_EVIDENCE,
+): PowersActivationState {
   const missingG2 = pendingKeys(g2);
   const missingG4 = pendingKeys(g4);
   const g2Ready = missingG2.length === 0;
   const g4ActivationReady = missingG4.length === 0;
-  const commercialReady = g2Ready && g4ActivationReady;
+  const technicalCommercialReady = g2Ready && g4ActivationReady;
 
   return {
     g2Ready,
@@ -89,20 +89,20 @@ export function evaluatePilotActivation(
     missingG2,
     missingG4,
     capabilities: {
-      canCollectPilotPII: g2Ready,
-      canReceiveDocuments: commercialReady,
-      canShowActiveCommercialOffer: commercialReady,
-      canAcceptPayment: commercialReady,
-      canStartRealCase: commercialReady,
+      canCollectServicePII: g2Ready,
+      canReceiveDocuments: technicalCommercialReady,
+      canShowActiveCommercialOffer: technicalCommercialReady,
+      canAcceptPayment: technicalCommercialReady,
+      canStartRealCase: technicalCommercialReady,
     },
   };
 }
 
-export const PILOT_ACTIVATION = evaluatePilotActivation();
+export const POWERS_ACTIVATION = evaluatePowersActivation();
 
-function assertActivationConsistency(state: PilotActivationState): void {
-  if (!state.g2Ready && state.capabilities.canCollectPilotPII) {
-    throw new Error("Pilot activation invariant failed: PII enabled before G2.");
+function assertActivationConsistency(state: PowersActivationState): void {
+  if (!state.g2Ready && state.capabilities.canCollectServicePII) {
+    throw new Error("Powers activation invariant failed: PII enabled before G2.");
   }
 
   const commercialCapabilities = [
@@ -117,9 +117,13 @@ function assertActivationConsistency(state: PilotActivationState): void {
     !(state.g2Ready && state.g4ActivationReady)
   ) {
     throw new Error(
-      "Pilot activation invariant failed: commercial capability enabled before G2 + G4 activation.",
+      "Powers activation invariant failed: commercial capability enabled before G2 + G4-B.",
     );
   }
 }
 
-assertActivationConsistency(PILOT_ACTIVATION);
+assertActivationConsistency(POWERS_ACTIVATION);
+
+// D-R2-03 (alcance/precio/SLA) es un gate humano independiente y deliberadamente
+// no se modela como booleano derivable aquí. Que G2/G4-B lleguen a READY no
+// autoriza activación si D-R2-03 o la autorización humana de publicación siguen abiertos.
