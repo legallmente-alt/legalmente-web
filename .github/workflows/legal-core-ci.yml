@@ -5,15 +5,19 @@ on:
     branches: [main]
     paths:
       - 'src/lib/legal-core/**'
+      - 'src/lib/visual-system/**'
+      - 'src/components/legalmente/**'
       - 'package.json'
-      - 'package-lock.json'
       - '.github/workflows/legal-core-ci.yml'
   push:
-    branches: [main]
+    branches:
+      - main
+      - feat/legalmente-deterministic-product-core-v1
     paths:
       - 'src/lib/legal-core/**'
+      - 'src/lib/visual-system/**'
+      - 'src/components/legalmente/**'
       - 'package.json'
-      - 'package-lock.json'
       - '.github/workflows/legal-core-ci.yml'
 
 permissions:
@@ -22,13 +26,13 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-      - run: npm ci
+      - run: npm install --no-audit --no-fund
+      - run: npm run test:legal-core
       - run: npm run typecheck
       - run: npm run build
