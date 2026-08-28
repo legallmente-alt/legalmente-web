@@ -7,6 +7,7 @@ const assets = {
   W01: {
     alt: "Libro abierto frente a un umbral iluminado, imagen editorial de entrada a LegalMente.",
     desktop: `${assetBase}/LM-PA-W01_home_1440.webp`,
+    mobile: `${assetBase}/LM-PA-W01_home_430.webp`,
     mobile430: `${assetBase}/LM-PA-W01_home_430.webp`,
     mobile390: `${assetBase}/LM-PA-W01_home_390.webp`,
     mobile360: `${assetBase}/LM-PA-W01_home_360.webp`,
