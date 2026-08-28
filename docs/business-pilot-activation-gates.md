@@ -6,9 +6,22 @@ Fecha: 2026-08-28
 
 Este contrato técnico evita que **Corporate Powers / Representation Review — México corporativo** se active por un cambio aislado de interfaz.
 
-D-R2-03 permanece abierto: alcance fijo, límite documental, exclusiones, precio fijo y SLA requieren decisión humana separada.
+La primera vía comercial está adoptada, pero permanece inactiva. D-R2-03 sigue abierto: alcance fijo, límite documental, exclusiones, precio fijo y SLA requieren decisión humana separada.
 
 El laboratorio NDA es `SYNTHETIC_ONLY` y no usa estos gates para convertirse en servicio comercial.
+
+## Gate D-R2-03 — definición de oferta
+
+Antes de cualquier activación deben quedar registrados por decisión humana:
+
+1. patrón de alcance (`FIXED_SCOPE` recomendado, `HOURLY` o `DEFER`);
+2. unidad exacta de servicio y límite de documentos/páginas;
+3. exclusiones finales;
+4. SLA final;
+5. precio fijo final o método expresamente aprobado para obtenerlo;
+6. consecuencia de la decisión: como máximo `PREPARED_FOR_CLOSED_PILOT`, no publicación automática.
+
+D-R2-03 no se deriva del código y no puede cerrarse por CI.
 
 ## Evidencia privada y repositorio público
 
