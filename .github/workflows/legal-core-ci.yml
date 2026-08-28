@@ -7,18 +7,19 @@ on:
       - 'src/app/**'
       - 'src/lib/legal-core/**'
       - 'src/lib/visual-system/**'
-      - 'src/components/legalmente/**'
+      - 'src/components/**'
       - 'package.json'
       - '.github/workflows/legal-core-ci.yml'
   push:
     branches:
       - main
       - feat/legalmente-deterministic-product-core-v1
+      - feat/legalmente-editorial-instrument-preview-v1
     paths:
       - 'src/app/**'
       - 'src/lib/legal-core/**'
       - 'src/lib/visual-system/**'
-      - 'src/components/legalmente/**'
+      - 'src/components/**'
       - 'package.json'
       - '.github/workflows/legal-core-ci.yml'
 
