@@ -20,6 +20,7 @@ const surfaces = [
   { name: "chapter", route: "/capitulo/consentimiento-no-es-solo-firma" },
   { name: "concept", route: "/concepto/consentimiento" },
   { name: "process", route: "/proceso/organizar-hechos-y-prueba" },
+  { name: "trust", route: "/confianza" },
 ];
 
 await mkdir(outputDir, { recursive: true });
@@ -64,7 +65,7 @@ try {
               try {
                 await image.decode();
               } catch {
-                // A failed decorative image must still be visible to the proof checks below.
+                // Broken imagery is recorded in the structural checks below.
               }
             }
           }),
