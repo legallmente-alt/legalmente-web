@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PILOT_ACTIVATION } from "@/lib/business-pilot-gates";
 
 const includes = [
   "Revisión acotada de un NDA/acuerdo de confidencialidad en español.",
@@ -21,12 +22,15 @@ const flow = [
   "Preflight sin PII ni documento.",
   "Admisibilidad y conflicto por persona responsable.",
   "Presentación de alcance, identidad del prestador, precio total y términos.",
-  "Aceptación y pago, solo cuando G2 esté habilitado.",
+  "Aceptación y pago, solo cuando G2 y G4-B estén habilitados.",
   "Canal seguro para el documento.",
   "Revisión profesional, QA, entrega y cierre.",
 ];
 
 export default function NdaMexicoServicePage() {
+  const activation = PILOT_ACTIVATION;
+  const commercialReady = activation.capabilities.canShowActiveCommercialOffer;
+
   return (
     <article className="mx-auto max-w-4xl space-y-10">
       <header className="space-y-5">
@@ -35,18 +39,44 @@ export default function NdaMexicoServicePage() {
           <span aria-hidden="true">·</span>
           <span>México</span>
           <span aria-hidden="true">·</span>
-          <span>Piloto en preparación</span>
+          <span>{commercialReady ? "Piloto habilitado" : "Piloto en preparación"}</span>
         </div>
         <h1 className="font-serif text-4xl leading-tight text-crema sm:text-5xl">
           Revisión acotada de NDA
         </h1>
         <p className="max-w-3xl text-base leading-7 text-crema/80">
-          LegalMente está preparando un piloto limitado para revisar un NDA simple en México. La ruta profesional está separada del contenido educativo y todavía no está disponible para contratación, pago ni recepción de documentos.
+          LegalMente está preparando un piloto limitado para revisar un NDA simple en México. La ruta profesional está separada del contenido educativo y solo puede activarse cuando sus gates de responsabilidad y contratación tengan evidencia aprobada.
         </p>
         <div className="rounded-xl border border-acento-miel/40 bg-acento-miel/10 p-5 text-sm leading-6 text-crema/75">
-          <strong className="text-crema">Estado actual:</strong> G2 bloqueado. Falta identificar y validar al profesional o entidad responsable, la estructura contractual/fiscal, privacidad, canal seguro, conflictos y QA antes de habilitar casos reales.
+          <strong className="text-crema">Estado derivado del sistema:</strong>{" "}
+          {activation.g2Ready ? "G2 listo" : "G2 bloqueado"}; {" "}
+          {activation.g4ActivationReady ? "G4-B listo" : "G4-B bloqueado"}. {" "}
+          {!commercialReady
+            ? "No están habilitados contratación, pago ni recepción de documentos."
+            : "La activación comercial requiere además la decisión humana de publicación correspondiente."}
         </div>
       </header>
+
+      <section className="grid gap-4 sm:grid-cols-2">
+        <div className="rounded-xl border border-crema/10 p-5">
+          <p className="text-xs uppercase tracking-[0.16em] text-oro/70">G2 · Responsabilidad</p>
+          <p className="mt-2 text-2xl font-semibold text-crema">
+            {activation.missingG2.length === 0 ? "READY" : `${activation.missingG2.length} requisitos pendientes`}
+          </p>
+          <p className="mt-2 text-xs leading-5 text-crema/55">
+            Identidad y credencial profesional, territorio, parte contratante, conflictos, privacidad, canal seguro, QA y modelo fiscal.
+          </p>
+        </div>
+        <div className="rounded-xl border border-crema/10 p-5">
+          <p className="text-xs uppercase tracking-[0.16em] text-oro/70">G4-B · Activación comercial</p>
+          <p className="mt-2 text-2xl font-semibold text-crema">
+            {activation.missingG4.length === 0 ? "READY" : `${activation.missingG4.length} requisitos pendientes`}
+          </p>
+          <p className="mt-2 text-xs leading-5 text-crema/55">
+            Precio público, términos, cancelación/reembolso, evidencia de transacción y mecanismo de pago.
+          </p>
+        </div>
+      </section>
 
       <section className="grid gap-6 md:grid-cols-2">
         <div className="rounded-xl border border-crema/10 p-6">
@@ -88,9 +118,11 @@ export default function NdaMexicoServicePage() {
 
       <section className="space-y-4">
         <p className="text-xs uppercase tracking-[0.16em] text-oro/70">Precio y contratación</p>
-        <h2 className="font-serif text-2xl text-crema">Todavía no hay oferta activa</h2>
+        <h2 className="font-serif text-2xl text-crema">
+          {commercialReady ? "Gate técnico listo; publicación aún requiere decisión humana" : "Todavía no hay oferta activa"}
+        </h2>
         <p className="max-w-3xl text-sm leading-6 text-crema/75">
-          Existe una hipótesis económica interna para medir el piloto, pero no se muestra como tarifa vigente. El precio público solo se habilitará cuando estén definidos el prestador real, impuestos, coste profesional, términos, cancelación/reembolso y mecanismo de pago.
+          Existe una hipótesis económica interna para medir el piloto, pero no se muestra como tarifa vigente. El precio público solo se habilitará cuando estén definidos y aprobados el prestador real, impuestos, coste profesional, términos, cancelación/reembolso y mecanismo de pago.
         </p>
       </section>
 
@@ -107,9 +139,11 @@ export default function NdaMexicoServicePage() {
           >
             Probar preflight
           </Link>
-          <span className="rounded-lg border border-crema/15 px-5 py-3 text-sm text-crema/55">
-            Contratación deshabilitada
-          </span>
+          {!commercialReady ? (
+            <span className="rounded-lg border border-crema/15 px-5 py-3 text-sm text-crema/55">
+              Contratación deshabilitada
+            </span>
+          ) : null}
         </div>
       </section>
 
