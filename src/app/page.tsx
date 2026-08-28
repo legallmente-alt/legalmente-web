@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { worlds } from "@/lib/knowledge-graph/content";
 
 function AssetField({
   assetId,
@@ -30,116 +31,118 @@ function AssetField({
   );
 }
 
-const verbs = [
-  ["Aprender", "Entender un concepto y de dónde sale."],
-  ["Resolver", "Ordenar una situación antes de decidir."],
-  ["Preparar", "Llegar mejor preparado a un documento o conversación."],
-  ["Tu caso", "Reconocer cuándo hace falta criterio profesional."],
+const entryModes = [
+  ["Una situación", "Empieza por algo que ocurrió o necesitas comprender.", "/mundo/vida-cotidiana"],
+  ["Un concepto", "Ve de una idea jurídica a sus conexiones.", "/concepto/consentimiento"],
+  ["Un proceso", "Ordena hechos, prueba y contexto antes de decidir.", "/proceso/organizar-hechos-y-prueba"],
+  ["Explorar", "Recorre mundos, series y capítulos relacionados.", "/explorar"],
 ] as const;
 
 export default function HomePage() {
+  const featuredWorlds = worlds.slice(0, 4);
+
   return (
     <main className="overflow-hidden bg-[#F5F0E8] text-[#102A43]">
-      <section className="mx-auto grid min-h-[calc(100svh-4rem)] max-w-[1320px] items-center gap-10 px-5 py-12 md:px-8 lg:grid-cols-[0.88fr_1.12fr] lg:gap-14 lg:py-16">
-        <div className="order-2 max-w-[620px] lg:order-1">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/52">
-            The Editorial Instrument · preview aislado
-          </p>
-          <h1 className="max-w-[11ch] font-serif text-[clamp(2.45rem,7.2vw,4.9rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-[#102A43]">
-            Entiende qué importa antes de decidir qué sigue.
+      <section className="mx-auto grid min-h-[calc(100svh-4rem)] max-w-[1320px] items-center gap-10 px-5 py-12 md:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14 lg:py-16">
+        <div className="order-2 max-w-[650px] lg:order-1">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/50">LegalMente · aprendizaje jurídico conectado</p>
+          <h1 className="max-w-[10ch] font-serif text-[clamp(2.7rem,7.2vw,5.2rem)] font-semibold leading-[0.94] tracking-[-0.05em]">
+            Entender el Derecho empieza por una pregunta.
           </h1>
-          <p className="mt-7 max-w-[56ch] text-[17px] leading-7 text-[#102A43]/72 md:text-lg md:leading-8">
-            LegalMente conecta una pregunta con contexto, una herramienta acotada, sus fuentes, su territorio y un siguiente paso comprensible.
+          <p className="mt-7 max-w-[58ch] text-[17px] leading-7 text-[#102A43]/70 md:text-lg md:leading-8">
+            Entra por una situación, un concepto o un proceso. LegalMente conecta lo que estás viendo con su materia, su contexto, sus fuentes, su territorio y lo que conviene aprender después.
           </p>
 
-          <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-            <Link
-              href="/internal/product-lab"
-              className="inline-flex min-h-12 items-center justify-center bg-[#102A43] px-6 text-sm font-semibold text-[#F5F0E8] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-4 motion-reduce:transform-none"
-            >
-              Abrir el instrumento
-            </Link>
-            <a
-              href="#explorar"
-              className="inline-flex min-h-12 items-center border-b border-[#102A43]/35 px-1 text-sm font-medium text-[#102A43]/72 hover:border-[#102A43] hover:text-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-4"
-            >
-              Explorar primero
-            </a>
-          </div>
+          <Link
+            href="/explorar"
+            className="mt-9 inline-flex min-h-12 items-center justify-center bg-[#102A43] px-6 text-sm font-semibold text-[#F5F0E8] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-4 motion-reduce:transform-none"
+          >
+            ¿Qué quieres entender?
+          </Link>
 
-          <dl className="mt-12 grid max-w-[600px] grid-cols-2 gap-x-7 gap-y-6 border-t border-[#102A43]/12 pt-6 sm:grid-cols-4">
-            {verbs.map(([term, description]) => (
-              <div key={term} className="space-y-1.5">
-                <dt className="text-sm font-semibold text-[#102A43]">{term}</dt>
-                <dd className="text-xs leading-5 text-[#102A43]/58">{description}</dd>
-              </div>
+          <div className="mt-11 divide-y divide-[#102A43]/10 border-t border-[#102A43]/10">
+            {entryModes.map(([label, note, href]) => (
+              <Link key={label} href={href} className="group grid min-h-20 grid-cols-[1fr_auto] items-center gap-6 py-3 focus:outline-none focus:ring-2 focus:ring-[#102A43]">
+                <span>
+                  <strong className="block text-sm">{label}</strong>
+                  <span className="mt-1 block text-xs leading-5 text-[#102A43]/56">{note}</span>
+                </span>
+                <span className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none" aria-hidden="true">→</span>
+              </Link>
             ))}
-          </dl>
+          </div>
         </div>
 
         <div className="order-1 lg:order-2">
-          <AssetField
-            assetId="W01"
-            label="Umbral de entrada"
-            className="aspect-[5/4] min-h-[330px] w-full lg:min-h-[610px] lg:aspect-auto"
-          />
-          <div className="mt-3 flex items-center justify-between text-xs text-[#102A43]/52">
-            <span>Una acción enfocada.</span>
-            <span>Un evento visual memorable.</span>
+          <AssetField assetId="W01" label="Umbral de entrada" className="aspect-[5/4] min-h-[330px] w-full lg:min-h-[610px] lg:aspect-auto" />
+          <div className="mt-3 flex items-center justify-between text-xs text-[#102A43]/48">
+            <span>Una pregunta.</span>
+            <span>Una ruta clara para continuar.</span>
           </div>
         </div>
       </section>
 
-      <section id="explorar" aria-labelledby="explorar-title" className="border-t border-[#102A43]/10 bg-[#102A43] text-[#F5F0E8]">
+      <section className="border-t border-[#102A43]/10 bg-white/35">
+        <div className="mx-auto max-w-[1320px] px-5 py-14 md:px-8 md:py-20">
+          <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/45">Rutas destacadas</p>
+              <h2 className="mt-4 max-w-[12ch] font-serif text-4xl leading-[1.02] tracking-[-0.035em] md:text-5xl">No memorices un índice. Sigue relaciones.</h2>
+            </div>
+            <p className="max-w-[58ch] text-sm leading-7 text-[#102A43]/62">
+              Un mismo concepto puede aparecer en vida cotidiana, empresa, salud o tecnología. La navegación mantiene el orden sin fingir que cada materia vive aislada.
+            </p>
+          </div>
+
+          <div className="mt-10 divide-y divide-[#102A43]/12 border-t border-[#102A43]/12">
+            {featuredWorlds.map((world, index) => (
+              <Link key={world.id} href={`/mundo/${world.id}`} className="group grid min-h-28 gap-3 py-5 focus:outline-none focus:ring-2 focus:ring-[#102A43] md:grid-cols-[48px_0.8fr_1.2fr_auto] md:items-center md:gap-6">
+                <span className="text-xs tabular-nums text-[#102A43]/35">{String(index + 1).padStart(2, "0")}</span>
+                <strong className="font-serif text-2xl">{world.title}</strong>
+                <span className="text-sm leading-6 text-[#102A43]/58">{world.summary}</span>
+                <span className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none" aria-hidden="true">→</span>
+              </Link>
+            ))}
+          </div>
+
+          <Link href="/explorar#mundos" className="mt-7 inline-flex min-h-11 items-center border-b border-[#102A43]/30 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#102A43]">
+            Ver todas las rutas
+          </Link>
+        </div>
+      </section>
+
+      <section className="border-t border-[#102A43]/10 bg-[#102A43] text-[#F5F0E8]">
         <div className="mx-auto max-w-[1320px] px-5 py-16 md:px-8 md:py-24">
           <div className="grid items-end gap-8 md:grid-cols-[1fr_auto]">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#63D7B0]">Continúa explorando</p>
-              <h2 id="explorar-title" className="mt-4 max-w-[14ch] font-serif text-[clamp(2rem,5vw,4rem)] leading-[1.02] tracking-[-0.035em]">
-                No llegues a un callejón sin salida.
-              </h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#63D7B0]">Continuidad editorial</p>
+              <h2 className="mt-4 max-w-[14ch] font-serif text-[clamp(2rem,5vw,4rem)] leading-[1.02] tracking-[-0.035em]">Cada página debe decirte qué sigue.</h2>
             </div>
             <p className="max-w-[42ch] text-sm leading-6 text-[#F5F0E8]/66">
-              Cada entrada debe conducir a otra pieza útil: una historia, una herramienta, una fuente o una explicación relacionada.
+              Series y capítulos conservan orden; los conceptos pueden cruzar materias; los procesos conectan hechos, prueba, territorio y fuentes cuando corresponde.
             </p>
           </div>
 
           <div className="mt-12 grid gap-8 lg:grid-cols-[1.18fr_0.82fr] lg:gap-5">
-            <Link href="/catalogo" className="group block focus:outline-none focus:ring-2 focus:ring-[#63D7B0] focus:ring-offset-4 focus:ring-offset-[#102A43]">
+            <Link href="/mundo/historia-sistemas" className="group block focus:outline-none focus:ring-2 focus:ring-[#63D7B0] focus:ring-offset-4 focus:ring-offset-[#102A43]">
               <AssetField assetId="W02" label="Historia del Derecho" className="aspect-[16/10] w-full bg-[#173954]" />
               <div className="mt-5 flex items-start justify-between gap-6">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.14em] text-[#F5F0E8]/48">Mundo destacado</p>
-                  <h3 className="mt-2 font-serif text-3xl tracking-[-0.025em]">Historia del Derecho</h3>
+                  <p className="text-xs uppercase tracking-[0.14em] text-[#F5F0E8]/48">Explorar origen y sistemas</p>
+                  <h3 className="mt-2 font-serif text-3xl tracking-[-0.025em]">Historia y derecho comparado</h3>
                 </div>
                 <span className="mt-2 text-sm text-[#63D7B0] transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none">Entrar →</span>
               </div>
             </Link>
 
-            <Link href="/catalogo" className="group block self-end focus:outline-none focus:ring-2 focus:ring-[#63D7B0] focus:ring-offset-4 focus:ring-offset-[#102A43]">
-              <AssetField assetId="W03" label="Cine y Derecho" className="aspect-[4/3] w-full bg-[#0B2235]" />
+            <Link href="/mundo/conflicto-prueba" className="group block self-end focus:outline-none focus:ring-2 focus:ring-[#63D7B0] focus:ring-offset-4 focus:ring-offset-[#102A43]">
+              <AssetField assetId="W03" label="Conflicto y prueba" className="aspect-[4/3] w-full bg-[#0B2235]" />
               <div className="mt-5 border-l border-[#D97745] pl-4">
-                <p className="text-xs uppercase tracking-[0.14em] text-[#F5F0E8]/48">Siguiente entrada</p>
-                <h3 className="mt-2 font-serif text-2xl">Cine y Derecho</h3>
-                <p className="mt-2 max-w-[34ch] text-sm leading-6 text-[#F5F0E8]/62">Ficción, evidencia, responsabilidad y sistemas jurídicos vistos desde una escena.</p>
+                <p className="text-xs uppercase tracking-[0.14em] text-[#F5F0E8]/48">Del hecho a la evidencia</p>
+                <h3 className="mt-2 font-serif text-2xl">Conflicto, proceso y prueba</h3>
+                <p className="mt-2 max-w-[34ch] text-sm leading-6 text-[#F5F0E8]/62">Aprende a distinguir lo ocurrido, lo que se afirma y lo que puede sostenerlo.</p>
               </div>
             </Link>
-          </div>
-        </div>
-      </section>
-
-      <section aria-labelledby="trust-title" className="mx-auto max-w-[1320px] px-5 py-14 md:px-8 md:py-20">
-        <div className="grid gap-8 border-t border-[#102A43]/14 pt-8 md:grid-cols-[1.1fr_0.9fr] md:items-start">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/48">Confianza en contexto</p>
-            <h2 id="trust-title" className="mt-4 max-w-[15ch] font-serif text-3xl leading-tight tracking-[-0.025em] md:text-4xl">
-              Fuente, territorio y límites cuando realmente importan.
-            </h2>
-          </div>
-          <div className="grid gap-4 text-sm leading-6 text-[#102A43]/70 sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
-            <div><strong className="block text-[#102A43]">Fuente</strong><span>De dónde sale la regla o explicación.</span></div>
-            <div><strong className="block text-[#102A43]">Territorio</strong><span>Dónde puede cambiar la respuesta.</span></div>
-            <div><strong className="block text-[#102A43]">Límite</strong><span>Qué no estamos automatizando.</span></div>
           </div>
         </div>
       </section>
