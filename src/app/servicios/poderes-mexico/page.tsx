@@ -1,4 +1,4 @@
-import { PILOT_ACTIVATION } from "@/lib/business-pilot-gates";
+import { POWERS_ACTIVATION } from "@/lib/business-pilot-gates";
 
 const proposedScope = [
   "Una sociedad mercantil mexicana.",
@@ -28,8 +28,9 @@ const reviewSignals = [
 ];
 
 export default function PoderesMexicoServicePage() {
-  const activation = PILOT_ACTIVATION;
-  const commercialReady = activation.capabilities.canShowActiveCommercialOffer;
+  const activation = POWERS_ACTIVATION;
+  const technicalCommercialReady =
+    activation.capabilities.canShowActiveCommercialOffer;
 
   return (
     <article className="mx-auto max-w-4xl space-y-10">
@@ -39,7 +40,7 @@ export default function PoderesMexicoServicePage() {
           <span aria-hidden="true">·</span>
           <span>México corporativo</span>
           <span aria-hidden="true">·</span>
-          <span>{commercialReady ? "Gate técnico listo" : "Candidato inactivo"}</span>
+          <span>{technicalCommercialReady ? "Gates técnicos listos" : "Candidato inactivo"}</span>
         </div>
 
         <h1 className="font-serif text-4xl leading-tight text-crema sm:text-5xl">
@@ -56,9 +57,9 @@ export default function PoderesMexicoServicePage() {
           <strong className="text-crema">Estado:</strong>{" "}
           D-R2-03 abierto · {activation.g2Ready ? "G2 listo" : "G2 bloqueado"} ·{" "}
           {activation.g4ActivationReady ? "G4-B listo" : "G4-B bloqueado"}.{" "}
-          {!commercialReady
+          {!technicalCommercialReady
             ? "Contratación, documentos y pago permanecen deshabilitados."
-            : "Un gate técnico listo no sustituye la autorización humana de activación."}
+            : "Los gates técnicos no sustituyen D-R2-03 ni la autorización humana de activación."}
         </div>
       </header>
 
