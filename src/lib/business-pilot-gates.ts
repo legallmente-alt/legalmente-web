@@ -22,6 +22,8 @@ const pending = (): EvidenceItem => ({
 // Este repositorio es público. Nunca guardar aquí nombres, cédulas, RFC,
 // domicilios, URLs privadas ni documentos de evidencia. El detalle probatorio
 // vive fuera del repo; el código solo puede referenciar un ID opaco de aprobación.
+export const POWERS_D_R2_03_DECISION = pending();
+
 export const POWERS_G2_EVIDENCE = {
   providerIdentity: pending(),
   professionalCredential: pending(),
@@ -42,6 +44,10 @@ export const POWERS_G4_ACTIVATION_EVIDENCE = {
   paymentMechanism: pending(),
 } as const;
 
+// Gate humano final. Incluso con D-R2-03, G2 y G4-B completos, ninguna capacidad
+// real se habilita hasta registrar una autorización expresa para casos reales.
+export const POWERS_REAL_CASE_AUTHORIZATION = pending();
+
 type EvidenceMap = Record<string, EvidenceItem>;
 
 function isApproved(item: EvidenceItem): boolean {
@@ -60,8 +66,11 @@ function pendingKeys(items: EvidenceMap): string[] {
 }
 
 export type PowersActivationState = {
+  definitionReady: boolean;
   g2Ready: boolean;
   g4ActivationReady: boolean;
+  preparedForClosedPilot: boolean;
+  realCaseAuthorizationReady: boolean;
   missingG2: string[];
   missingG4: string[];
   capabilities: {
@@ -74,26 +83,35 @@ export type PowersActivationState = {
 };
 
 export function evaluatePowersActivation(
+  definitionDecision: EvidenceItem = POWERS_D_R2_03_DECISION,
   g2: EvidenceMap = POWERS_G2_EVIDENCE,
   g4: EvidenceMap = POWERS_G4_ACTIVATION_EVIDENCE,
+  realCaseAuthorization: EvidenceItem = POWERS_REAL_CASE_AUTHORIZATION,
 ): PowersActivationState {
+  const definitionReady = isApproved(definitionDecision);
   const missingG2 = pendingKeys(g2);
   const missingG4 = pendingKeys(g4);
   const g2Ready = missingG2.length === 0;
   const g4ActivationReady = missingG4.length === 0;
-  const technicalCommercialReady = g2Ready && g4ActivationReady;
+  const preparedForClosedPilot = definitionReady && g2Ready && g4ActivationReady;
+  const realCaseAuthorizationReady = isApproved(realCaseAuthorization);
+  const realCapabilitiesReady =
+    preparedForClosedPilot && realCaseAuthorizationReady;
 
   return {
+    definitionReady,
     g2Ready,
     g4ActivationReady,
+    preparedForClosedPilot,
+    realCaseAuthorizationReady,
     missingG2,
     missingG4,
     capabilities: {
-      canCollectServicePII: g2Ready,
-      canReceiveDocuments: technicalCommercialReady,
-      canShowActiveCommercialOffer: technicalCommercialReady,
-      canAcceptPayment: technicalCommercialReady,
-      canStartRealCase: technicalCommercialReady,
+      canCollectServicePII: realCapabilitiesReady,
+      canReceiveDocuments: realCapabilitiesReady,
+      canShowActiveCommercialOffer: realCapabilitiesReady,
+      canAcceptPayment: realCapabilitiesReady,
+      canStartRealCase: realCapabilitiesReady,
     },
   };
 }
@@ -101,11 +119,8 @@ export function evaluatePowersActivation(
 export const POWERS_ACTIVATION = evaluatePowersActivation();
 
 function assertActivationConsistency(state: PowersActivationState): void {
-  if (!state.g2Ready && state.capabilities.canCollectServicePII) {
-    throw new Error("Powers activation invariant failed: PII enabled before G2.");
-  }
-
-  const commercialCapabilities = [
+  const realCapabilities = [
+    state.capabilities.canCollectServicePII,
     state.capabilities.canReceiveDocuments,
     state.capabilities.canShowActiveCommercialOffer,
     state.capabilities.canAcceptPayment,
@@ -113,11 +128,16 @@ function assertActivationConsistency(state: PowersActivationState): void {
   ];
 
   if (
-    commercialCapabilities.some(Boolean) &&
-    !(state.g2Ready && state.g4ActivationReady)
+    realCapabilities.some(Boolean) &&
+    !(
+      state.definitionReady &&
+      state.g2Ready &&
+      state.g4ActivationReady &&
+      state.realCaseAuthorizationReady
+    )
   ) {
     throw new Error(
-      "Powers activation invariant failed: commercial capability enabled before G2 + G4-B.",
+      "Powers activation invariant failed: real capability enabled before all human/operational gates.",
     );
   }
 }
@@ -136,8 +156,10 @@ const approveMap = (items: EvidenceMap): EvidenceMap =>
     Object.keys(items).map((key) => [key, syntheticApproved(key)]),
   );
 
+const SYNTHETIC_DEFINITION_APPROVED = syntheticApproved("D-R2-03");
 const SYNTHETIC_G2_APPROVED = approveMap(POWERS_G2_EVIDENCE);
 const SYNTHETIC_G4_APPROVED = approveMap(POWERS_G4_ACTIVATION_EVIDENCE);
+const SYNTHETIC_REAL_CASE_APPROVED = syntheticApproved("REAL-CASE-GO");
 
 export const POWERS_ACTIVATION_SELF_TEST = [
   {
@@ -145,47 +167,62 @@ export const POWERS_ACTIVATION_SELF_TEST = [
     pass: (() => {
       const state = evaluatePowersActivation();
       return (
+        !state.definitionReady &&
         !state.g2Ready &&
         !state.g4ActivationReady &&
-        !state.capabilities.canCollectServicePII &&
-        !state.capabilities.canReceiveDocuments &&
-        !state.capabilities.canAcceptPayment &&
-        !state.capabilities.canStartRealCase
+        !state.preparedForClosedPilot &&
+        !state.realCaseAuthorizationReady &&
+        Object.values(state.capabilities).every((value) => !value)
       );
     })(),
   },
   {
-    id: "g2-only",
+    id: "definition-plus-g2-not-enough",
     pass: (() => {
       const state = evaluatePowersActivation(
+        SYNTHETIC_DEFINITION_APPROVED,
         SYNTHETIC_G2_APPROVED,
         POWERS_G4_ACTIVATION_EVIDENCE,
+        POWERS_REAL_CASE_AUTHORIZATION,
       );
       return (
+        state.definitionReady &&
         state.g2Ready &&
         !state.g4ActivationReady &&
-        state.capabilities.canCollectServicePII &&
-        !state.capabilities.canReceiveDocuments &&
-        !state.capabilities.canShowActiveCommercialOffer &&
-        !state.capabilities.canAcceptPayment &&
-        !state.capabilities.canStartRealCase
+        !state.preparedForClosedPilot &&
+        Object.values(state.capabilities).every((value) => !value)
       );
     })(),
   },
   {
-    id: "g2-plus-g4",
+    id: "prepared-but-not-authorized",
     pass: (() => {
       const state = evaluatePowersActivation(
+        SYNTHETIC_DEFINITION_APPROVED,
         SYNTHETIC_G2_APPROVED,
         SYNTHETIC_G4_APPROVED,
+        POWERS_REAL_CASE_AUTHORIZATION,
       );
       return (
-        state.g2Ready &&
-        state.g4ActivationReady &&
-        state.capabilities.canReceiveDocuments &&
-        state.capabilities.canShowActiveCommercialOffer &&
-        state.capabilities.canAcceptPayment &&
-        state.capabilities.canStartRealCase
+        state.preparedForClosedPilot &&
+        !state.realCaseAuthorizationReady &&
+        Object.values(state.capabilities).every((value) => !value)
+      );
+    })(),
+  },
+  {
+    id: "all-gates-plus-real-case-authorization",
+    pass: (() => {
+      const state = evaluatePowersActivation(
+        SYNTHETIC_DEFINITION_APPROVED,
+        SYNTHETIC_G2_APPROVED,
+        SYNTHETIC_G4_APPROVED,
+        SYNTHETIC_REAL_CASE_APPROVED,
+      );
+      return (
+        state.preparedForClosedPilot &&
+        state.realCaseAuthorizationReady &&
+        Object.values(state.capabilities).every(Boolean)
       );
     })(),
   },
@@ -202,15 +239,16 @@ export const POWERS_ACTIVATION_SELF_TEST = [
         },
       };
       const state = evaluatePowersActivation(
+        SYNTHETIC_DEFINITION_APPROVED,
         malformedG2,
         SYNTHETIC_G4_APPROVED,
+        SYNTHETIC_REAL_CASE_APPROVED,
       );
       return (
         !state.g2Ready &&
         state.missingG2.includes("professionalCredential") &&
-        !state.capabilities.canCollectServicePII &&
-        !state.capabilities.canReceiveDocuments &&
-        !state.capabilities.canAcceptPayment
+        !state.preparedForClosedPilot &&
+        Object.values(state.capabilities).every((value) => !value)
       );
     })(),
   },
@@ -227,7 +265,3 @@ if (failedActivationSelfTests.length > 0) {
       .join(", ")}`,
   );
 }
-
-// IMPORTANTE: el escenario sintético g2-plus-g4 solo prueba coherencia técnica.
-// D-R2-03 (alcance/precio/SLA) y la autorización humana de activación/publicación
-// son gates independientes y deliberadamente no se pueden satisfacer desde este módulo.
