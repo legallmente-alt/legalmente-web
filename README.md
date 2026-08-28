@@ -32,7 +32,10 @@ La primera vía comercial adoptada es **Corporate Powers / Representation Review
 - `/servicios/poderes-mexico` — landing de preparación y estado del candidato comercial.
 - D-R2-03 permanece `OPEN`: falta aprobación humana de alcance fijo, límite documental, exclusiones, precio fijo y SLA.
 - G2 permanece `BLOCKED` hasta cerrar identidad/credencial profesional, territorio, parte contratante, conflictos, privacidad, canal seguro, QA y modelo fiscal.
+- G4-B permanece bloqueado hasta cerrar precio público, términos, cancelación/reembolso, evidencia de transacción y mecanismo de pago.
 - No hay intake real, documentos, PII, checkout, pago ni casos reales.
+
+La recomendación de alcance/precio puede prepararse en código o Drive, pero **D-R2-03 no puede cerrarse por CI ni por una inferencia del asistente**. Requiere decisión humana registrada.
 
 ### Laboratorio sintético — NDA México
 
@@ -56,9 +59,9 @@ Git solo conserva:
 
 La evidencia completa permanece en el sistema documental controlado del proyecto.
 
-Mientras G2 y G4-B no estén completos:
+Mientras D-R2-03, G2 y G4-B no estén completos:
 
-- PII del piloto: OFF.
+- PII del servicio: OFF.
 - Recepción documental: OFF.
 - Oferta comercial activa: OFF.
 - Pago: OFF.
@@ -82,7 +85,7 @@ npm run lint
 
 `feat/business-pilot-preflight-nda-mx`
 
-El nombre histórico de la rama conserva el origen del trabajo NDA; no redefine la vía comercial. El PR debe permanecer revisable y no debe fusionarse como oferta comercial activa mientras D-R2-03/G2 permanezcan abiertos o bloqueados.
+El nombre histórico de la rama conserva el origen del trabajo NDA; no redefine la vía comercial. El PR debe permanecer revisable y no debe fusionarse como oferta comercial activa mientras D-R2-03/G2/G4-B permanezcan abiertos o bloqueados.
 
 ## Regla de cierre
 
