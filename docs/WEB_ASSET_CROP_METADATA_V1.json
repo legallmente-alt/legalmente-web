@@ -1,0 +1,38 @@
+{
+  "status": "CODE_READY",
+  "source_policy": "Original PNGs remain in Drive; these are web derivatives only.",
+  "assets": {
+    "LM-PA-W01": {
+      "source_file_id": "1lahq3yTyNkpRVLvBTmeXrnEnioPNcFWi",
+      "role": "HOME HERO",
+      "focal": {"x": 0.36, "y": 0.70},
+      "desktop": {"object_position": "center center", "output": "LM-PA-W01_home_1440.webp"},
+      "mobile_360": {"object_position": "center 72%", "output": "LM-PA-W01_home_360.webp", "rule": "ONE FOCUS + ONE PEEK; preserve book/threshold/depth"},
+      "mobile_390": {"object_position": "center 70%", "output": "LM-PA-W01_home_390.webp", "rule": "FOCAL OBJECT + NEXT ACTION"},
+      "mobile_430": {"object_position": "center 68%", "output": "LM-PA-W01_home_430.webp", "rule": "MORE BREATHING ROOM, NOT MORE MODULES"},
+      "safe_area": "Keep UI outside the book and threshold focal relationship.",
+      "text_zone": "right 0 44%",
+      "verdict": "KEEP_WITH_CROP"
+    },
+    "LM-PA-W02": {
+      "source_file_id": "1VnpyumGA176Op-n3zo0IMO9y5p5BBvWi",
+      "role": "HISTORY / CONTINUATION",
+      "focal": {"x": 0.55, "y": 0.58},
+      "desktop": {"object_position": "center center", "output": "LM-PA-W02_history_1440.webp"},
+      "responsive": {"object_position": "center 60%", "output": "LM-PA-W02_history_responsive.webp", "rule": "Preserve lifted page + brass ruler diagonal; bookshelf may exit."},
+      "safe_area": "Keep UI outside page/ruler gesture.",
+      "text_zone": "right 0 42%",
+      "verdict": "KEEP_WITH_CROP"
+    },
+    "LM-PA-W03": {
+      "source_file_id": "1JMYm21CAK9bXwCiPNpRluZEWy0TaRmvQ",
+      "role": "CINEMA & LAW / CONTINUATION",
+      "focal": {"x": 0.66, "y": 0.61},
+      "desktop": {"object_position": "center center", "output": "LM-PA-W03_cinema_law_1200.webp"},
+      "responsive": {"object_position": "center 60%", "output": "LM-PA-W03_cinema_law_mobile.webp", "rule": "Preserve beam-to-envelope causal line; no generic poster crop."},
+      "safe_area": "Keep UI outside beam and envelope relationship.",
+      "text_zone": "left 0 38%",
+      "verdict": "KEEP_WITH_CROP"
+    }
+  }
+}
