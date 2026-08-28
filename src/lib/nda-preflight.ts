@@ -54,7 +54,7 @@ export interface PreflightResult {
   reasonCodes: ReasonCode[];
   humanReviewRequired: boolean;
   documentUploadAllowed: false;
-  businessGate: "G2_BLOCKED";
+  labState: "SYNTHETIC_ONLY";
 }
 
 export const EMPTY_NDA_PREFLIGHT: NdaPreflightInput = {
@@ -103,7 +103,7 @@ export function evaluateNdaPreflight(input: NdaPreflightInput): PreflightResult 
       reasonCodes: unique(stopReasons),
       humanReviewRequired: true,
       documentUploadAllowed: false,
-      businessGate: "G2_BLOCKED",
+      labState: "SYNTHETIC_ONLY",
     };
   }
 
@@ -136,7 +136,7 @@ export function evaluateNdaPreflight(input: NdaPreflightInput): PreflightResult 
       ]),
       humanReviewRequired: false,
       documentUploadAllowed: false,
-      businessGate: "G2_BLOCKED",
+      labState: "SYNTHETIC_ONLY",
     };
   }
 
@@ -153,7 +153,7 @@ export function evaluateNdaPreflight(input: NdaPreflightInput): PreflightResult 
       reasonCodes: unique(reviewReasons),
       humanReviewRequired: true,
       documentUploadAllowed: false,
-      businessGate: "G2_BLOCKED",
+      labState: "SYNTHETIC_ONLY",
     };
   }
 
@@ -162,7 +162,7 @@ export function evaluateNdaPreflight(input: NdaPreflightInput): PreflightResult 
     reasonCodes: ["WITHIN_PILOT_SCOPE"],
     humanReviewRequired: false,
     documentUploadAllowed: false,
-    businessGate: "G2_BLOCKED",
+    labState: "SYNTHETIC_ONLY",
   };
 }
 
