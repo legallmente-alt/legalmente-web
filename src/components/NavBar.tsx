@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const links = [
-  { href: "/catalogo", label: "Explorar" },
+  { href: "/explorar", label: "Explorar" },
   { href: "/internal/product-lab", label: "Preparar" },
   { href: "/confianza", label: "Fuentes" },
 ];
@@ -24,10 +24,10 @@ export default function NavBar() {
             </Link>
           ))}
           <Link
-            href="/internal/product-lab"
+            href="/explorar"
             className="ml-1 inline-flex min-h-11 items-center border border-[#102A43] px-4 text-sm font-semibold text-[#102A43] transition-colors hover:bg-[#102A43] hover:text-[#F5F0E8] focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-2"
           >
-            Abrir instrumento
+            Entender algo
           </Link>
         </div>
       </div>
