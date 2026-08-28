@@ -1,40 +1,40 @@
-# legalmente-web
+# LegalMente
 
-Sitio web de LegalMente — divulgación jurídica panhispánica.
+## Visual quality gate — 2026 product direction
 
-## Objetivo
+The current public/root scaffold and the first internal product-lab composition are **not** accepted as the final visual target. They are implementation scaffolds only.
 
-El mismo que en redes: generar mensajes directos que se conviertan en consulta. La web no es un folleto, es un cierre. Ver `legalmente-marca-y-estilo.md` en el repo `Psyche-creation` (docs/) para la línea editorial completa.
+### Status
 
-## Sistema visual vigente (decisión 23-ago-2026)
+- Legal core: internal deterministic implementation under review.
+- Visual tokens/symbols/cards: implementation candidates, not final art.
+- Manus 2 production images: `PRODUCTION_PROOF`, binary import pending.
+- Root Home composition: `VISUAL_REJECT / LEGACY_SCAFFOLD`.
+- Internal product lab composition: `FUNCTIONAL_SCAFFOLD / VISUAL_QA_REQUIRED`.
+- Publication/deploy: blocked.
 
-**Realismo cinematográfico editorial** — el definido en `Psyche-creation/docs/legalmente-marca-y-estilo.md`, Sección 3 (Librería de Prompts Maestros para Imágenes). Paleta base: Crema `#EDE7DA`, Oro `#C8A24A`, Tinta profunda `#0E1A24`. Estilo: cinematic legal realism con restrained symbolic surrealism, fotorrealista, composición tipo still-life editorial. Formato 9:16 vertical para redes, 16:9 para portadas de YouTube.
+### 2026 acceptance principles
 
-Existe un segundo sistema (óleo cinematográfico / claroscuro, paleta Nogal/Marfil/Azul Petróleo/Latón) documentado en el skill `legalmente-visual-system`, sincronizado desde el Drive del proyecto. Ese sistema quedó descartado para este proyecto — si el skill se sigue activando y sugiriendo esa dirección de arte, es una inconsistencia pendiente de corregir en el Drive/skill, no una alternativa válida. No mezclar ambos sistemas en la misma pieza o colección.
+LegalMente must feel like a premium, explorable editorial/product experience, not a legacy legal portal, a generic SaaS dashboard, a school slide deck, or a grid of identical cards. Art direction, hierarchy, motion, editorial pacing and discovery must work together. Visual tokens are constraints, not proof of quality.
 
-## Mapa del sitio
+Do not promote any scaffold to public UI until art/UX review explicitly passes desktop and 360/390/430 mobile surfaces. Do not treat compliance with symbol, color or card tokens as sufficient visual acceptance.
 
-Seis páginas, sin relleno: Inicio; Sobre LegalMente / Sobre Raymundo (autoridad profesional); Áreas de práctica (corporativo, contractual, inmobiliario, regulatorio/compliance); Catálogo editorial (piezas ya publicadas en redes, curadas); Casos y contingencias resueltas (sin identificar clientes); Contacto (único objetivo real de la página — CTA de documento, nunca "consulta a un abogado").
+### Hard anti-patterns
 
-No se agregan más páginas sin justificación: la métrica única de éxito del proyecto son los mensajes directos, no el tráfico.
+- centered marketing hero + two equal outlined cards as the main Home structure;
+- repeated equal-width card grids for every content family;
+- generic gradient placeholders where art is expected;
+- decorative glassmorphism, excessive borders or shadows;
+- serif typography everywhere without role hierarchy;
+- dashboard-like presentation of editorial worlds;
+- motion without information value;
+- content density that hides the primary user action;
+- treating `PRODUCTION_PROOF` or `VECTOR_CANDIDATE` as final/public art.
 
-## Stack
+### Engineering rule
 
-Next.js (React) más TypeScript más Tailwind. Consistente con Psyche-creation (React/TypeScript) y compatible con envolver el sitio como PWA o reutilizar lógica en una futura app (React Native / Expo).
+The code should keep legal logic, source data, territory, copy and image assets separate. Feature flags remain fail-closed. No merge, deployment or publication is authorized by this branch.
 
-## Estructura de carpetas propuesta
+---
 
-```
-src/pages (o app/ si se usa App Router): index, sobre, areas-de-practica, catalogo, casos, contacto
-src/components
-src/content -> piezas del catalogo, mismo patron que content/*.json de Psyche-creation
-src/styles -> tokens de la paleta: crema/oro/tinta
-```
-
-## Automatización (fase 2)
-
-CI/CD de build y deploy en cada push a main, con el mismo patrón que ya usa Psyche-creation. Sincronización del catálogo editorial con las piezas ya generadas en el pipeline de Remotion/Canva. Formulario de contacto conectado a un servicio simple, midiendo "mensajes directos" en el mismo tablero que usan las redes.
-
-## Estado
-
-Repositorio recién creado — esqueleto de carpetas y documentación en progreso. Próximo paso: validar copy de cada sección y generar las primeras piezas visuales con el sistema vigente descrito arriba.
+Existing scaffold documentation remains in repository history. This README reflects the current quality gate for the active product branch.
