@@ -45,22 +45,56 @@ try {
       const url = new URL(surface.route, baseUrl).toString();
       const response = await page.goto(url, { waitUntil: "domcontentloaded" });
       await page.locator("body").waitFor({ state: "visible" });
-      await page.waitForTimeout(250);
+
+      await page.evaluate(async () => {
+        const images = Array.from(document.images);
+        for (const image of images) image.loading = "eager";
+
+        await Promise.all(
+          images.map(async (image) => {
+            if (!image.complete) {
+              await new Promise((resolve) => {
+                const finish = () => resolve(undefined);
+                image.addEventListener("load", finish, { once: true });
+                image.addEventListener("error", finish, { once: true });
+                setTimeout(finish, 5000);
+              });
+            }
+            if (typeof image.decode === "function") {
+              try {
+                await image.decode();
+              } catch {
+                // A failed decorative image must still be visible to the proof checks below.
+              }
+            }
+          }),
+        );
+      });
+
+      await page.waitForTimeout(150);
 
       const status = response?.status() ?? 0;
       const metrics = await page.evaluate(() => {
         const root = document.documentElement;
+        const images = Array.from(document.images);
         return {
           title: document.title,
           h1Count: document.querySelectorAll("h1").length,
           clientWidth: root.clientWidth,
           scrollWidth: root.scrollWidth,
           bodyScrollWidth: document.body.scrollWidth,
+          imageCount: images.length,
+          brokenImages: images.filter((image) => image.complete && image.naturalWidth === 0).length,
         };
       });
 
       const horizontalOverflow = Math.max(metrics.scrollWidth, metrics.bodyScrollWidth) > metrics.clientWidth + 1;
-      const ok = status >= 200 && status < 400 && metrics.h1Count === 1 && !horizontalOverflow;
+      const ok =
+        status >= 200 &&
+        status < 400 &&
+        metrics.h1Count === 1 &&
+        !horizontalOverflow &&
+        metrics.brokenImages === 0;
       if (!ok) failed = true;
 
       const filename = `${surface.name}-${viewport.name}.png`;
@@ -79,6 +113,8 @@ try {
         clientWidth: metrics.clientWidth,
         scrollWidth: Math.max(metrics.scrollWidth, metrics.bodyScrollWidth),
         horizontalOverflow,
+        imageCount: metrics.imageCount,
+        brokenImages: metrics.brokenImages,
         screenshot: filename,
         ok,
       });
@@ -100,6 +136,7 @@ const summary = {
     httpSuccess: true,
     exactlyOneH1: true,
     noHorizontalOverflow: true,
+    noBrokenImages: true,
   },
   passed: !failed,
   results,
