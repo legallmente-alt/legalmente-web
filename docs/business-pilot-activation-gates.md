@@ -36,7 +36,7 @@ Cada registro público solo puede almacenar:
 
 ## G2 — Professional & Legal Responsibility
 
-Requiere 9 aprobaciones con evidencia externa:
+`POWERS_G2_EVIDENCE` requiere 9 aprobaciones con evidencia externa:
 
 1. `providerIdentity`
 2. `professionalCredential`
@@ -52,7 +52,7 @@ G2 no sustituye D-R2-03. Ambos deben resolverse antes de una activación real.
 
 ## G4-B — Commercial Activation
 
-Requiere 5 aprobaciones adicionales:
+`POWERS_G4_ACTIVATION_EVIDENCE` requiere 5 aprobaciones adicionales:
 
 1. `publicPrice`
 2. `serviceTerms`
@@ -64,7 +64,7 @@ El precio monetario permanece pendiente; no reutilizar la hipótesis del laborat
 
 ## Capacidades
 
-`evaluatePilotActivation()` deriva capacidades; la UI no decide por su cuenta.
+`evaluatePowersActivation()` deriva capacidades; la UI no decide por su cuenta.
 
 - PII del servicio: solo puede habilitarse si G2 está completo.
 - Recepción documental: G2 + G4-B completos.
