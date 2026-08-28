@@ -34,18 +34,14 @@ export default function HomePage() {
 
       <section className="grid gap-6 sm:grid-cols-2">
         <div className="rounded-sm border border-oro/20 p-6">
-          <h2 className="mb-2 font-serif text-xl text-oro">
-            Áreas de práctica
-          </h2>
+          <h2 className="mb-2 font-serif text-xl text-oro">Áreas de práctica</h2>
           <p className="text-sm text-crema/70">
             Explora las áreas jurídicas que cubrimos como contenido educativo,
             organizadas por claridad conceptual y utilidad real.
           </p>
         </div>
         <div className="rounded-sm border border-oro/20 p-6">
-          <h2 className="mb-2 font-serif text-xl text-oro">
-            Casos y ejemplos
-          </h2>
+          <h2 className="mb-2 font-serif text-xl text-oro">Casos y ejemplos</h2>
           <p className="text-sm text-crema/70">
             Situaciones redactadas para explicar cómo funcionan los conceptos,
             sin convertir el contenido en asesoría individual.
@@ -57,22 +53,45 @@ export default function HomePage() {
         <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
           <div>
             <p className="text-xs uppercase tracking-[0.16em] text-oro/70">
-              Ruta profesional separada · México
+              Ruta profesional separada · México corporativo
             </p>
             <h2 className="mt-2 font-serif text-2xl text-crema">
-              Piloto de revisión acotada de NDA
+              Revisión de Poderes y Representación Corporativa
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-crema/70">
-              Estamos preparando un servicio limitado y gobernado. Todavía no
-              acepta pagos ni documentos. Puedes revisar su alcance y probar el
-              preflight sin compartir información personal o contractual.
+              Es la vía comercial adoptada para preparar, no activar. Alcance,
+              precio y SLA siguen pendientes de decisión humana; no acepta pagos,
+              datos personales ni documentos.
             </p>
           </div>
           <Link
-            href="/servicios/nda-mexico"
+            href="/servicios/poderes-mexico"
             className="inline-flex justify-center rounded-lg border border-oro px-5 py-3 text-sm font-semibold text-oro transition hover:bg-oro hover:text-tinta"
           >
-            Ver piloto
+            Ver preparación
+          </Link>
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-crema/10 p-6 sm:p-8">
+        <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
+          <div>
+            <p className="text-xs uppercase tracking-[0.16em] text-crema/50">
+              Laboratorio sintético · sin servicio comercial
+            </p>
+            <h2 className="mt-2 font-serif text-xl text-crema">
+              Preflight de NDA — México
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-crema/60">
+              Este flujo prueba reglas de admisibilidad sin PII, archivos ni
+              almacenamiento. No es la primera vía comercial de LegalMente.
+            </p>
+          </div>
+          <Link
+            href="/preparar/nda-mexico"
+            className="inline-flex justify-center rounded-lg border border-crema/20 px-5 py-3 text-sm text-crema/70 transition hover:border-crema/40 hover:text-crema"
+          >
+            Probar laboratorio
           </Link>
         </div>
       </section>
