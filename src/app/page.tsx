@@ -1,32 +1,51 @@
 import Link from "next/link";
 import { worlds } from "@/lib/knowledge-graph/content";
 
-function AssetField({
-  assetId,
-  label,
-  className = "",
-}: {
-  assetId: "W01" | "W02" | "W03";
-  label: string;
-  className?: string;
-}) {
+const assetBase = "/assets/legalmente/editorial-instrument";
+
+const assets = {
+  W01: {
+    alt: "Libro abierto frente a un umbral iluminado, imagen editorial de entrada a LegalMente.",
+    desktop: `${assetBase}/LM-PA-W01_home_1440.webp`,
+    mobile430: `${assetBase}/LM-PA-W01_home_430.webp`,
+    mobile390: `${assetBase}/LM-PA-W01_home_390.webp`,
+    mobile360: `${assetBase}/LM-PA-W01_home_360.webp`,
+  },
+  W02: {
+    alt: "Página elevada y regla de latón en una escena de archivo, imagen editorial sobre historia del Derecho.",
+    desktop: `${assetBase}/LM-PA-W02_history_1440.webp`,
+    mobile: `${assetBase}/LM-PA-W02_history_responsive.webp`,
+  },
+  W03: {
+    alt: "Haz de luz dirigido hacia un sobre en una escena cinematográfica, imagen editorial de Cine y Derecho.",
+    desktop: `${assetBase}/LM-PA-W03_cinema_law_1200.webp`,
+    mobile: `${assetBase}/LM-PA-W03_cinema_law_mobile.webp`,
+  },
+} as const;
+
+function AssetField({ assetId, className = "" }: { assetId: keyof typeof assets; className?: string }) {
+  const asset = assets[assetId];
+
   return (
-    <div
-      role="img"
-      aria-label={`${label}. Asset ${assetId} pendiente de importación binaria en esta rama aislada.`}
-      data-asset-id={assetId}
-      data-binary-status="pending"
-      className={`relative overflow-hidden bg-[#102A43] text-[#F5F0E8] ${className}`}
-    >
-      <div className="absolute inset-0 opacity-30" aria-hidden="true">
-        <div className="absolute left-[8%] top-[10%] h-[58%] w-px bg-[#F5F0E8]/60" />
-        <div className="absolute bottom-[14%] left-[8%] right-[8%] h-px bg-[#F5F0E8]/30" />
-        <div className="absolute right-[9%] top-[12%] h-16 w-16 border-r border-t border-[#B68B4A]/80" />
-      </div>
-      <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 text-xs uppercase tracking-[0.12em] text-[#F5F0E8]/66">
-        <span>{label}</span>
-        <span>{assetId}</span>
-      </div>
+    <div data-asset-id={assetId} data-binary-status="local" className={`relative overflow-hidden bg-[#102A43] ${className}`}>
+      <picture>
+        {assetId === "W01" ? (
+          <>
+            <source media="(max-width: 360px)" srcSet={assets.W01.mobile360} />
+            <source media="(max-width: 390px)" srcSet={assets.W01.mobile390} />
+            <source media="(max-width: 430px)" srcSet={assets.W01.mobile430} />
+          </>
+        ) : (
+          <source media="(max-width: 768px)" srcSet={asset.mobile} />
+        )}
+        <img
+          src={asset.desktop}
+          alt={asset.alt}
+          className="absolute inset-0 h-full w-full object-cover"
+          loading={assetId === "W01" ? "eager" : "lazy"}
+          decoding="async"
+        />
+      </picture>
     </div>
   );
 }
@@ -53,10 +72,7 @@ export default function HomePage() {
             Entra por una situación, un concepto o un proceso. LegalMente conecta lo que estás viendo con su materia, su contexto, sus fuentes, su territorio y lo que conviene aprender después.
           </p>
 
-          <Link
-            href="/explorar"
-            className="mt-9 inline-flex min-h-12 items-center justify-center bg-[#102A43] px-6 text-sm font-semibold text-[#F5F0E8] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-4 motion-reduce:transform-none"
-          >
+          <Link href="/explorar" className="mt-9 inline-flex min-h-12 items-center justify-center bg-[#102A43] px-6 text-sm font-semibold text-[#F5F0E8] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-4 motion-reduce:transform-none">
             ¿Qué quieres entender?
           </Link>
 
@@ -74,7 +90,7 @@ export default function HomePage() {
         </div>
 
         <div className="order-1 lg:order-2">
-          <AssetField assetId="W01" label="Umbral de entrada" className="aspect-[5/4] min-h-[330px] w-full lg:min-h-[610px] lg:aspect-auto" />
+          <AssetField assetId="W01" className="aspect-[3/4] min-h-[330px] w-full min-[431px]:aspect-[5/4] lg:min-h-[610px] lg:aspect-[16/9]" />
           <div className="mt-3 flex items-center justify-between text-xs text-[#102A43]/48">
             <span>Una pregunta.</span>
             <span>Una ruta clara para continuar.</span>
@@ -125,7 +141,7 @@ export default function HomePage() {
 
           <div className="mt-12 grid gap-8 lg:grid-cols-[1.18fr_0.82fr] lg:gap-5">
             <Link href="/mundo/historia-sistemas" className="group block focus:outline-none focus:ring-2 focus:ring-[#63D7B0] focus:ring-offset-4 focus:ring-offset-[#102A43]">
-              <AssetField assetId="W02" label="Historia del Derecho" className="aspect-[16/10] w-full bg-[#173954]" />
+              <AssetField assetId="W02" className="aspect-[4/5] w-full md:aspect-[16/10]" />
               <div className="mt-5 flex items-start justify-between gap-6">
                 <div>
                   <p className="text-xs uppercase tracking-[0.14em] text-[#F5F0E8]/48">Explorar origen y sistemas</p>
@@ -135,12 +151,12 @@ export default function HomePage() {
               </div>
             </Link>
 
-            <Link href="/mundo/conflicto-prueba" className="group block self-end focus:outline-none focus:ring-2 focus:ring-[#63D7B0] focus:ring-offset-4 focus:ring-offset-[#102A43]">
-              <AssetField assetId="W03" label="Conflicto y prueba" className="aspect-[4/3] w-full bg-[#0B2235]" />
+            <Link href="/explorar" className="group block self-end focus:outline-none focus:ring-2 focus:ring-[#63D7B0] focus:ring-offset-4 focus:ring-offset-[#102A43]">
+              <AssetField assetId="W03" className="aspect-[4/5] w-full" />
               <div className="mt-5 border-l border-[#D97745] pl-4">
-                <p className="text-xs uppercase tracking-[0.14em] text-[#F5F0E8]/48">Del hecho a la evidencia</p>
-                <h3 className="mt-2 font-serif text-2xl">Conflicto, proceso y prueba</h3>
-                <p className="mt-2 max-w-[34ch] text-sm leading-6 text-[#F5F0E8]/62">Aprende a distinguir lo ocurrido, lo que se afirma y lo que puede sostenerlo.</p>
+                <p className="text-xs uppercase tracking-[0.14em] text-[#F5F0E8]/48">Otra puerta de entrada</p>
+                <h3 className="mt-2 font-serif text-2xl">Cine y Derecho</h3>
+                <p className="mt-2 max-w-[34ch] text-sm leading-6 text-[#F5F0E8]/62">Una historia también puede abrir preguntas sobre conducta, prueba, poder, responsabilidad y contexto.</p>
               </div>
             </Link>
           </div>
