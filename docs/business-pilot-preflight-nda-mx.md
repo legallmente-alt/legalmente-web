@@ -1,57 +1,45 @@
-# Business Pilot — Preflight NDA México
+# NDA México — Synthetic Preflight Lab
 
 Fecha: 2026-08-28
 
 ## Estado
 
-Implementación de rama para el piloto cerrado de preparación. No autoriza cobro, carga de documentos ni prestación profesional.
+`SYNTHETIC_ONLY`.
 
-Fuente de producto: `LegalMente — Business Pilot — G1 Service Definition V1 — 2026-08-28` en Drive.
+Este flujo pertenece al laboratorio interno/sintético de Document Review. **No es la primera vía comercial de LegalMente y no depende del G2 de Powers Review.**
 
-Bloqueo superior: G2 — Professional & Legal Responsibility.
+La primera vía comercial adoptada permanece `Corporate Powers / Representation Review — México corporativo`, inactiva y con D-R2-03 abierto.
 
 ## Objetivo técnico
 
-Clasificar únicamente si los hechos declarados por una persona encajan en el alcance operativo de un futuro servicio de revisión acotada de NDA simple — México.
+Probar un router determinista `ACCEPT / CLARIFY / REVIEW / STOP` sin recibir documentos ni datos identificables.
 
-El preflight no analiza cláusulas, no recibe archivos, no consulta una IA y no emite una conclusión jurídica.
+El laboratorio no analiza cláusulas, no consulta IA, no almacena respuestas y no emite una conclusión jurídica.
 
 ## Orden de rutas
 
-La función `evaluateNdaPreflight` aplica precedencia fail-closed:
+`evaluateNdaPreflight()` aplica precedencia fail-closed:
 
 1. `STOP` — existe una exclusión determinista.
-2. `CLARIFY` — no hay un STOP, pero faltan datos críticos o anexos.
-3. `REVIEW` — no hay STOP/CLARIFY, pero existe una señal que exige decisión humana.
-4. `ACCEPT` — únicamente cuando todos los campos críticos están definidos y ninguna regla anterior dispara.
+2. `CLARIFY` — no hay STOP, pero faltan datos críticos o anexos.
+3. `REVIEW` — no hay STOP/CLARIFY, pero existe una señal que exigiría decisión humana.
+4. `ACCEPT` — todos los campos críticos están definidos y ninguna regla anterior dispara.
 
-`ACCEPT` significa «encaja en el alcance sintético», no «servicio contratado» ni «documento aceptado».
+`ACCEPT` significa únicamente «encaja en el escenario sintético».
 
 ## Invariantes
 
-- `documentUploadAllowed` es siempre `false`.
-- `businessGate` es siempre `G2_BLOCKED`.
-- No existe input `file`.
-- No existe route handler/API para este preflight.
-- No existe persistencia local o remota.
-- El formulario no solicita nombre, correo, empresa, importe, contraparte, contenido contractual ni otro identificador personal.
+- `labState = SYNTHETIC_ONLY`.
+- `documentUploadAllowed = false` en todas las rutas.
+- No existe `input[type=file]`.
+- No existe API de envío para el preflight.
+- No existe persistencia local o remota deliberada.
+- No se solicita nombre, correo, empresa, importe, contraparte, texto contractual ni identificadores.
+- No existe checkout ni pago.
 - La lógica no utiliza IA ni red.
-- Una materia excluida nunca se degrada a `REVIEW` por falta de otros datos.
-- Dos países generan `STOP` en este piloto.
-- No competencia material/central genera `STOP`.
-- Datos sensibles generan `REVIEW` y nunca `ACCEPT` automático.
-
-## Límite inicial
-
-- Territorio de producto: México.
-- Documento: NDA/acuerdo de confidencialidad.
-- Idioma: español.
-- Un documento.
-- Máximo inicial: 10 páginas.
+- Una exclusión determinista nunca se degrada a `REVIEW` por faltar otros datos.
 
 ## Contrato sintético
-
-El módulo ejecuta once casos deterministas al cargarse y lanza un error si una ruta real difiere de la esperada:
 
 | Caso | Esperado |
 |---|---|
@@ -67,21 +55,21 @@ El módulo ejecuta once casos deterministas al cargarse y lanza un error si una 
 | No es NDA | STOP |
 | Información insuficiente | CLARIFY |
 
-Cobertura esperada: 4/4 rutas.
+Cobertura esperada: 4/4 rutas; 11 escenarios.
 
-## Motivos tipificados
+El módulo falla al cargarse si una ruta obtenida deja de coincidir con el contrato esperado.
 
-La salida incluye `reasonCodes[]`; la interfaz traduce los códigos a texto. La UI no debe derivar la ruta por su cuenta.
+## Relación con la ruta comercial
 
-## Siguiente gate técnico
+Este laboratorio puede producir aprendizaje sobre admisibilidad, claridad y stop rules. No autoriza ni define alcance, precio, SLA, privacidad, conflictos o prestación profesional de Powers Review.
 
-Antes de habilitar cualquier recepción documental se requiere un cambio separado y revisable que demuestre que G2 está verde. Ese cambio deberá definir canal seguro, privacidad/retención, responsable, conflictos, términos y QA. No se debe convertir el booleano de carga en un simple feature flag sin gobernanza.
+No reutilizar la hipótesis económica histórica de NDA como precio de Powers Review.
 
 ## No hacer
 
-- No añadir upload a esta rama.
+- No añadir upload.
+- No añadir email o captura de PII.
 - No añadir checkout.
-- No añadir OAuth.
-- No capturar PII para «probar» el flujo.
-- No presentar ACCEPT como consejo legal.
-- No fusionar como oferta comercial activa mientras G2 permanezca bloqueado.
+- No convertir `ACCEPT` en consejo jurídico.
+- No presentar `/servicios/nda-mexico` como oferta; esa ruta redirige al laboratorio.
+- No vincular la activación de este laboratorio a G2/G4-B.
