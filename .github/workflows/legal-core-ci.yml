@@ -1,0 +1,34 @@
+name: LegalMente legal core CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/lib/legal-core/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/legal-core-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/lib/legal-core/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/legal-core-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
