@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:legal-core": "tsx --test src/lib/legal-core/legal-core.test.ts"
   },
   "dependencies": {
     "next": "14.2.35",
@@ -24,6 +25,7 @@
     "eslint-config-next": "14.2.35",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
+    "tsx": "4.20.5",
     "typescript": "^5.5.2"
   }
 }
