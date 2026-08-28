@@ -1,6 +1,6 @@
 import { getActiveSmgParameter } from "./parameters";
 import { completedServiceYears, inclusiveCalendarDays, isLeapYear, lastAnniversaryIso, roundDays, roundMoney } from "./math";
-import type { SmgZone, ToolResult, WorkMode } from "./types";
+import type { Provenance, SmgZone, ToolResult, WorkMode } from "./types";
 
 const VACATION_TABLE: readonly [number, number, number][] = [
   [1, 1, 12], [2, 2, 14], [3, 3, 16], [4, 4, 18], [5, 5, 20],
@@ -8,12 +8,11 @@ const VACATION_TABLE: readonly [number, number, number][] = [
 ];
 
 function vacationEntitlement(serviceYear: number): number | null {
-  const row = VACATION_TABLE.find(([min, max]) => serviceYear >= min && serviceYear <= max);
-  return row?.[2] ?? null;
+  return VACATION_TABLE.find(([min, max]) => serviceYear >= min && serviceYear <= max)?.[2] ?? null;
 }
 
-const baseProvenance = (ruleVersion: string, sourceIds: string[]) => ({
-  territory: "MX" as const,
+const baseProvenance = (ruleVersion: string, sourceIds: string[]): Provenance => ({
+  territory: "MX",
   ruleVersion,
   calculationVersion: "1.0.0",
   effectiveDate: "2026-08-28",
@@ -29,14 +28,16 @@ export type VacationInput = {
   includeHistoricalPre2023Claim?: boolean;
 };
 
-export function calculateVacationMx(input: VacationInput): ToolResult<{
+type VacationData = {
   completedYears: number;
   annualEntitlement: number;
   proportionalVacationDays: number;
   pendingVacationDays: number;
   vacationAmount: number;
   vacationPremiumAmount: number;
-}> {
+};
+
+export function calculateVacationMx(input: VacationInput): ToolResult<VacationData> {
   const provenance = baseProvenance("1.0.0-frozen+control-patch", ["LFT-76", "LFT-78", "LFT-80", "DOF-2022-12-27"]);
   if (!(input.dailySalary > 0)) return { state: "REQUIRE_INPUT", warnings: [], requiredInputs: ["dailySalary"], provenance };
   const premium = input.vacationPremiumPct ?? 25;
@@ -46,33 +47,22 @@ export function calculateVacationMx(input: VacationInput): ToolResult<{
   const years = completedServiceYears(input.startDate, input.calculationDate);
   const anniversary = lastAnniversaryIso(input.startDate, input.calculationDate);
   if (years === null || anniversary === null) return { state: "REQUIRE_INPUT", warnings: [], requiredInputs: ["valid startDate/calculationDate"], provenance };
-
   const annual = vacationEntitlement(years + 1);
   if (annual === null) return { state: "REVIEW_REQUIRED", warnings: [], reviewReasons: ["Antigüedad fuera del tabulador congelado V1."], provenance };
   const elapsed = inclusiveCalendarDays(anniversary, input.calculationDate);
   if (elapsed === null) return { state: "REQUIRE_INPUT", warnings: [], requiredInputs: ["valid dates"], provenance };
+
   const proportional = (Math.max(0, elapsed - 1) / 365) * annual;
-  const pending = Math.max(0, proportional - (input.daysTakenCurrentPeriod ?? 0));
+  const pending = Math.max(0, proportional - Math.max(0, input.daysTakenCurrentPeriod ?? 0));
   const amount = pending * input.dailySalary;
-  return {
-    state: "PASS",
-    warnings: [],
-    data: {
-      completedYears: years,
-      annualEntitlement: annual,
-      proportionalVacationDays: roundDays(proportional),
-      pendingVacationDays: roundDays(pending),
-      vacationAmount: roundMoney(amount),
-      vacationPremiumAmount: roundMoney(amount * (premium / 100)),
-    },
-    provenance,
-  };
+  return { state: "PASS", warnings: [], data: { completedYears: years, annualEntitlement: annual, proportionalVacationDays: roundDays(proportional), pendingVacationDays: roundDays(pending), vacationAmount: roundMoney(amount), vacationPremiumAmount: roundMoney(amount * (premium / 100)) }, provenance };
 }
 
 export type AbsenceCategory = "MATERNIDAD" | "RIESGO_TRABAJO" | "PERMISO_CON_GOCE" | "DESCANSO_OBLIGATORIO" | "FALTA_INJUSTIFICADA_ACREDITADA" | "PERMISO_SIN_GOCE" | "SUSPENSION_DISCIPLINARIA_FIRME" | "ENFERMEDAD_GENERAL" | "GENERICA";
 export type AguinaldoInput = { startDateInYear: string; endDateInYear: string; dailySalary: number; contractualDays?: number; absences?: Array<{ category: AbsenceCategory; days: number }> };
+type AguinaldoData = { effectiveWorkedDays: number; proportionalAguinaldoDays: number; grossAmount: number };
 
-export function calculateAguinaldoMx(input: AguinaldoInput): ToolResult<{ effectiveWorkedDays: number; proportionalAguinaldoDays: number; grossAmount: number }> {
+export function calculateAguinaldoMx(input: AguinaldoInput): ToolResult<AguinaldoData> {
   const provenance = baseProvenance("1.0.0-frozen+control-patch", ["LFT-87", "LFT-42", "LFT-170", "LFT-491"]);
   const start = new Date(`${input.startDateInYear}T00:00:00Z`);
   const end = new Date(`${input.endDateInYear}T00:00:00Z`);
@@ -98,10 +88,15 @@ export type FiniquitoInput = {
   requestedComponents?: string[];
 };
 
+type FiniquitoData = { pendingWages: number; proportionalAguinaldo: number; proportionalVacation: number; vacationPremium: number; total: number };
 const OUT_OF_SCOPE = new Set(["SALARIOS_CAIDOS", "INTERESES_PROCESALES", "ISR_NETO", "IMSS_NETO", "PRESTACIONES_EXTRALEGALES"]);
 const HOLD = new Set(["INDEMNIZACION_90_DIAS", "PRIMA_ANTIGUEDAD", "20_DIAS_POR_ANO"]);
 
-export function calculateFiniquitoDevengadosMx(input: FiniquitoInput): ToolResult<{ pendingWages: number; proportionalAguinaldo: number; proportionalVacation: number; vacationPremium: number; total: number }> {
+function propagateFailure<T>(result: ToolResult<unknown>, provenance: Provenance): ToolResult<T> {
+  return { state: result.state, warnings: result.warnings, requiredInputs: result.requiredInputs, reviewReasons: result.reviewReasons, provenance };
+}
+
+export function calculateFiniquitoDevengadosMx(input: FiniquitoInput): ToolResult<FiniquitoData> {
   const provenance = baseProvenance("1.0.0-frozen+control-patch+smg-v1", ["LFT-76", "LFT-79", "LFT-80", "LFT-82", "LFT-87"]);
   const requested = input.requestedComponents ?? [];
   if (requested.some((x) => OUT_OF_SCOPE.has(x))) return { state: "OUT_OF_SCOPE", warnings: [], reviewReasons: ["La solicitud incluye componentes fuera del alcance de Finiquito Devengados V1."], provenance };
@@ -118,10 +113,12 @@ export function calculateFiniquitoDevengadosMx(input: FiniquitoInput): ToolResul
     if (mode === "JORNADA_COMPLETA_ORDINARIA") return { state: "REVIEW_REQUIRED", warnings: ["El salario diario capturado es inferior al salario mínimo aplicable para la zona y fecha seleccionadas."], reviewReasons: ["Verificar modalidad de jornada y dato salarial."], provenance };
   }
 
-  const agu = calculateAguinaldoMx({ startDateInYear: `${new Date(`${input.terminationDate}T00:00:00Z`).getUTCFullYear()}-01-01`, endDateInYear: input.terminationDate, dailySalary: input.dailySalary, contractualDays: input.contractualAguinaldoDays ?? 15, absences: input.verifiedNonComputableAguinaldoDays ? [{ category: "FALTA_INJUSTIFICADA_ACREDITADA", days: input.verifiedNonComputableAguinaldoDays }] : [] });
-  if (agu.state !== "PASS" || !agu.data) return { ...agu, provenance };
+  const terminationYear = new Date(`${input.terminationDate}T00:00:00Z`).getUTCFullYear();
+  if (!Number.isFinite(terminationYear)) return { state: "REQUIRE_INPUT", warnings: [], requiredInputs: ["terminationDate"], provenance };
+  const agu = calculateAguinaldoMx({ startDateInYear: `${terminationYear}-01-01`, endDateInYear: input.terminationDate, dailySalary: input.dailySalary, contractualDays: input.contractualAguinaldoDays ?? 15, absences: input.verifiedNonComputableAguinaldoDays ? [{ category: "FALTA_INJUSTIFICADA_ACREDITADA", days: input.verifiedNonComputableAguinaldoDays }] : [] });
+  if (agu.state !== "PASS" || !agu.data) return propagateFailure<FiniquitoData>(agu, provenance);
   const vac = calculateVacationMx({ startDate: input.startDate, calculationDate: input.terminationDate, dailySalary: input.dailySalary, daysTakenCurrentPeriod: input.vacationDaysAlreadyEnjoyed ?? 0, vacationPremiumPct: input.vacationPremiumPct ?? 25 });
-  if (vac.state !== "PASS" || !vac.data) return { ...vac, provenance };
+  if (vac.state !== "PASS" || !vac.data) return propagateFailure<FiniquitoData>(vac, provenance);
   const wages = roundMoney((input.unpaidSalaryDays ?? 0) * input.dailySalary);
   const total = roundMoney(wages + agu.data.grossAmount + vac.data.vacationAmount + vac.data.vacationPremiumAmount);
   return { state: "PASS", warnings: [], data: { pendingWages: wages, proportionalAguinaldo: agu.data.grossAmount, proportionalVacation: vac.data.vacationAmount, vacationPremium: vac.data.vacationPremiumAmount, total }, provenance };
