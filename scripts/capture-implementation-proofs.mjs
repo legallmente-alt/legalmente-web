@@ -38,12 +38,16 @@ try {
     });
 
     const page = await context.newPage();
+    page.setDefaultNavigationTimeout(20_000);
+    page.setDefaultTimeout(10_000);
 
     for (const surface of surfaces) {
       const url = new URL(surface.route, baseUrl).toString();
-      const response = await page.goto(url, { waitUntil: "networkidle", timeout: 30_000 });
-      const status = response?.status() ?? 0;
+      const response = await page.goto(url, { waitUntil: "domcontentloaded" });
+      await page.locator("body").waitFor({ state: "visible" });
+      await page.waitForTimeout(250);
 
+      const status = response?.status() ?? 0;
       const metrics = await page.evaluate(() => {
         const root = document.documentElement;
         return {
@@ -63,6 +67,7 @@ try {
       await page.screenshot({
         path: path.join(outputDir, filename),
         fullPage: true,
+        animations: "disabled",
       });
 
       results.push({
