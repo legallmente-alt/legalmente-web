@@ -124,6 +124,110 @@ function assertActivationConsistency(state: PowersActivationState): void {
 
 assertActivationConsistency(POWERS_ACTIVATION);
 
-// D-R2-03 (alcance/precio/SLA) es un gate humano independiente y deliberadamente
-// no se modela como booleano derivable aquí. Que G2/G4-B lleguen a READY no
-// autoriza activación si D-R2-03 o la autorización humana de publicación siguen abiertos.
+const syntheticApproved = (id: string): EvidenceItem => ({
+  status: "APPROVED",
+  approvalRecordId: `synthetic:${id}`,
+  approvedByRole: "FOUNDER",
+  approvedAt: "2099-01-01T00:00:00Z",
+});
+
+const approveMap = (items: EvidenceMap): EvidenceMap =>
+  Object.fromEntries(
+    Object.keys(items).map((key) => [key, syntheticApproved(key)]),
+  );
+
+const SYNTHETIC_G2_APPROVED = approveMap(POWERS_G2_EVIDENCE);
+const SYNTHETIC_G4_APPROVED = approveMap(POWERS_G4_ACTIVATION_EVIDENCE);
+
+export const POWERS_ACTIVATION_SELF_TEST = [
+  {
+    id: "all-pending",
+    pass: (() => {
+      const state = evaluatePowersActivation();
+      return (
+        !state.g2Ready &&
+        !state.g4ActivationReady &&
+        !state.capabilities.canCollectServicePII &&
+        !state.capabilities.canReceiveDocuments &&
+        !state.capabilities.canAcceptPayment &&
+        !state.capabilities.canStartRealCase
+      );
+    })(),
+  },
+  {
+    id: "g2-only",
+    pass: (() => {
+      const state = evaluatePowersActivation(
+        SYNTHETIC_G2_APPROVED,
+        POWERS_G4_ACTIVATION_EVIDENCE,
+      );
+      return (
+        state.g2Ready &&
+        !state.g4ActivationReady &&
+        state.capabilities.canCollectServicePII &&
+        !state.capabilities.canReceiveDocuments &&
+        !state.capabilities.canShowActiveCommercialOffer &&
+        !state.capabilities.canAcceptPayment &&
+        !state.capabilities.canStartRealCase
+      );
+    })(),
+  },
+  {
+    id: "g2-plus-g4",
+    pass: (() => {
+      const state = evaluatePowersActivation(
+        SYNTHETIC_G2_APPROVED,
+        SYNTHETIC_G4_APPROVED,
+      );
+      return (
+        state.g2Ready &&
+        state.g4ActivationReady &&
+        state.capabilities.canReceiveDocuments &&
+        state.capabilities.canShowActiveCommercialOffer &&
+        state.capabilities.canAcceptPayment &&
+        state.capabilities.canStartRealCase
+      );
+    })(),
+  },
+  {
+    id: "malformed-approval-fails-closed",
+    pass: (() => {
+      const malformedG2: EvidenceMap = {
+        ...SYNTHETIC_G2_APPROVED,
+        professionalCredential: {
+          status: "APPROVED",
+          approvalRecordId: null,
+          approvedByRole: "PROFESSIONAL_RESPONSIBLE",
+          approvedAt: "2099-01-01T00:00:00Z",
+        },
+      };
+      const state = evaluatePowersActivation(
+        malformedG2,
+        SYNTHETIC_G4_APPROVED,
+      );
+      return (
+        !state.g2Ready &&
+        state.missingG2.includes("professionalCredential") &&
+        !state.capabilities.canCollectServicePII &&
+        !state.capabilities.canReceiveDocuments &&
+        !state.capabilities.canAcceptPayment
+      );
+    })(),
+  },
+] as const;
+
+const failedActivationSelfTests = POWERS_ACTIVATION_SELF_TEST.filter(
+  (testCase) => !testCase.pass,
+);
+
+if (failedActivationSelfTests.length > 0) {
+  throw new Error(
+    `Powers activation synthetic contract failed: ${failedActivationSelfTests
+      .map((testCase) => testCase.id)
+      .join(", ")}`,
+  );
+}
+
+// IMPORTANTE: el escenario sintético g2-plus-g4 solo prueba coherencia técnica.
+// D-R2-03 (alcance/precio/SLA) y la autorización humana de activación/publicación
+// son gates independientes y deliberadamente no se pueden satisfacer desde este módulo.
