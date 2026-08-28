@@ -1,40 +1,102 @@
 # legalmente-web
 
-Sitio web de LegalMente — divulgación jurídica panhispánica.
+Sitio web de LegalMente — educación jurídica panhispánica con una ruta profesional separada y gobernada.
 
-## Objetivo
+## Fuente de verdad
 
-El mismo que en redes: generar mensajes directos que se conviertan en consulta. La web no es un folleto, es un cierre. Ver `legalmente-marca-y-estilo.md` en el repo `Psyche-creation` (docs/) para la línea editorial completa.
+- Drive / Constitución vigente: identidad, separación entre educación y servicios, estrategia y decisiones.
+- `Psyche-creation`: estado técnico canónico de verificación/gates y controles editoriales.
+- Este repositorio: implementación del sitio web.
 
-## Sistema visual vigente (decisión 23-ago-2026)
+Una página o copy en este repo no autoriza por sí misma publicación, cobro, recepción de documentos ni prestación profesional.
 
-**Realismo cinematográfico editorial** — el definido en `Psyche-creation/docs/legalmente-marca-y-estilo.md`, Sección 3 (Librería de Prompts Maestros para Imágenes). Paleta base: Crema `#EDE7DA`, Oro `#C8A24A`, Tinta profunda `#0E1A24`. Estilo: cinematic legal realism con restrained symbolic surrealism, fotorrealista, composición tipo still-life editorial. Formato 9:16 vertical para redes, 16:9 para portadas de YouTube.
+## Arquitectura de producto
 
-Existe un segundo sistema (óleo cinematográfico / claroscuro, paleta Nogal/Marfil/Azul Petróleo/Latón) documentado en el skill `legalmente-visual-system`, sincronizado desde el Drive del proyecto. Ese sistema quedó descartado para este proyecto — si el skill se sigue activando y sugiriendo esa dirección de arte, es una inconsistencia pendiente de corregir en el Drive/skill, no una alternativa válida. No mezclar ambos sistemas en la misma pieza o colección.
+### LegalMente educativo
 
-## Mapa del sitio
+Contenido jurídico claro, panhispánico y verificable. El contenido educa; no diagnostica casos particulares ni promete resultados.
 
-Seis páginas, sin relleno: Inicio; Sobre LegalMente / Sobre Raymundo (autoridad profesional); Áreas de práctica (corporativo, contractual, inmobiliario, regulatorio/compliance); Catálogo editorial (piezas ya publicadas en redes, curadas); Casos y contingencias resueltas (sin identificar clientes); Contacto (único objetivo real de la página — CTA de documento, nunca "consulta a un abogado").
+Rutas actuales:
 
-No se agregan más páginas sin justificación: la métrica única de éxito del proyecto son los mensajes directos, no el tráfico.
+- `/` — inicio educativo.
+- `/sobre` — identidad del proyecto.
+- `/areas-de-practica` — áreas cubiertas como contenido educativo.
+- `/catalogo` — catálogo editorial.
+- `/casos` — casos/ejemplos educativos, sujetos a verificación antes de publicarse.
+- `/contacto` — contacto general; actualmente sin backend.
+
+### Primera vía comercial adoptada — Powers Review
+
+La primera vía comercial adoptada es **Corporate Powers / Representation Review — México corporativo**. Está en preparación y permanece inactiva.
+
+- `/servicios/poderes-mexico` — landing de preparación y estado del candidato comercial.
+- D-R2-03 permanece `OPEN`: falta aprobación humana de alcance fijo, límite documental, exclusiones, precio fijo y SLA.
+- G2 permanece `BLOCKED` hasta cerrar identidad/credencial profesional, territorio, parte contratante, conflictos, privacidad, canal seguro, QA y modelo fiscal.
+- G4-B permanece bloqueado hasta cerrar precio público, términos, cancelación/reembolso, evidencia de transacción y mecanismo de pago.
+- `POWERS_REAL_CASE_AUTHORIZATION` permanece pendiente incluso después de los gates anteriores y exige aprobación humana expresa.
+- No hay intake real, documentos, PII, checkout, pago ni casos reales.
+
+La recomendación de alcance/precio puede prepararse en código o Drive, pero **D-R2-03 no puede cerrarse por CI ni por una inferencia del asistente**. Tampoco un estado técnico `READY` autoriza casos reales.
+
+### Laboratorio sintético — NDA México
+
+El flujo NDA no es la primera vía comercial. Se conserva como laboratorio interno/sintético de Document Review para probar admisibilidad sin datos reales.
+
+- `/preparar/nda-mexico` — preflight determinista `ACCEPT / CLARIFY / REVIEW / STOP`.
+- `/servicios/nda-mexico` — redirige al preflight sintético; no es una landing comercial.
+- Sin PII, archivos, almacenamiento, email, checkout ni IA jurídica.
+- `ACCEPT` solo significa que las respuestas declaradas encajan en el contrato sintético; no crea relación profesional ni autoriza envío o pago.
+
+## Gates de activación comercial
+
+El archivo `src/lib/business-pilot-gates.ts` aplica únicamente a Powers Review y distingue cuatro capas humanas/operativas:
+
+1. `POWERS_D_R2_03_DECISION` — definición cerrada de oferta.
+2. `POWERS_G2_EVIDENCE` — responsabilidad profesional/legal.
+3. `POWERS_G4_ACTIVATION_EVIDENCE` — contratación/pago.
+4. `POWERS_REAL_CASE_AUTHORIZATION` — autorización humana final para capacidades reales.
+
+El repositorio es público: nunca debe almacenar nombres, cédulas, RFC, domicilios, documentos o URLs privadas de evidencia.
+
+Git solo conserva:
+
+- `status`
+- `approvalRecordId` opaco
+- `approvedByRole`
+- `approvedAt`
+
+La evidencia completa permanece en el sistema documental controlado del proyecto.
+
+`preparedForClosedPilot` puede llegar a `true` cuando D-R2-03 + G2 + G4-B estén completos, pero **todas las capacidades reales permanecen OFF** hasta que exista `POWERS_REAL_CASE_AUTHORIZATION` aprobada.
+
+Mientras falta cualquier gate:
+
+- PII del servicio: OFF.
+- Recepción documental: OFF.
+- Oferta comercial activa: OFF.
+- Pago: OFF.
+- Caso real: OFF.
+
+El módulo ejecuta pruebas sintéticas fail-closed durante el build para comprobar esta secuencia.
 
 ## Stack
 
-Next.js (React) más TypeScript más Tailwind. Consistente con Psyche-creation (React/TypeScript) y compatible con envolver el sitio como PWA o reutilizar lógica en una futura app (React Native / Expo).
+Next.js 14 + React 18 + TypeScript + Tailwind.
 
-## Estructura de carpetas propuesta
+Scripts:
 
+```bash
+npm run dev
+npm run build
+npm run lint
 ```
-src/pages (o app/ si se usa App Router): index, sobre, areas-de-practica, catalogo, casos, contacto
-src/components
-src/content -> piezas del catalogo, mismo patron que content/*.json de Psyche-creation
-src/styles -> tokens de la paleta: crema/oro/tinta
-```
 
-## Automatización (fase 2)
+## Rama de trabajo
 
-CI/CD de build y deploy en cada push a main, con el mismo patrón que ya usa Psyche-creation. Sincronización del catálogo editorial con las piezas ya generadas en el pipeline de Remotion/Canva. Formulario de contacto conectado a un servicio simple, midiendo "mensajes directos" en el mismo tablero que usan las redes.
+`feat/business-pilot-preflight-nda-mx`
 
-## Estado
+El nombre histórico de la rama conserva el origen del trabajo NDA; no redefine la vía comercial. El PR debe permanecer revisable y no debe fusionarse como oferta comercial activa mientras D-R2-03/G2/G4-B/GO humano permanezcan abiertos o bloqueados.
 
-Repositorio recién creado — esqueleto de carpetas y documentación en progreso. Próximo paso: validar copy de cada sección y generar las primeras piezas visuales con el sistema vigente descrito arriba.
+## Regla de cierre
+
+Antes de habilitar Powers Review para casos reales se requiere un cambio separado y verificable que cierre, como mínimo: D-R2-03, identidad del prestador, credencial/territorio, conflicto, privacidad/retención, canal seguro, términos, precio total, cancelación/reembolso, fiscalidad/facturación, QA y una autorización humana final de caso real.
