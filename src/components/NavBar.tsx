@@ -6,7 +6,7 @@ const links = [
   { href: "/areas-de-practica", label: "Áreas de práctica" },
   { href: "/catalogo", label: "Catálogo editorial" },
   { href: "/casos", label: "Casos y ejemplos" },
-  { href: "/servicios/nda-mexico", label: "Piloto profesional" },
+  { href: "/servicios/poderes-mexico", label: "Piloto profesional" },
   { href: "/contacto", label: "Contacto" },
 ];
 
