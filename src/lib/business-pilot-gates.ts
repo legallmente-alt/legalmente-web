@@ -1,19 +1,27 @@
 export type ApprovalStatus = "PENDING" | "APPROVED" | "REJECTED";
+export type ApprovalRole =
+  | "FOUNDER"
+  | "PROFESSIONAL_RESPONSIBLE"
+  | "PRIVACY_REVIEW"
+  | "FISCAL_REVIEW";
 
 export type EvidenceItem = {
   status: ApprovalStatus;
-  evidenceRef: string | null;
-  approvedBy: string | null;
+  approvalRecordId: string | null;
+  approvedByRole: ApprovalRole | null;
   approvedAt: string | null;
 };
 
 const pending = (): EvidenceItem => ({
   status: "PENDING",
-  evidenceRef: null,
-  approvedBy: null,
+  approvalRecordId: null,
+  approvedByRole: null,
   approvedAt: null,
 });
 
+// Este repositorio es público. Nunca guardar aquí nombres, cédulas, RFC,
+// domicilios, URLs privadas ni documentos de evidencia. El detalle probatorio
+// vive fuera del repo; el código solo puede referenciar un ID opaco de aprobación.
 export const PILOT_G2_EVIDENCE = {
   providerIdentity: pending(),
   professionalCredential: pending(),
@@ -39,8 +47,8 @@ type EvidenceMap = Record<string, EvidenceItem>;
 function isApproved(item: EvidenceItem): boolean {
   return (
     item.status === "APPROVED" &&
-    Boolean(item.evidenceRef?.trim()) &&
-    Boolean(item.approvedBy?.trim()) &&
+    Boolean(item.approvalRecordId?.trim()) &&
+    Boolean(item.approvedByRole) &&
     Boolean(item.approvedAt?.trim())
   );
 }
