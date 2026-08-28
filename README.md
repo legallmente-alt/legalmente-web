@@ -25,38 +25,46 @@ Rutas actuales:
 - `/casos` — casos/ejemplos educativos, sujetos a verificación antes de publicarse.
 - `/contacto` — contacto general; actualmente sin backend.
 
-### Ruta profesional separada — Business Pilot
+### Primera vía comercial adoptada — Powers Review
 
-El piloto profesional no se presenta como una extensión automática del contenido educativo.
+La primera vía comercial adoptada es **Corporate Powers / Representation Review — México corporativo**. Está en preparación y permanece inactiva.
 
-- `/servicios/nda-mexico` — landing de estado/alcance del futuro piloto de revisión acotada de NDA simple — México.
-- `/preparar/nda-mexico` — preflight determinista de alcance, sin PII ni carga documental.
+- `/servicios/poderes-mexico` — landing de preparación y estado del candidato comercial.
+- D-R2-03 permanece `OPEN`: falta aprobación humana de alcance fijo, límite documental, exclusiones, precio fijo y SLA.
+- G2 permanece `BLOCKED` hasta cerrar identidad/credencial profesional, territorio, parte contratante, conflictos, privacidad, canal seguro, QA y modelo fiscal.
+- No hay intake real, documentos, PII, checkout, pago ni casos reales.
 
-Estado actual del piloto:
+### Laboratorio sintético — NDA México
 
-- G1 Service Definition: definido en Drive.
-- G2 Professional & Legal Responsibility: bloqueado hasta identificar/validar responsable o entidad profesional, contratación, privacidad, conflicto, canal seguro, fiscalidad y QA.
-- G3 Preflight: implementación sintética con rutas `ACCEPT / CLARIFY / REVIEW / STOP`.
-- G4-A Commercial Design: listo como diseño; precio interno experimental no publicado.
-- G4-B Commercial Activation: bloqueado por G2.
-- Cobro: deshabilitado.
-- Upload: deshabilitado.
-- PII del piloto: no se captura.
-- OAuth/Drive/Gmail: no implementados para el piloto.
+El flujo NDA no es la primera vía comercial. Se conserva como laboratorio interno/sintético de Document Review para probar admisibilidad sin datos reales.
 
-`ACCEPT` en el preflight solo significa que las respuestas declaradas encajan en el alcance sintético. No crea relación profesional, no acepta un documento y no autoriza pago.
+- `/preparar/nda-mexico` — preflight determinista `ACCEPT / CLARIFY / REVIEW / STOP`.
+- `/servicios/nda-mexico` — redirige al preflight sintético; no es una landing comercial.
+- Sin PII, archivos, almacenamiento, email, checkout ni IA jurídica.
+- `ACCEPT` solo significa que las respuestas declaradas encajan en el contrato sintético; no crea relación profesional ni autoriza envío o pago.
 
-## Invariantes del piloto mientras G2 esté bloqueado
+## Gates de activación comercial
 
-- `documentUploadAllowed=false` en todas las rutas.
-- `businessGate=G2_BLOCKED`.
-- Sin `input[type=file]` para el piloto.
-- Sin API/endpoint de envío del preflight.
-- Sin checkout.
-- Sin almacenamiento de contratos.
-- Sin IA jurídica para clasificar el documento.
-- Sin precio presentado como oferta vigente.
-- Sin CTA “contrata ahora” o equivalente.
+El archivo `src/lib/business-pilot-gates.ts` deriva capacidades desde evidencia aprobada. El repositorio es público: nunca debe almacenar nombres, cédulas, RFC, domicilios, documentos o URLs privadas de evidencia.
+
+Git solo conserva:
+
+- `status`
+- `approvalRecordId` opaco
+- `approvedByRole`
+- `approvedAt`
+
+La evidencia completa permanece en el sistema documental controlado del proyecto.
+
+Mientras G2 y G4-B no estén completos:
+
+- PII del piloto: OFF.
+- Recepción documental: OFF.
+- Oferta comercial activa: OFF.
+- Pago: OFF.
+- Caso real: OFF.
+
+Incluso con los gates técnicos completos, una activación/publicación sigue requiriendo decisión humana.
 
 ## Stack
 
@@ -70,12 +78,12 @@ npm run build
 npm run lint
 ```
 
-## Rama de Business Pilot
+## Rama de trabajo
 
 `feat/business-pilot-preflight-nda-mx`
 
-El PR correspondiente debe permanecer revisable y no debe fusionarse como oferta comercial activa mientras G2 permanezca bloqueado. Un merge técnico tampoco constituye autorización de publicación o cobro.
+El nombre histórico de la rama conserva el origen del trabajo NDA; no redefine la vía comercial. El PR debe permanecer revisable y no debe fusionarse como oferta comercial activa mientras D-R2-03/G2 permanezcan abiertos o bloqueados.
 
 ## Regla de cierre
 
-Antes de habilitar casos reales se requiere un cambio separado y verificable que demuestre G2 en verde y cierre: identidad del prestador, territorio, conflicto, privacidad/retención, canal seguro, engagement/términos, precio total, cancelación/reembolso, fiscalidad/facturación, QA y autorización humana de activación.
+Antes de habilitar Powers Review para casos reales se requiere un cambio separado y verificable que cierre, como mínimo: D-R2-03, identidad del prestador, credencial/territorio, conflicto, privacidad/retención, canal seguro, términos, precio total, cancelación/reembolso, fiscalidad/facturación, QA y autorización humana de activación.
