@@ -64,6 +64,12 @@ const entryModes = [
   ["Explorar", "Recorre mundos, series y capítulos relacionados.", "/explorar"],
 ] as const;
 
+const learningLanes = [
+  ["Para entender", "Personas que llegan con una duda, una situación o una decisión próxima.", "Empieza por una situación", "/mundo/vida-cotidiana"],
+  ["Para profundizar", "Abogacía, estudiantes y docentes que necesitan conceptos, procesos y relaciones.", "Abrir el catálogo", "/catalogo"],
+  ["Para contrastar", "Jueces, investigadores e instituciones que necesitan territorio, fuentes y comparación.", "Ver fuentes y límites", "/confianza"],
+] as const;
+
 export default function HomePage() {
   const featuredWorlds = worlds.slice(0, 4);
 
@@ -108,6 +114,33 @@ export default function HomePage() {
           <div className="mt-3 flex items-center justify-between text-xs text-[#102A43]/48">
             <span>Una pregunta.</span>
             <span>Una ruta clara para continuar.</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-[#102A43]/10 bg-white/35">
+        <div className="mx-auto max-w-[1320px] px-5 py-14 md:px-8 md:py-20">
+          <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/45">Una experiencia, varias entradas</p>
+              <h2 className="mt-4 max-w-[12ch] font-serif text-4xl leading-[1.02] tracking-[-0.035em] md:text-5xl">Aprende desde donde estás.</h2>
+            </div>
+            <p className="max-w-[58ch] text-sm leading-7 text-[#102A43]/62">
+              LegalMente separa la puerta de entrada sin separar el conocimiento: entender, profundizar y contrastar son rutas distintas dentro del mismo archivo educativo.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-3 border-t border-[#102A43]/12 pt-3 md:grid-cols-3">
+            {learningLanes.map(([label, note, action, href], index) => (
+              <Link key={label} href={href} className="group flex min-h-56 flex-col justify-between border border-[#102A43]/12 bg-[#F5F0E8]/55 p-5 transition-transform duration-300 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-[#102A43] motion-reduce:transform-none">
+                <div>
+                  <span className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/42">0{index + 1}</span>
+                  <h3 className="mt-7 font-serif text-2xl tracking-[-0.02em]">{label}</h3>
+                  <p className="mt-3 text-sm leading-6 text-[#102A43]/62">{note}</p>
+                </div>
+                <span className="mt-8 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#102A43]/72">{action} <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none">→</span></span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
