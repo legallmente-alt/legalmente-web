@@ -33,6 +33,32 @@ export default function ExplorePage() {
         </div>
       </section>
 
+      <section className="border-y border-[#102A43]/10 bg-[#E7DED1]">
+        <div className="mx-auto grid max-w-[1180px] gap-8 px-5 py-14 md:px-8 md:py-20 lg:grid-cols-[0.7fr_1.3fr] lg:items-end lg:gap-16">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/48">Un camino para aprender</p>
+            <h2 className="mt-4 max-w-[11ch] font-serif text-4xl leading-[1.02] tracking-[-0.035em] md:text-5xl">De lo cercano a lo complejo.</h2>
+          </div>
+          <ol className="divide-y divide-[#102A43]/14 border-t border-[#102A43]/14">
+            {[
+              ["01", "Mirar", "Empieza por una situación humana y cotidiana.", "/mundo/vida-cotidiana"],
+              ["02", "Nombrar", "Encuentra el concepto que ayuda a pensarla.", "/concepto/consentimiento"],
+              ["03", "Ordenar", "Separa hechos, evidencia y preguntas abiertas.", "/proceso/organizar-hechos-y-prueba"],
+              ["04", "Comparar", "Abre contexto, historia y otras formas de entender.", "/mundo/historia-sistemas"],
+            ].map(([number, label, note, href]) => (
+              <li key={number}>
+                <Link href={href} className="group grid min-h-20 grid-cols-[42px_0.7fr_1.3fr_auto] items-center gap-3 py-4 focus:outline-none focus:ring-2 focus:ring-[#102A43] md:grid-cols-[52px_0.55fr_1.45fr_auto] md:gap-5">
+                  <span className="text-xs tabular-nums text-[#102A43]/42">{number}</span>
+                  <strong className="font-serif text-2xl">{label}</strong>
+                  <span className="text-sm leading-6 text-[#102A43]/62">{note}</span>
+                  <span className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none" aria-hidden="true">→</span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
       <section id="mundos" className="border-t border-[#102A43]/10 bg-[#102A43] text-[#F5F0E8]">
         <div className="mx-auto max-w-[1180px] px-5 py-14 md:px-8 md:py-20">
           <div className="max-w-[700px]">
