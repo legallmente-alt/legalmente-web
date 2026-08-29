@@ -115,6 +115,21 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-y border-[#102A43]/10 bg-[#E7DED1]">
+        <div className="mx-auto grid max-w-[1320px] gap-8 px-5 py-14 md:px-8 md:py-20 lg:grid-cols-[0.7fr_1.3fr] lg:items-end lg:gap-16">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/48">El corazón de LegalMente</p>
+            <h2 className="mt-4 max-w-[10ch] font-serif text-4xl leading-[1.02] tracking-[-0.035em] md:text-5xl">El Derecho ocurre entre personas.</h2>
+          </div>
+          <div>
+            <p className="max-w-[58ch] text-xl leading-8 text-[#102A43]/78 md:text-2xl md:leading-9">
+              El <em>arte</em> nos enseña a mirar, la <em>justicia</em> nos obliga a preguntar y el <em>amor</em> —como el cuidado, la confianza y la responsabilidad— nos recuerda que detrás de cada regla hay una vida concreta. LegalMente conecta esas preguntas con rutas para <Link href="/mundo/vida-cotidiana" className="font-semibold underline decoration-[#D97745] decoration-2 underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#102A43]">entender</Link>, <Link href="/concepto/consentimiento" className="font-semibold underline decoration-[#D97745] decoration-2 underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#102A43]">consentir</Link>, <Link href="/proceso/organizar-hechos-y-prueba" className="font-semibold underline decoration-[#D97745] decoration-2 underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#102A43]">ordenar lo ocurrido</Link> y seguir aprendiendo.
+            </p>
+            <p className="mt-6 text-sm leading-6 text-[#102A43]/58">No son temas separados: son distintas puertas para volver a la misma pregunta humana.</p>
+          </div>
+        </div>
+      </section>
+
       <section className="border-t border-[#102A43]/10 bg-white/35">
         <div className="mx-auto max-w-[1320px] px-5 py-14 md:px-8 md:py-20">
           <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">

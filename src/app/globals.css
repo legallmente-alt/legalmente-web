@@ -33,6 +33,11 @@ a {
   color: inherit;
 }
 
+:where(a, button, summary):focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
