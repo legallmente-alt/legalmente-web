@@ -12,7 +12,7 @@ export default function NavBar() {
       <div className="mx-auto flex min-h-16 max-w-[1320px] items-center justify-between gap-4 px-5 md:px-8">
         <Link
           href="/"
-          className="shrink-0 text-[15px] font-semibold tracking-[-0.01em] text-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-2"
+          className="inline-flex min-h-11 shrink-0 items-center text-[15px] font-semibold tracking-[-0.01em] text-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-2"
         >
           LegalMente
         </Link>
