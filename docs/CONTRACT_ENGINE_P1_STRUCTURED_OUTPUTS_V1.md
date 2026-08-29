@@ -2,74 +2,22 @@
 
 State: `IMPLEMENTED / SYNTHETIC_ONLY / REAL_DRAFT_BLOCKED / CI_GREEN`.
 
-## Purpose
+The typed Contract Preparation Record now produces structured preparation outputs through `src/lib/contracts/outputs.ts`: contract brief, party map, representation map, obligation matrix, timeline, payment schedule, missing information, preparation red flags, professional-review questions, and an explicit annex gap (`NOT_MODELLED_IN_V1`).
 
-Convert the typed Contract Preparation Record into useful preparation outputs without producing contractual prose or a signable document.
+The adapter invariant is permanent for this V1 scope: `realDraftAllowed: false` and `draftPreview: null`, even if upstream technical evaluation reports eligibility. Technical eligibility is not authorization to generate a real contract.
 
-## Implemented outputs
+`src/lib/contracts/demo.ts` provides a non-identifiable fixture for `/preparar/contrato`. The surface reads actual adapter outputs, remains territorially unresolved/fail-closed, and no longer suggests that territorial coverage alone would unlock a draft.
 
-`src/lib/contracts/outputs.ts` produces:
+Tests: `src/lib/contracts/outputs.test.ts` covers structured output construction, label resolution, fail-closed red flags, missing-information separation and the real-draft invariant.
 
-- Contract brief;
-- Party map;
-- Representation map;
-- Obligation matrix;
-- Contract timeline events;
-- Payment schedule;
-- Missing-information list;
-- Preparation red flags;
-- Professional-review questions;
-- Annex checklist state (`NOT_MODELLED_IN_V1`).
+Verified runtime CI:
 
-## Non-negotiable draft boundary
+- run `33247723546`;
+- tested PR head `fe6139809d931292970c7a1b28395e7b7e0867a1`;
+- result `SUCCESS`;
+- legal-core, knowledge-safety, contract-core, typecheck, privacy smoke, build, responsive proof and accessibility/interaction smoke all passed;
+- proof artifact ID `9713387532`.
 
-The output adapter always returns:
+Later documentation-only commits do not change that verified runtime.
 
-- `realDraftAllowed: false`;
-- `draftPreview: null`.
-
-This remains true even if upstream technical evaluation could otherwise report draft eligibility. Technical eligibility is not founder authorization to generate a real contract.
-
-## Synthetic demo integration
-
-`src/lib/contracts/demo.ts` contains a non-identifiable fixture used by `/preparar/contrato`.
-
-The prototype surface now reads its example state from the actual output adapter instead of hard-coded status copy. It demonstrates unresolved territory and representation review while receiving no PII, documents, cases or payments.
-
-The previous UI copy suggesting that a structural draft might appear once territorial coverage existed was removed. V1 explicitly excludes a real contractual draft.
-
-## Tests and verification
-
-`src/lib/contracts/outputs.test.ts` covers structured output construction, label resolution, fail-closed red flags, separation of missing information and the real-draft invariant.
-
-Verified CI run: `33247723546`
-
-Tested PR head: `fe6139809d931292970c7a1b28395e7b7e0867a1`
-
-Result: `SUCCESS`.
-
-Passed legal-core, knowledge-safety, contract-core, typecheck, privacy smoke, production build, responsive proof capture, accessibility/interaction smoke and artifact upload.
-
-Proof artifact ID: `9713387532`.
-
-The artifact name contains GitHub's generated PR merge-ref SHA; workflow metadata records the tested PR head above.
-
-## Gates unchanged
-
-`LEGAL_COVERAGE = PENDING`
-
-`COMPONENT_VERIFICATION = BLOCKED_PENDING_TARGETED_CORRECTIONS`
-
-`VERIFIED_FOR_TERRITORY = FALSE`
-
-`REAL_DRAFT = BLOCKED`
-
-`PII = DISABLED`
-
-`PROFESSIONAL_SERVICES = DISABLED`
-
-`MERGE = NOT_AUTHORIZED`
-
-`DEPLOY = NOT_AUTHORIZED`
-
-`PUBLICATION = BLOCKED`
+Gates unchanged: `LEGAL_COVERAGE=PENDING`, `COMPONENT_VERIFICATION=BLOCKED_PENDING_TARGETED_CORRECTIONS`, `VERIFIED_FOR_TERRITORY=FALSE`, `REAL_DRAFT=BLOCKED`, `PII=DISABLED`, `PROFESSIONAL_SERVICES=DISABLED`, `MERGE=NOT_AUTHORIZED`, `DEPLOY=NOT_AUTHORIZED`, `PUBLICATION=BLOCKED`.
