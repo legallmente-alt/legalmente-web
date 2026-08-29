@@ -11,6 +11,7 @@ const routes = [
   "/concepto/consentimiento",
   "/proceso/organizar-hechos-y-prueba",
   "/confianza",
+  "/preparar/contrato",
 ];
 const viewports = [
   { name: "1440", width: 1440, height: 1000 },
