@@ -22,7 +22,7 @@ La experiencia editorial existente del branch visual permanece disponible en `/e
 | Knowledge safety | PASS | 3 pruebas de límites territoriales y no automatización |
 | Privacy smoke | PASS | 36 archivos revisados; sin formularios, texto libre, almacenamiento o trackers bloqueados |
 | Static export | PASS | `out/` contiene `_headers`, `robots.txt` y las rutas educativas |
-| Internal lab | FAIL-CLOSED | `/internal/product-lab` se exporta como 404 cuando no se habilita la variable interna |
+| Internal lab | FAIL-CLOSED | El sanitizer `build:public` elimina `/internal/` del artefacto público; la ruta permanece en el código para el laboratorio interno |
 | CI GitHub | PASS | workflow de validación de PR #7: [run 33251213202](https://github.com/legallmente-alt/legalmente-web/actions/runs/33251213202) |
 
 ## Cambios aplicados
@@ -33,8 +33,8 @@ Se añadió `/antes-de-firmar` con controles transient/no-PII y salida estructur
 
 Este documento no aprueba el release público ni sustituye revisión jurídica. Continúan bloqueados `PUBLIC_RELEASE`, `PII_COLLECTION`, `CASE_TEXT_INPUT`, `DOCUMENT_UPLOAD`, `PAYMENTS` y `PROFESSIONAL_SERVICE_ACTIVATION` hasta que exista aprobación humana explícita sobre privacidad/retención/eliminación, términos y disclosure, proveedor de hosting, rollback, logs, correcciones/incidentes y autorización final de publicación.
 
-El repositorio no tiene GitHub Pages, homepage de producción ni proyecto Pages existente. La creación de un proyecto de hosting y el deploy a una URL real deben ocurrir solo después de confirmar proveedor, dominio/URL canónica, rama de producción y estrategia de rollback. El sitio histórico revisado exige inicio de sesión y no debe considerarse el destino del nuevo lanzamiento.
+El repositorio no tiene GitHub Pages ni homepage de producción. Existe un proyecto Pages aislado para el candidato educativo. La creación de un proyecto de hosting y el deploy a una URL real deben ocurrir solo después de confirmar proveedor, dominio/URL canónica, rama de producción y estrategia de rollback. El sitio histórico revisado exige inicio de sesión y no debe considerarse el destino del nuevo lanzamiento.
 
 ## Decisión operativa
 
-La candidata está lista para **revisión de release y preview controlado**, no para presentarse como un servicio profesional activo. El siguiente paso irreversible es uno solo: aprobar la configuración de hosting y autorizar el deploy del commit `7316a94` o de su descendiente validado. Si se autoriza, el deploy debe ser estático, sin analítica de terceros, sin captura de datos y con verificación pública de las rutas, headers, robots y 404 interno.
+La candidata está lista para **revisión de release y publicación educativa controlada**, no para presentarse como un servicio profesional activo. El siguiente paso irreversible es uno solo: aprobar la configuración de hosting y autorizar el deploy del commit `7316a94` o de su descendiente validado. Si se autoriza, el deploy debe ser estático, sin analítica de terceros, sin captura de datos y con verificación pública de las rutas, headers, robots y 404 interno.
