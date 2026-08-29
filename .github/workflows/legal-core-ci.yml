@@ -7,18 +7,25 @@ on:
       - 'src/app/**'
       - 'src/lib/legal-core/**'
       - 'src/lib/visual-system/**'
-      - 'src/components/legalmente/**'
+      - 'src/lib/knowledge-graph/**'
+      - 'src/components/**'
+      - 'public/assets/legalmente/**'
+      - 'scripts/**'
       - 'package.json'
       - '.github/workflows/legal-core-ci.yml'
   push:
     branches:
       - main
       - feat/legalmente-deterministic-product-core-v1
+      - feat/legalmente-editorial-instrument-preview-v1
     paths:
       - 'src/app/**'
       - 'src/lib/legal-core/**'
       - 'src/lib/visual-system/**'
-      - 'src/components/legalmente/**'
+      - 'src/lib/knowledge-graph/**'
+      - 'src/components/**'
+      - 'public/assets/legalmente/**'
+      - 'scripts/**'
       - 'package.json'
       - '.github/workflows/legal-core-ci.yml'
 
@@ -28,7 +35,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -36,5 +43,47 @@ jobs:
           node-version: 20
       - run: npm install --no-audit --no-fund
       - run: npm run test:legal-core
+      - run: npm run test:knowledge-safety
       - run: npm run typecheck
+      - name: Privacy surface smoke
+        run: node scripts/privacy-surface-smoke.mjs
       - run: npm run build
+
+      - name: Install proof browser
+        if: github.ref == 'refs/heads/feat/legalmente-editorial-instrument-preview-v1'
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.55.0
+          npx playwright install chromium
+
+      - name: Capture integrated responsive proofs and accessibility smoke
+        if: github.ref == 'refs/heads/feat/legalmente-editorial-instrument-preview-v1'
+        run: |
+          npm run start -- -p 3000 > /tmp/legalmente-next.log 2>&1 &
+          APP_PID=$!
+          trap 'kill $APP_PID 2>/dev/null || true' EXIT
+
+          READY=0
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error http://127.0.0.1:3000/ > /dev/null; then
+              READY=1
+              break
+            fi
+            sleep 1
+          done
+
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/legalmente-next.log
+            exit 1
+          fi
+
+          node scripts/capture-implementation-proofs.mjs
+          node scripts/accessibility-interaction-smoke.mjs
+
+      - name: Upload integrated proof artifact
+        if: github.ref == 'refs/heads/feat/legalmente-editorial-instrument-preview-v1' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: legalmente-implementation-proofs-${{ github.sha }}
+          path: implementation-proofs/
+          if-no-files-found: warn
+          retention-days: 14

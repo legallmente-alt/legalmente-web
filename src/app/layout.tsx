@@ -4,9 +4,9 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "LegalMente — divulgación jurídica panhispánica",
+  title: "LegalMente — conocimiento jurídico para orientarte mejor",
   description:
-    "LegalMente: educación jurídica clara y panhispánica. Conceptos, máximas y diferencias legales explicadas con rigor y sin tecnicismos innecesarios.",
+    "LegalMente convierte preguntas jurídicas en rutas de comprensión, preparación, fuentes y siguientes pasos, con límites territoriales visibles.",
 };
 
 export default function RootLayout({
@@ -14,9 +14,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es">
-      <body className="min-h-screen font-serif">
+      <body className="min-h-screen bg-[#F5F0E8] text-[#102A43] antialiased">
         <NavBar />
-        <main className="mx-auto max-w-5xl px-6 py-12">{children}</main>
+        {children}
         <Footer />
       </body>
     </html>
