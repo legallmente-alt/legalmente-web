@@ -52,7 +52,7 @@ jobs:
           npm install --no-save --no-audit --no-fund playwright@1.55.0
           npx playwright install chromium
 
-      - name: Capture integrated responsive proofs
+      - name: Capture integrated responsive proofs and accessibility smoke
         if: github.ref == 'refs/heads/feat/legalmente-editorial-instrument-preview-v1'
         run: |
           npm run start -- -p 3000 > /tmp/legalmente-next.log 2>&1 &
@@ -74,6 +74,7 @@ jobs:
           fi
 
           node scripts/capture-implementation-proofs.mjs
+          node scripts/accessibility-interaction-smoke.mjs
 
       - name: Upload integrated proof artifact
         if: github.ref == 'refs/heads/feat/legalmente-editorial-instrument-preview-v1' && always()
