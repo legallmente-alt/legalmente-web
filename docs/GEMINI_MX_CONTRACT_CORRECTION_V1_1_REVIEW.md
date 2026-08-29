@@ -126,7 +126,9 @@ The adapter has an invariant `realDraftAllowed: false` and `draftPreview: null`,
 
 `src/lib/contracts/outputs.test.ts` covers these outputs, label resolution, fail-closed red flags and the real-draft invariant.
 
-CI run `33247560231` on head `a8c67253007e05f085bad0ebce652afc7896c798` completed `SUCCESS`: legal-core, knowledge-safety, contract-core, typecheck, privacy smoke, production build, responsive/accessibility proof capture and artifact upload all passed. Proof artifact ID: `9713335306`.
+The `/preparar/contrato` surface is now wired to the actual structured-output adapter via a dedicated non-identifiable synthetic fixture (`src/lib/contracts/demo.ts`). The old copy suggesting that a structural draft might appear once territorial coverage exists was removed; V1 now says explicitly that a real contractual draft is not included.
+
+CI run `33247723546` on runtime head `fe6139809d931292970c7a1b28395e7b7e0867a1` completed `SUCCESS`: legal-core, knowledge-safety, contract-core, typecheck, privacy smoke, production build, responsive/accessibility proof capture and artifact upload all passed. Proof artifact ID: `9713387532`.
 
 Later documentation-only commits do not change that verified runtime.
 
