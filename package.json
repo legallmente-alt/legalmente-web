@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test:legal-core": "tsx --test src/lib/legal-core/legal-core.test.ts"
+    "test:legal-core": "tsx --test src/lib/legal-core/legal-core.test.ts",
+    "test:knowledge-safety": "tsx --test src/lib/knowledge-graph/safety.test.ts"
   },
   "dependencies": {
     "next": "14.2.35",
