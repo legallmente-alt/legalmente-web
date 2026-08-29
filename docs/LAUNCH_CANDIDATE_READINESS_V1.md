@@ -1,40 +1,42 @@
 # LegalMente — Launch Candidate Readiness V1
 
-**Estado:** `EDUCATIONAL_STATIC_CANDIDATE / NOT_DEPLOYED / NOT_LEGAL_APPROVAL`  
-**Rama:** `agent/legalmente-educational-launch-v1`  
+> **HISTORICAL STATUS NOTICE — 2026-08-29:** this document describes the pre-deployment candidate state. The isolated static educational release was subsequently deployed and merged into `main`. For current operational state use `docs/CURRENT_RELEASE_STATE_V2.md`. The sensitive-capability restrictions below remain applicable to PII, case text, document upload, payments and professional services.
+
+**Estado histórico:** `EDUCATIONAL_STATIC_CANDIDATE / PRE-DEPLOYMENT / NOT_LEGAL_APPROVAL`  
+**Rama histórica:** `agent/legalmente-educational-launch-v1`  
 **Pull request:** [PR #7](https://github.com/legallmente-alt/legalmente-web/pull/7)  
 **Corte:** 29 de agosto de 2026.
 
-## Alcance que sí está preparado
+## Alcance que sí estaba preparado
 
 La candidata concentra el primer ciclo en una experiencia educativa panhispánica con foco inicial en México. La home conduce a `/antes-de-firmar`, una herramienta determinista que solo revisa señales estructurales: identificación de partes, contraprestación, vigencia/terminación, espacios o anexos pendientes y ley/foro aplicable. No acepta texto libre, nombres, correos, documentos, expedientes, pagos ni casos reales.
 
 La experiencia editorial existente del branch visual permanece disponible en `/explorar`, `/confianza`, `/catalogo`, `/sobre` y las rutas relacionales de mundos, conceptos, procesos, series y capítulos. La dirección visual se conserva; la mejora aplicada a la entrada es de jerarquía, navegación, legibilidad y calidad técnica, no de sustitución arbitraria del sistema.
 
-## Evidencia técnica
+## Evidencia técnica histórica
 
 | Control | Resultado | Evidencia |
 |---|---|---|
-| Producción Next.js | PASS | `npm run build` genera export estático con 56 rutas |
+| Producción Next.js | PASS | `npm run build` generaba export estático con 56 rutas |
 | TypeScript | PASS | `npm run typecheck` |
 | ESLint | PASS | `npm run lint`, sin warnings ni errores |
 | Legal core | PASS | 13 pruebas, incluyendo rechazo de dictamen de validez |
 | Knowledge safety | PASS | 3 pruebas de límites territoriales y no automatización |
 | Privacy smoke | PASS | 36 archivos revisados; sin formularios, texto libre, almacenamiento o trackers bloqueados |
-| Static export | PASS | `out/` contiene `_headers`, `robots.txt` y las rutas educativas |
-| Internal lab | FAIL-CLOSED | El sanitizer `build:public` elimina `/internal/` del artefacto público; la ruta permanece en el código para el laboratorio interno |
-| CI GitHub | PASS | workflow de validación de PR #7: [run 33251213202](https://github.com/legallmente-alt/legalmente-web/actions/runs/33251213202) |
+| Static export | PASS | `out/` contenía `_headers`, `robots.txt` y las rutas educativas |
+| Internal lab | FAIL-CLOSED | El sanitizer `build:public` elimina `/internal/` del artefacto público |
+| CI GitHub | PASS | workflow de validación de PR #7: run `33251213202` |
 
 ## Cambios aplicados
 
-Se añadió `/antes-de-firmar` con controles transient/no-PII y salida estructural; la home y la navegación ahora lo presentan como CTA principal; `/confianza` declara el alcance de datos de esta versión; se añadió `robots.txt`; el branch se configuró para `output: export` y `trailingSlash`; los headers se trasladaron a `public/_headers`, que sí acompaña el artefacto estático de Cloudflare Pages; y el smoke de privacidad distingue controles checkbox transitorios de captura de datos.
+Se añadió `/antes-de-firmar` con controles transient/no-PII y salida estructural; la home y la navegación lo presentan como CTA principal; `/confianza` declara el alcance de datos de esta versión; se añadió `robots.txt`; el branch se configuró para `output: export` y `trailingSlash`; los headers se trasladaron a `public/_headers`; y el smoke de privacidad distingue controles checkbox transitorios de captura de datos.
 
-## Lo que sigue bloqueado
+## Restricciones que siguen vigentes
 
-Este documento no aprueba el release público ni sustituye revisión jurídica. Continúan bloqueados `PUBLIC_RELEASE`, `PII_COLLECTION`, `CASE_TEXT_INPUT`, `DOCUMENT_UPLOAD`, `PAYMENTS` y `PROFESSIONAL_SERVICE_ACTIVATION` hasta que exista aprobación humana explícita sobre privacidad/retención/eliminación, términos y disclosure, proveedor de hosting, rollback, logs, correcciones/incidentes y autorización final de publicación.
+La existencia de un release educativo estático no autoriza capacidades sensibles. Siguen bloqueados `PII_COLLECTION`, `CASE_TEXT_INPUT`, `DOCUMENT_UPLOAD`, `PAYMENTS` y `PROFESSIONAL_SERVICE_ACTIVATION` hasta que existan los artefactos, revisión y autorización correspondientes.
 
-El repositorio no tiene GitHub Pages ni homepage de producción. Existe un proyecto Pages aislado para el candidato educativo. La creación de un proyecto de hosting y el deploy a una URL real deben ocurrir solo después de confirmar proveedor, dominio/URL canónica, rama de producción y estrategia de rollback. El sitio histórico revisado exige inicio de sesión y no debe considerarse el destino del nuevo lanzamiento.
+La activación de nuevas capacidades sensibles requiere privacidad/retención/eliminación, términos y disclosure, seguridad/operación, rollback, logs, correcciones/incidentes y autorización humana separada.
 
-## Decisión operativa
+## Estado posterior
 
-La candidata está lista para **revisión de release y publicación educativa controlada**, no para presentarse como un servicio profesional activo. El siguiente paso irreversible es uno solo: aprobar la configuración de hosting y autorizar el deploy del commit `7316a94` o de su descendiente validado. Si se autoriza, el deploy debe ser estático, sin analítica de terceros, sin captura de datos y con verificación pública de las rutas, headers, robots y 404 interno.
+El paso irreversible descrito originalmente en este documento ya ocurrió para la superficie educativa estática aislada. Eso no convierte a LegalMente en un servicio profesional ni habilita intake. Consultar `docs/CURRENT_RELEASE_STATE_V2.md` para la separación vigente entre release educativo y capacidades sensibles/profesionales.
