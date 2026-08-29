@@ -32,6 +32,10 @@ The gate passed locally after:
 
 The build generated the static educational pages and the public preparation script removed internal routes. The worktree was clean after commit.
 
+## CI integration note
+
+The original workflow restricted `pull_request` events to PRs targeting `main`. Because this proof is carried on a stacked integration branch, PR #11 did not receive a remote check. This branch removes that destination restriction only for `pull_request`; the `push` trigger remains limited to `main`. The change is intended to make the validation gate observable for stacked PRs without broadening public release permissions.
+
 ## Limits
 
 This proof does not establish legal validity, content approval, privacy approval, publication authorization, release ownership, or production deployment. It is a technical artifact-integrity gate and must remain separate from `LEGAL_PASS`, `CONTENT_PASS` and `RELEASE_PASS`.
