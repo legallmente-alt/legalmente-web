@@ -41,6 +41,10 @@ const headersPath = join(outputRoot, "_headers");
 if (!existsSync(robotsPath) || !existsSync(headersPath)) {
   throw new Error("Public artifact is missing robots.txt or _headers.");
 }
+const robots = readFileSync(robotsPath, "utf8");
+if (!robots.includes("Disallow: /internal/") || !robots.includes("Sitemap: https://ef9882a7.legalmente-educativo.pages.dev/sitemap.xml")) {
+  throw new Error("robots.txt is missing the internal disallow rule or sitemap reference.");
+}
 const sitemapPath = join(outputRoot, "sitemap.xml");
 if (!existsSync(sitemapPath)) {
   throw new Error("Public artifact is missing sitemap.xml.");
