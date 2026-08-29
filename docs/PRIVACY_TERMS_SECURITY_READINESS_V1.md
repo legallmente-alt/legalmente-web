@@ -1,70 +1,57 @@
 # LEGALMENTE — PRIVACY / TERMS / SECURITY READINESS V1
 
-Estado: `INTERNAL_READINESS / NOT LEGAL_APPROVAL / NOT RELEASE_AUTHORIZATION`.
+> **STATUS RECONCILIATION — 2026-08-29:** the static, non-PII educational release is now live in an isolated Cloudflare Pages project. Therefore the historical blanket state `PUBLIC_RELEASE = BLOCKED` is superseded for that narrow educational surface by `docs/CURRENT_RELEASE_STATE_V2.md`. All sensitive-capability gates in this document remain fail-closed.
 
-Este documento no es aviso de privacidad, términos de uso ni dictamen jurídico. Es un contrato técnico de cierre para impedir que el producto avance a release sin resolver privacidad, términos, seguridad y operación.
+Estado actual del alcance sensible: `NO_PII / NO_CASE_TEXT / NO_DOCUMENT_UPLOAD / NO_PAYMENTS / PROFESSIONAL_SERVICES_DISABLED / NOT_LEGAL_APPROVAL_FOR_SENSITIVE_CAPABILITIES`.
 
-## 1. Estado técnico observado en la rama aislada
+Este documento no es aviso de privacidad, términos de uso ni dictamen jurídico. Es un contrato técnico de cierre para impedir que las capacidades sensibles avancen sin resolver privacidad, términos, seguridad y operación.
 
-El primer privacy smoke reveló una superficie legacy que contradecía la intención fail-closed: `/contacto` contenía nombre, correo y texto libre aunque el propio formulario indicaba que todavía no estaba conectado a backend.
+## 1. Estado técnico observado
 
-Ese formulario fue retirado. `/contacto` ahora es una superficie informativa cerrada que no acepta datos y advierte expresamente no enviar nombres, documentos, expedientes, datos de salud ni detalles identificables de una situación jurídica.
+El primer privacy smoke reveló una superficie legacy: `/contacto` contenía nombre, correo y texto libre aunque no estaba conectada a backend. Ese formulario fue retirado. `/contacto` es ahora una superficie informativa cerrada.
 
-En el runtime corregido no se introducen deliberadamente formularios de usuario, autenticación, pagos, PII, almacenamiento local de datos del usuario ni SDK de analítica/telemetría de terceros como parte de la experiencia relacional.
-
-CI incorpora `scripts/privacy-surface-smoke.mjs`, que falla si detecta nuevas superficies sensibles conocidas en `src/app`, `src/components` o `src/lib`, incluyendo formularios/inputs, localStorage/sessionStorage, client cookies, sendBeacon y trackers comunes.
+En el release educativo no se introducen deliberadamente autenticación, pagos, PII, texto libre de casos, almacenamiento local de datos del usuario ni SDK de analítica/telemetría de terceros. CI incorpora `scripts/privacy-surface-smoke.mjs`, que falla si detecta superficies sensibles conocidas.
 
 Esto es una guardia de regresión técnica, no una garantía de privacidad ni una revisión normativa completa.
 
-## 2. Gate de privacidad — sigue BLOQUEADO
+## 2. PII / case / document privacy gate — BLOQUEADO
 
-Antes de cualquier release público debe existir aprobación explícita sobre:
+Antes de habilitar cualquier captura real debe existir aprobación explícita sobre:
 
-- qué datos se recolectan realmente, si alguno;
-- finalidad y base/justificación aplicable por territorio cuando corresponda;
+- inventario de datos y finalidad;
+- base/justificación aplicable por territorio cuando corresponda;
 - retención y eliminación;
 - encargados/proveedores y transferencias;
 - cookies/telemetría/analytics;
 - canal para solicitudes de privacidad;
 - manejo de incidentes;
-- tratamiento diferenciado si posteriormente se habilitan herramientas que acepten información de casos o documentos.
+- tratamiento específico para casos, contratos y documentos.
 
-Regla V1: ninguna superficie debe aceptar PII o texto libre de un caso real hasta que exista un diseño de privacidad/seguridad expresamente aprobado.
+Regla: ninguna superficie debe aceptar PII o texto libre de un caso real hasta que exista un diseño de privacidad/seguridad expresamente aprobado.
 
-## 3. Gate de términos y disclosure — sigue BLOQUEADO
+## 3. Términos y disclosure
 
-Debe aprobarse texto público coherente con la Constitución de LegalMente que deje claro, como mínimo:
+El release educativo necesita texto público coherente con la Constitución de LegalMente que deje claro naturaleza educativa/preparatoria, ausencia de asesoría jurídica individual automática, límites territoriales, fuentes/contexto cuando corresponda, correcciones y condiciones de uso de herramientas.
 
-- naturaleza educativa y de preparación;
-- ausencia de asesoría jurídica individual automática;
-- límites territoriales;
-- fuentes y fecha/contexto cuando aplique;
-- necesidad de profesional cuando el nivel de riesgo lo exija;
-- reglas de corrección/actualización;
-- condiciones específicas para herramientas de cálculo o preparación.
+Cualquier término definitivo o política aplicable a futuras capacidades sensibles requiere revisión humana autorizada. No promover texto generado automáticamente a términos definitivos.
 
-No publicar texto legal generado automáticamente como “términos definitivos” sin revisión humana autorizada.
+## 4. Seguridad / operación
 
-## 4. Gate de seguridad / operación — sigue BLOQUEADO
+La superficie estática ya dispone de headers básicos, sanitizer de `/internal/` y build estático. Aun así, el cierre operativo debe documentar y mantener:
 
-Antes de deploy público deben cerrarse al menos:
-
-- entorno y proveedor de hosting aprobados;
-- secretos fuera de repositorio;
-- headers de seguridad y política de contenido según arquitectura final;
-- estrategia de logs sin PII innecesaria;
+- proveedor y rama/fuente de hosting;
 - rollback verificable;
+- política de logs sin PII innecesaria;
 - monitoreo de disponibilidad/errores;
 - procedimiento de corrección/incidente;
-- backups si posteriormente aparece estado persistente;
-- dependencias revisadas y política de actualización;
-- separación clara entre preview/internal y público.
+- política de dependencias;
+- CSP u otra decisión explícita sobre política de contenido según arquitectura;
+- separación entre laboratorio/internal y público;
+- backups cuando exista estado persistente.
 
-## 5. Regla fail-closed
+## 5. Regla fail-closed actual
 
-Hasta que los gates anteriores tengan aceptación explícita:
-
-`PUBLIC_RELEASE = BLOCKED`
+`EDUCATIONAL_STATIC_RELEASE = LIVE_CONTROLLED`
 
 `PII_COLLECTION = BLOCKED`
 
@@ -76,27 +63,16 @@ Hasta que los gates anteriores tengan aceptación explícita:
 
 `PROFESSIONAL_SERVICE_ACTIVATION = BLOCKED`
 
+`REAL_CONTRACT_DRAFT = BLOCKED`
+
 `THIRD_PARTY_ANALYTICS = BLOCKED_UNLESS_EXPLICITLY_REVIEWED`
 
-## 6. Lo que este documento sí permite
+## 6. Lo que puede continuar
 
-Puede continuar:
-
-- desarrollo aislado;
-- contenido sintético/no personal;
-- navegación relacional;
-- QA visual/responsive/accesibilidad;
-- herramientas fail-closed ya congeladas para implementación interna;
-- pruebas automáticas;
-- preparación del microlote sin publicación.
+Puede continuar desarrollo de contenido/no-PII, navegación relacional, QA visual/responsive/accesibilidad, herramientas deterministas sin intake, pruebas automáticas, preparación de microlote y prototipos sintéticos del Contract Engine.
 
 ## 7. Próximo criterio de cierre
 
-Este gate solo cambia cuando existan artefactos revisables y responsables humanos para:
+Antes de activar cualquier capacidad sensible deben existir artefactos revisables y responsables humanos para privacidad/retención/eliminación, términos/disclosure, seguridad/rollback/logging/incidentes y autorización de la capacidad concreta.
 
-1. privacidad/retención/eliminación;
-2. términos/disclosure;
-3. seguridad/deploy/rollback/logging;
-4. autorización de release.
-
-Hasta entonces, mantener PR #5 aislado y sin merge/deploy/publicación.
+El estado operativo global del release se consulta en `docs/CURRENT_RELEASE_STATE_V2.md`.
