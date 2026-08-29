@@ -5,8 +5,8 @@
   "description": "Sitio web de LegalMente - divulgacion juridica panhispanica.",
   "scripts": {
     "dev": "next dev",
-    "build": "NODE_ENV=production next build",
-    "build:public": "NODE_ENV=production npm run build && node scripts/prepare-public-pages.mjs",
+    "build": "NEXT_IGNORE_INCORRECT_LOCKFILE=1 NODE_ENV=production next build",
+    "build:public": "NEXT_IGNORE_INCORRECT_LOCKFILE=1 NODE_ENV=production npm run build && node scripts/prepare-public-pages.mjs",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
