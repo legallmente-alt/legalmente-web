@@ -19,7 +19,7 @@ const wave01aReviews = [
     ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual_4x5.png",
-    copyState: "READY_FOR_COPY",
+    copyState: "READY_FOR_COPY_INTERNAL",
     integrationState: "PRODUCT_REVIEW_REQUIRED",
     publicationState: "NOT_PUBLIC",
     alt: "Bodegón editorial con caja, regla y papel para LM-PC-013; no incorpora texto jurídico.",
@@ -37,7 +37,7 @@ const wave01aReviews = [
     ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual_4x5.png",
-    copyState: "READY_FOR_COPY",
+    copyState: "READY_FOR_COPY_INTERNAL",
     integrationState: "PRODUCT_REVIEW_REQUIRED",
     publicationState: "NOT_PUBLIC",
     alt: "Bodegón editorial con herramientas, delantal y etiqueta en blanco para LM-PC-031; no incorpora texto jurídico.",
@@ -55,7 +55,7 @@ const wave01aReviews = [
     ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual_4x5.png",
-    copyState: "READY_FOR_COPY",
+    copyState: "READY_FOR_COPY_INTERNAL",
     integrationState: "PRODUCT_REVIEW_REQUIRED",
     publicationState: "NOT_PUBLIC",
     alt: "Bodegón editorial con muestras, carpeta y placa en blanco para LM-PC-065; no incorpora texto jurídico.",
@@ -130,7 +130,7 @@ export default function InternalProductLabPage() {
         <div className="max-w-3xl space-y-3">
           <p className="text-sm uppercase tracking-[0.08em] text-tinta/55">Wave 01A · revisión de integración</p>
           <h2 id="wave-01a-title" className="font-serif text-3xl">Visuales preparados y copy aprobado para el siguiente gate.</h2>
-          <p className="text-base leading-7 text-tinta/70">Esta bandeja interna comprueba la presencia binaria y la relación candidata con rutas existentes. El copy vinculado tiene estado READY_FOR_COPY; la integración pública requiere decisión de producto y la publicación conserva una autorización humana separada. El territorio de los tres expedientes es México — PILOT_RESEARCH_TERRITORY.</p>
+          <p className="text-base leading-7 text-tinta/70">Esta bandeja interna comprueba la presencia binaria y la relación candidata con rutas existentes. El copy vinculado tiene estado READY_FOR_COPY_INTERNAL; la integración pública requiere decisión de producto y la publicación conserva una autorización humana separada. El territorio de los tres expedientes es México — PILOT_RESEARCH_TERRITORY.</p>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
           {wave01aReviews.map((item) => (
@@ -179,7 +179,7 @@ export default function InternalProductLabPage() {
       </section>
 
       <footer className="border-t border-tinta/15 pt-6 text-sm leading-6 text-tinta/65">
-        Asset pack: {productionAssetPack.count} proofs registrados · Wave 01A con copy READY_FOR_COPY · integración y publicación bloqueadas.
+        Asset pack: {productionAssetPack.count} proofs registrados · Wave 01A con copy READY_FOR_COPY_INTERNAL · integración y publicación bloqueadas.
       </footer>
     </main>
   );
