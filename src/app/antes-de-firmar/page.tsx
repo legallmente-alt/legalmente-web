@@ -110,7 +110,7 @@ export default function BeforeSigningPage() {
                     type="checkbox"
                     checked={values[check.key]}
                     onChange={() => updateCheck(check.key)}
-                    className="mt-1 h-5 w-5 accent-[#102A43] focus:ring-2 focus:ring-[#102A43]"
+                    className="mt-1 h-6 w-6 accent-[#102A43] focus:ring-2 focus:ring-[#102A43]"
                   />
                   <span>
                     <strong className="block text-base font-medium">{check.title}</strong>
