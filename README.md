@@ -2,7 +2,7 @@
 
 ## Active isolated product direction
 
-This branch implements **The Editorial Instrument** as an isolated product/visual preview and now includes a relational learning layer. It is not approved for merge, deploy or publication.
+This branch implements **The Editorial Instrument** as an isolated educational release with a relational learning layer. The validated public release is available at https://ef9882a7.legalmente-educativo.pages.dev/. It is not a professional legal service and does not collect personal data.
 
 ### Current status
 
@@ -10,9 +10,9 @@ This branch implements **The Editorial Instrument** as an isolated product/visua
 - Knowledge graph: implemented as navigation/learning structure, not as a source of legal claims.
 - Home: recomposed around one simple entry question and relational continuation.
 - Relational surfaces: `/explorar`, `/mundo/[worldId]`, `/serie/[seriesId]`, `/capitulo/[chapterId]`, `/concepto/[conceptId]`, `/proceso/[processId]`.
-- Manus 2 production images: `PRODUCTION_PROOF`; W01/W02/W03 binary import and crop QA still pending.
-- Manus 3: `ART_PASS_FOR_ISOLATED_IMPLEMENTATION`; post-implementation art QA still pending.
-- Publication/deploy: blocked.
+- Visual system: published-format editorial assets are preserved; representative vertical art was restored/upscaled without changing its 9:16 composition.
+- Public educational tool: `/antes-de-firmar` is live, deterministic and non-PII.
+- Publication/deploy: educational release live on isolated Cloudflare Pages project; professional-service activation remains out of scope.
 
 ## Relational product rule
 
@@ -44,4 +44,4 @@ Do not promote any scaffold to public UI until art/UX review explicitly passes d
 
 ### Engineering rule
 
-Keep legal logic, source data, territory, copy, graph relationships and image assets separate. The graph can organize learning and navigation but cannot manufacture legal rules. Feature flags remain fail-closed. No merge, deployment or publication is authorized by this branch.
+Keep legal logic, source data, territory, copy, graph relationships and image assets separate. The graph can organize learning and navigation but cannot manufacture legal rules. Feature flags remain fail-closed. The public artifact excludes `/internal/`, uses no PII/document/payment surfaces, and must pass the legal-core, knowledge-safety, privacy, typecheck and static-build gates before each publication.
