@@ -52,7 +52,7 @@ The previous UI copy suggesting that a structural draft might appear once territ
 
 Run: `33247723546`
 
-Runtime head: `fe6139809d931292970c7a1b28395e7b7e0867a1`
+PR head tested: `fe6139809d931292970c7a1b28395e7b7e0867a1`
 
 Result: `SUCCESS`.
 
@@ -68,7 +68,9 @@ Passed:
 - accessibility/interaction smoke;
 - proof artifact upload.
 
-Proof artifact: `9713387532`.
+Proof artifact ID: `9713387532`.
+
+The artifact name contains GitHub's generated PR merge-ref SHA; the workflow metadata records the actual tested PR head above.
 
 ## Gates unchanged
 
