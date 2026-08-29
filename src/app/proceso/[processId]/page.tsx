@@ -43,7 +43,13 @@ export default function ProcessPage({ params }: { params: { processId: string } 
             <strong className="text-sm">Territorio y límite</strong>
             <p className="mt-2 text-sm leading-6 text-[#102A43]/62">{process.territoryNote}</p>
           </div>
-          <Link href="/explorar" className="mt-8 inline-flex min-h-11 items-center border-b border-[#102A43]/30 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#102A43]">Volver a explorar</Link>
+          <Link
+            href="/explorar"
+            className="group mt-8 inline-flex min-h-12 items-center gap-2 border-b border-[#102A43]/60 px-1 py-2 text-sm font-semibold transition-colors hover:border-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43]"
+          >
+            <span aria-hidden="true" className="transition-transform duration-300 group-hover:-translate-x-1 motion-reduce:transform-none">←</span>
+            Volver a explorar
+          </Link>
         </aside>
       </div>
     </KnowledgeShell>
