@@ -34,52 +34,42 @@ This remains true even if upstream technical evaluation could otherwise report d
 
 `src/lib/contracts/demo.ts` contains a non-identifiable fixture used by `/preparar/contrato`.
 
-The public prototype now reads its example state from the actual output adapter instead of hard-coded status copy. It demonstrates unresolved territory and representation review while receiving no PII, documents, cases or payments.
+The prototype surface now reads its example state from the actual output adapter instead of hard-coded status copy. It demonstrates unresolved territory and representation review while receiving no PII, documents, cases or payments.
 
 The previous UI copy suggesting that a structural draft might appear once territorial coverage existed was removed. V1 explicitly excludes a real contractual draft.
 
-## Tests
+## Tests and verification
 
-`src/lib/contracts/outputs.test.ts` covers:
+`src/lib/contracts/outputs.test.ts` covers structured output construction, label resolution, fail-closed red flags, separation of missing information and the real-draft invariant.
 
-1. structured output construction;
-2. party/representation/obligation label resolution;
-3. fail-closed red flags and review questions;
-4. separation of missing information from other blockers;
-5. the invariant that a real draft remains blocked even under upstream technical eligibility.
+Verified CI run: `33247723546`
 
-## Verified CI
-
-Run: `33247723546`
-
-PR head tested: `fe6139809d931292970c7a1b28395e7b7e0867a1`
+Tested PR head: `fe6139809d931292970c7a1b28395e7b7e0867a1`
 
 Result: `SUCCESS`.
 
-Passed:
-
-- legal-core;
-- knowledge-safety;
-- contract-core;
-- typecheck;
-- privacy surface smoke;
-- production build;
-- responsive proof capture;
-- accessibility/interaction smoke;
-- proof artifact upload.
+Passed legal-core, knowledge-safety, contract-core, typecheck, privacy smoke, production build, responsive proof capture, accessibility/interaction smoke and artifact upload.
 
 Proof artifact ID: `9713387532`.
 
-The artifact name contains GitHub's generated PR merge-ref SHA; the workflow metadata records the actual tested PR head above.
+The artifact name contains GitHub's generated PR merge-ref SHA; workflow metadata records the tested PR head above.
 
 ## Gates unchanged
 
-- `LEGAL_COVERAGE = PENDING`
-- `COMPONENT_VERIFICATION = BLOCKED_PENDING_TARGETED_CORRECTIONS`
-- `VERIFIED_FOR_TERRITORY = FALSE`
-- `REAL_DRAFT = BLOCKED`
-- `PII = DISABLED`
-- `PROFESSIONAL_SERVICES = DISABLED`
-- `MERGE = NOT_AUTHORIZED`
-- `DEPLOY = NOT_AUTHORIZED`
-- `PUBLICATION = BLOCKED`
+`LEGAL_COVERAGE = PENDING`
+
+`COMPONENT_VERIFICATION = BLOCKED_PENDING_TARGETED_CORRECTIONS`
+
+`VERIFIED_FOR_TERRITORY = FALSE`
+
+`REAL_DRAFT = BLOCKED`
+
+`PII = DISABLED`
+
+`PROFESSIONAL_SERVICES = DISABLED`
+
+`MERGE = NOT_AUTHORIZED`
+
+`DEPLOY = NOT_AUTHORIZED`
+
+`PUBLICATION = BLOCKED`
