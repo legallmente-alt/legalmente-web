@@ -40,8 +40,9 @@ export default function ConfianzaPage() {
             </p>
             <Link
               href="/explorar"
-              className="mt-8 inline-flex min-h-11 items-center border-b border-[#102A43]/30 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#102A43]"
+              className="group mt-8 inline-flex min-h-12 items-center gap-2 border-b border-[#102A43]/60 px-1 py-2 text-sm font-semibold transition-colors hover:border-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43]"
             >
+              <span aria-hidden="true" className="transition-transform duration-300 group-hover:-translate-x-1 motion-reduce:transform-none">←</span>
               Volver a explorar
             </Link>
           </div>
@@ -65,9 +66,17 @@ export default function ConfianzaPage() {
           <h2 className="max-w-[12ch] font-serif text-4xl leading-[1.02] tracking-[-0.035em] md:text-5xl">
             La confianza no es un sello. Es información visible.
           </h2>
-          <p className="max-w-[54ch] text-sm leading-7 text-[#F5F0E8]/66">
-            Fuentes, territorio y límites deben acompañar la experiencia cuando sean relevantes. La autorización de publicación sigue siendo una decisión humana separada.
-          </p>
+          <div>
+            <p className="max-w-[54ch] text-sm leading-7 text-[#F5F0E8]/66">
+              Fuentes, territorio y límites deben acompañar la experiencia cuando sean relevantes. La autorización de publicación sigue siendo una decisión humana separada.
+            </p>
+            <Link
+              href="/explorar"
+              className="group mt-7 inline-flex min-h-12 items-center gap-2 border-b border-[#F5F0E8]/45 px-1 py-2 text-sm font-semibold text-[#F5F0E8] transition-colors hover:border-[#F5F0E8] focus:outline-none focus:ring-2 focus:ring-[#63D7B0] focus:ring-offset-4 focus:ring-offset-[#102A43]"
+            >
+              Volver a explorar <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none">→</span>
+            </Link>
+          </div>
         </div>
       </section>
     </main>
