@@ -1,0 +1,38 @@
+{
+  "LM-PC-013": {
+    "source_binding_original_state": "HUMAN_REVIEW_REQUIRED (historical; not rewritten)",
+    "human_decision_id": "FOUNDER_DECISION_WAVE_01A_READY_FOR_COPY_2026-08-29",
+    "human_decision_date": "2026-08-29",
+    "current_copy_state": "READY_FOR_COPY",
+    "current_visual_state": "READY_FOR_VISUAL",
+    "current_integration_state": "PRODUCT_REVIEW_REQUIRED",
+    "current_publication_state": "NOT_PUBLIC",
+    "supersedes": "Historical source-binding addendum remains preserved",
+    "superseded_by": "Current operational state layer in this package",
+    "next_gate": "Human product decision per unit; integration QA; publication decision"
+  },
+  "LM-PC-031": {
+    "source_binding_original_state": "HUMAN_REVIEW_REQUIRED (historical; not rewritten)",
+    "human_decision_id": "FOUNDER_DECISION_WAVE_01A_READY_FOR_COPY_2026-08-29",
+    "human_decision_date": "2026-08-29",
+    "current_copy_state": "READY_FOR_COPY",
+    "current_visual_state": "READY_FOR_VISUAL",
+    "current_integration_state": "PRODUCT_REVIEW_REQUIRED",
+    "current_publication_state": "NOT_PUBLIC",
+    "supersedes": "Historical source-binding addendum remains preserved",
+    "superseded_by": "Current operational state layer in this package",
+    "next_gate": "Human product decision per unit; integration QA; publication decision"
+  },
+  "LM-PC-065": {
+    "source_binding_original_state": "HUMAN_REVIEW_REQUIRED (historical; not rewritten)",
+    "human_decision_id": "FOUNDER_DECISION_WAVE_01A_READY_FOR_COPY_2026-08-29",
+    "human_decision_date": "2026-08-29",
+    "current_copy_state": "READY_FOR_COPY",
+    "current_visual_state": "READY_FOR_VISUAL",
+    "current_integration_state": "PRODUCT_REVIEW_REQUIRED",
+    "current_publication_state": "NOT_PUBLIC",
+    "supersedes": "Historical source-binding addendum remains preserved",
+    "superseded_by": "Current operational state layer in this package",
+    "next_gate": "Human product decision per unit; integration QA; publication decision"
+  }
+}
