@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+import { syntheticContractPreparationDemo } from "@/lib/contracts/demo";
+import { buildContractPreparationOutputs } from "@/lib/contracts/outputs";
+
 const steps = [
   ["01", "Partes y capacidad", "Quién contrata, quién firma y qué representación debe verificarse."],
   ["02", "Objeto y obligaciones", "Qué se acuerda, qué queda fuera y qué debe entregar cada parte."],
@@ -7,16 +10,29 @@ const steps = [
   ["04", "Cambios y riesgos", "Renovación, terminación, confidencialidad, responsabilidad y controversias."],
 ] as const;
 
-const outputs = [
+const permittedOutputs = [
   "Contract brief",
-  "Checklist antes de firmar",
   "Mapa de partes y representación",
-  "Mapa de obligaciones y fechas",
-  "Matriz de puntos por revisar",
-  "Borrador estructural únicamente cuando exista cobertura territorial",
+  "Matriz de obligaciones",
+  "Timeline contractual",
+  "Calendario de pagos",
+  "Información faltante y puntos por revisar",
+  "Preguntas para revisión profesional cuando corresponda",
 ] as const;
 
+const demoOutputs = buildContractPreparationOutputs(syntheticContractPreparationDemo);
+
+const statusLabel: Record<typeof demoOutputs.brief.preparationStatus, string> = {
+  MISSING_INPUT: "Falta información esencial",
+  TERRITORIAL_RESEARCH_REQUIRED: "Revisión territorial requerida",
+  PROFESSIONAL_REVIEW_REQUIRED: "Revisión profesional requerida",
+  STRUCTURED_BRIEF_READY: "Preparación estructurada lista",
+  DRAFT_ELIGIBILITY_PENDING: "Elegibilidad técnica pendiente",
+};
+
 export default function PrepararContratoPage() {
+  const primaryFlag = demoOutputs.preparationRedFlags[0];
+
   return (
     <main className="bg-[#F5F0E8] text-[#102A43]">
       <section className="mx-auto max-w-[1180px] px-5 py-14 md:px-8 md:py-24">
@@ -65,16 +81,32 @@ export default function PrepararContratoPage() {
           </section>
 
           <aside className="border border-[#102A43]/15 bg-[#102A43] p-7 text-[#F5F0E8] md:p-9" aria-labelledby="ejemplo-title">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#63D7B0]">Ejemplo sintético</p>
-            <h2 id="ejemplo-title" className="mt-4 font-serif text-3xl leading-tight">Proveedor independiente</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#63D7B0]">Ejemplo sintético · salida real del adapter</p>
+            <h2 id="ejemplo-title" className="mt-4 font-serif text-3xl leading-tight">{demoOutputs.brief.summary}</h2>
             <dl className="mt-7 space-y-4 text-sm">
-              <div className="border-b border-[#F5F0E8]/12 pb-3"><dt className="text-[#F5F0E8]/48">Tipo</dt><dd className="mt-1">Prestación de servicios</dd></div>
-              <div className="border-b border-[#F5F0E8]/12 pb-3"><dt className="text-[#F5F0E8]/48">Partes</dt><dd className="mt-1">Parte A / Parte B · marcadores no identificables</dd></div>
-              <div className="border-b border-[#F5F0E8]/12 pb-3"><dt className="text-[#F5F0E8]/48">Territorio</dt><dd className="mt-1">Pendiente de selección</dd></div>
-              <div><dt className="text-[#F5F0E8]/48">Siguiente bloqueo</dt><dd className="mt-1 text-[#63D7B0]">Revisión territorial requerida</dd></div>
+              <div className="border-b border-[#F5F0E8]/12 pb-3">
+                <dt className="text-[#F5F0E8]/48">Modo</dt>
+                <dd className="mt-1">{demoOutputs.brief.mode}</dd>
+              </div>
+              <div className="border-b border-[#F5F0E8]/12 pb-3">
+                <dt className="text-[#F5F0E8]/48">Partes</dt>
+                <dd className="mt-1">{demoOutputs.partyMap.map((party) => party.displayLabel).join(" / ")} · marcadores no identificables</dd>
+              </div>
+              <div className="border-b border-[#F5F0E8]/12 pb-3">
+                <dt className="text-[#F5F0E8]/48">Territorio</dt>
+                <dd className="mt-1">{demoOutputs.brief.territoryCode ?? "Pendiente de selección"}</dd>
+              </div>
+              <div className="border-b border-[#F5F0E8]/12 pb-3">
+                <dt className="text-[#F5F0E8]/48">Estado de preparación</dt>
+                <dd className="mt-1 text-[#63D7B0]">{statusLabel[demoOutputs.brief.preparationStatus]}</dd>
+              </div>
+              <div>
+                <dt className="text-[#F5F0E8]/48">Siguiente bloqueo</dt>
+                <dd className="mt-1 text-[#63D7B0]">{primaryFlag?.message ?? "Sin bloqueo estructural adicional"}</dd>
+              </div>
             </dl>
             <p className="mt-8 border-t border-[#F5F0E8]/12 pt-5 text-xs leading-5 text-[#F5F0E8]/58">
-              Este ejemplo no crea un contrato, no determina suficiencia de poderes y no sustituye revisión profesional.
+              El adapter solo produce preparación estructurada. En V1, <strong className="font-semibold text-[#F5F0E8]/82">realDraftAllowed = false</strong> y no existe vista previa de contrato real.
             </p>
           </aside>
         </div>
@@ -83,16 +115,19 @@ export default function PrepararContratoPage() {
       <section className="border-t border-[#102A43]/10 bg-white/45">
         <div className="mx-auto max-w-[1180px] px-5 py-14 md:px-8 md:py-20">
           <div className="max-w-[700px]">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/52">Salidas previstas</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/52">Salidas permitidas en V1</p>
             <h2 className="mt-3 font-serif text-4xl tracking-[-0.035em] md:text-5xl">El resultado es un mapa, no una falsa certeza.</h2>
           </div>
           <div className="mt-10 grid gap-x-8 gap-y-0 border-t border-[#102A43]/12 md:grid-cols-2">
-            {outputs.map((output, index) => (
+            {permittedOutputs.map((output, index) => (
               <div key={output} className="flex gap-4 border-b border-[#102A43]/12 py-5 text-sm leading-6">
                 <span className="text-xs tabular-nums text-[#102A43]/42">{String(index + 1).padStart(2, "0")}</span>
                 <span>{output}</span>
               </div>
             ))}
+          </div>
+          <div className="mt-8 border-l-2 border-[#102A43]/18 pl-4 text-sm leading-6 text-[#102A43]/66">
+            <p><strong className="font-semibold text-[#102A43]">No incluido:</strong> borrador contractual real, validación de poderes, asesoría individualizada, recepción de documentos, PII o pagos.</p>
           </div>
           <div className="mt-10 flex flex-wrap gap-4">
             <Link href="/proceso/leer-antes-de-aceptar" className="inline-flex min-h-12 items-center border border-[#102A43] px-5 py-3 text-sm font-semibold transition-colors hover:bg-[#102A43] hover:text-[#F5F0E8] focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-2">
@@ -107,4 +142,3 @@ export default function PrepararContratoPage() {
     </main>
   );
 }
-
