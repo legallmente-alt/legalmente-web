@@ -21,6 +21,11 @@ const trustLayers = [
     title: "Correcciones",
     body: "El conocimiento jurídico cambia. Una corrección material debe conservar contexto suficiente para entender qué cambió y por qué, sin borrar silenciosamente la historia de una pieza.",
   },
+  {
+    index: "05",
+    title: "Datos",
+    body: "Esta primera experiencia no solicita nombres, correos, documentos, expedientes ni detalles de casos. No incluye carga de archivos, pagos, cuentas ni almacenamiento de información personal.",
+  },
 ] as const;
 
 export default function ConfianzaPage() {

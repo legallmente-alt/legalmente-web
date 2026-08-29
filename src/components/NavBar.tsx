@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const links = [
   { href: "/explorar", label: "Explorar" },
+  { href: "/antes-de-firmar", label: "Antes de firmar" },
   { href: "/explorar#mundos", label: "Mundos" },
   { href: "/sobre", label: "Sobre" },
 ];
@@ -28,10 +29,10 @@ export default function NavBar() {
             </Link>
           ))}
           <Link
-            href="/explorar"
+            href="/antes-de-firmar"
             className="ml-1 inline-flex min-h-11 items-center border border-[#102A43] px-4 text-sm font-semibold text-[#102A43] transition-colors hover:bg-[#102A43] hover:text-[#F5F0E8] focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-2"
           >
-            Entender algo
+            Revisar antes de firmar
           </Link>
         </div>
 

@@ -80,10 +80,10 @@ export default function HomePage() {
           </p>
 
           <Link
-            href="/explorar"
+            href="/antes-de-firmar"
             className="group mt-9 inline-flex min-h-14 w-full items-center justify-between gap-8 bg-[#102A43] px-7 text-base font-semibold text-[#F5F0E8] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-4 motion-reduce:transform-none sm:w-auto sm:min-w-72 sm:px-8"
           >
-            <span>¿Qué quieres entender?</span>
+            <span>Revisar antes de firmar</span>
             <span className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none" aria-hidden="true">→</span>
           </Link>
 
