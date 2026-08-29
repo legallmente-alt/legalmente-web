@@ -1,40 +1,47 @@
-# legalmente-web
+# LegalMente
 
-Sitio web de LegalMente — divulgación jurídica panhispánica.
+## Active isolated product direction
 
-## Objetivo
+This branch implements **The Editorial Instrument** as an isolated educational release with a relational learning layer. The validated public release is available at https://ef9882a7.legalmente-educativo.pages.dev/. It is not a professional legal service and does not collect personal data.
 
-El mismo que en redes: generar mensajes directos que se conviertan en consulta. La web no es un folleto, es un cierre. Ver `legalmente-marca-y-estilo.md` en el repo `Psyche-creation` (docs/) para la línea editorial completa.
+### Current status
 
-## Sistema visual vigente (decisión 23-ago-2026)
+- Legal core: deterministic internal implementation under review.
+- Knowledge graph: implemented as navigation/learning structure, not as a source of legal claims.
+- Home: recomposed around one simple entry question and relational continuation.
+- Relational surfaces: `/explorar`, `/mundo/[worldId]`, `/serie/[seriesId]`, `/capitulo/[chapterId]`, `/concepto/[conceptId]`, `/proceso/[processId]`.
+- Visual system: published-format editorial assets are preserved; representative vertical art was restored/upscaled without changing its 9:16 composition.
+- Public educational tool: `/antes-de-firmar` is live, deterministic and non-PII.
+- Publication/deploy: educational release live on isolated Cloudflare Pages project; professional-service activation remains out of scope.
 
-**Realismo cinematográfico editorial** — el definido en `Psyche-creation/docs/legalmente-marca-y-estilo.md`, Sección 3 (Librería de Prompts Maestros para Imágenes). Paleta base: Crema `#EDE7DA`, Oro `#C8A24A`, Tinta profunda `#0E1A24`. Estilo: cinematic legal realism con restrained symbolic surrealism, fotorrealista, composición tipo still-life editorial. Formato 9:16 vertical para redes, 16:9 para portadas de YouTube.
+## Relational product rule
 
-Existe un segundo sistema (óleo cinematográfico / claroscuro, paleta Nogal/Marfil/Azul Petróleo/Latón) documentado en el skill `legalmente-visual-system`, sincronizado desde el Drive del proyecto. Ese sistema quedó descartado para este proyecto — si el skill se sigue activando y sugiriendo esa dirección de arte, es una inconsistencia pendiente de corregir en el Drive/skill, no una alternativa válida. No mezclar ambos sistemas en la misma pieza o colección.
+LegalMente is not a flat catalogue. The product should let a user enter through a situation, concept, process or world and then understand where they are, why the current item matters, what it connects to and what comes next.
 
-## Mapa del sitio
+The canonical learning journey is:
 
-Seis páginas, sin relleno: Inicio; Sobre LegalMente / Sobre Raymundo (autoridad profesional); Áreas de práctica (corporativo, contractual, inmobiliario, regulatorio/compliance); Catálogo editorial (piezas ya publicadas en redes, curadas); Casos y contingencias resueltas (sin identificar clientes); Contacto (único objetivo real de la página — CTA de documento, nunca "consulta a un abogado").
+`SITUATION → CONCEPT → BRANCH → PROCESS → EVIDENCE → TERRITORY → SOURCE → TOOL`
 
-No se agregan más páginas sin justificación: la métrica única de éxito del proyecto son los mensajes directos, no el tráfico.
+History, disciplines, series and chapters are contextual layers. Similarity between legal systems is not treated as legal equivalence without territorial evidence.
 
-## Stack
+### Visual acceptance principles
 
-Next.js (React) más TypeScript más Tailwind. Consistente con Psyche-creation (React/TypeScript) y compatible con envolver el sitio como PWA o reutilizar lógica en una futura app (React Native / Expo).
+LegalMente must feel like a premium, explorable editorial/product experience, not a legacy legal portal, generic SaaS dashboard, school slide deck or grid of identical cards. Complexity belongs in the graph, not on the first screen.
 
-## Estructura de carpetas propuesta
+Do not promote any scaffold to public UI until art/UX review explicitly passes desktop and 360/390/430 mobile surfaces. Do not treat compliance with symbol, color or card tokens as sufficient visual acceptance.
 
-```
-src/pages (o app/ si se usa App Router): index, sobre, areas-de-practica, catalogo, casos, contacto
-src/components
-src/content -> piezas del catalogo, mismo patron que content/*.json de Psyche-creation
-src/styles -> tokens de la paleta: crema/oro/tinta
-```
+### Hard anti-patterns
 
-## Automatización (fase 2)
+- centered marketing hero + equal outlined cards as the whole Home structure;
+- repeated equal-width card grids for every content family;
+- generic gradient placeholders where approved art is expected;
+- decorative glassmorphism, excessive borders or shadows;
+- dashboard-like presentation of editorial worlds;
+- unordered chapters or orphan concepts;
+- motion without information value;
+- content density that hides the primary user action;
+- treating `PRODUCTION_PROOF` or `VECTOR_CANDIDATE` as final/public art.
 
-CI/CD de build y deploy en cada push a main, con el mismo patrón que ya usa Psyche-creation. Sincronización del catálogo editorial con las piezas ya generadas en el pipeline de Remotion/Canva. Formulario de contacto conectado a un servicio simple, midiendo "mensajes directos" en el mismo tablero que usan las redes.
+### Engineering rule
 
-## Estado
-
-Repositorio recién creado — esqueleto de carpetas y documentación en progreso. Próximo paso: validar copy de cada sección y generar las primeras piezas visuales con el sistema vigente descrito arriba.
+Keep legal logic, source data, territory, copy, graph relationships and image assets separate. The graph can organize learning and navigation but cannot manufacture legal rules. Feature flags remain fail-closed. The public artifact excludes `/internal/`, uses no PII/document/payment surfaces, and must pass the legal-core, knowledge-safety, privacy, typecheck and static-build gates before each publication.

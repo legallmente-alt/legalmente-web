@@ -1,39 +1,39 @@
+import Link from "next/link";
+
 export default function ContactoPage() {
   return (
-    <article className="space-y-6">
-      <h1 className="font-serif text-3xl text-oro">Contacto</h1>
-      <p className="text-crema/85">
-        ¿Tienes una pregunta, sugerencia o quieres colaborar con
-        LegalMente? Escríbenos.
+    <main className="mx-auto min-h-[70vh] max-w-[900px] px-5 py-20 text-[#102A43] md:px-8 md:py-28">
+      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[#102A43]/55">
+        Canal no habilitado
       </p>
-      <form className="grid gap-4 sm:max-w-md">
-        <input
-          type="text"
-          placeholder="Nombre"
-          className="rounded-sm border border-oro/30 bg-transparent px-4 py-3 text-sm text-crema placeholder:text-crema/40"
-        />
-        <input
-          type="email"
-          placeholder="Correo electrónico"
-          className="rounded-sm border border-oro/30 bg-transparent px-4 py-3 text-sm text-crema placeholder:text-crema/40"
-        />
-        <textarea
-          placeholder="Mensaje"
-          rows={5}
-          className="rounded-sm border border-oro/30 bg-transparent px-4 py-3 text-sm text-crema placeholder:text-crema/40"
-        />
-        <button
-          type="submit"
-          className="rounded-sm border border-oro px-6 py-3 text-sm uppercase tracking-wide text-oro hover:bg-oro hover:text-tinta"
+      <h1 className="max-w-[14ch] font-serif text-4xl leading-[1.02] tracking-[-0.025em] md:text-6xl">
+        Contacto todavía no recibe casos ni datos personales.
+      </h1>
+      <div className="mt-8 max-w-[64ch] space-y-5 text-base leading-7 text-[#102A43]/76 md:text-lg">
+        <p>
+          LegalMente mantiene este canal cerrado mientras termina las reglas de privacidad, retención, seguridad y atención responsable.
+        </p>
+        <p>
+          No envíes nombres, documentos, expedientes, datos de salud, información de un proceso ni detalles identificables de una situación jurídica por esta vía.
+        </p>
+        <p>
+          La plataforma actual está orientada a educación y preparación general; no sustituye asesoría profesional para un caso concreto.
+        </p>
+      </div>
+      <div className="mt-10 flex flex-wrap gap-3">
+        <Link
+          href="/explorar"
+          className="inline-flex min-h-11 items-center border border-[#102A43] px-5 py-3 text-sm font-semibold text-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-2"
         >
-          Enviar
-        </button>
-      </form>
-      <p className="text-xs text-crema/50">
-        Nota técnica: este formulario aún no está conectado a un backend.
-        Fase 2 de automatización: registrar cada envío como "mensaje
-        directo" para la métrica de éxito del manual de marca.
-      </p>
-    </article>
+          Explorar LegalMente →
+        </Link>
+        <Link
+          href="/confianza"
+          className="inline-flex min-h-11 items-center px-2 py-3 text-sm font-semibold text-[#102A43]/72 underline decoration-[#102A43]/30 underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-2"
+        >
+          Fuentes y límites
+        </Link>
+      </div>
+    </main>
   );
 }
