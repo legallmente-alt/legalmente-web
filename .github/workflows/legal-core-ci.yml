@@ -43,6 +43,7 @@ jobs:
           node-version: 20
       - run: npm install --no-audit --no-fund
       - run: npm run test:legal-core
+      - run: npm run test:knowledge-safety
       - run: npm run typecheck
       - name: Privacy surface smoke
         run: node scripts/privacy-surface-smoke.mjs
