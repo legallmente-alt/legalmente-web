@@ -2,12 +2,15 @@ name: LegalMente product core CI
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - feat/legalmente-editorial-instrument-preview-v1
     paths:
       - 'src/app/**'
       - 'src/lib/legal-core/**'
       - 'src/lib/visual-system/**'
       - 'src/lib/knowledge-graph/**'
+      - 'src/lib/contracts/**'
       - 'src/components/**'
       - 'public/assets/legalmente/**'
       - 'scripts/**'
@@ -18,11 +21,13 @@ on:
       - main
       - feat/legalmente-deterministic-product-core-v1
       - feat/legalmente-editorial-instrument-preview-v1
+      - agent/contract-preparation-engine-v1
     paths:
       - 'src/app/**'
       - 'src/lib/legal-core/**'
       - 'src/lib/visual-system/**'
       - 'src/lib/knowledge-graph/**'
+      - 'src/lib/contracts/**'
       - 'src/components/**'
       - 'public/assets/legalmente/**'
       - 'scripts/**'
@@ -44,19 +49,20 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npm run test:legal-core
       - run: npm run test:knowledge-safety
+      - run: npm run test:contract-core
       - run: npm run typecheck
       - name: Privacy surface smoke
         run: node scripts/privacy-surface-smoke.mjs
       - run: npm run build
 
       - name: Install proof browser
-        if: github.ref == 'refs/heads/feat/legalmente-editorial-instrument-preview-v1'
+        if: ${{ github.ref == 'refs/heads/feat/legalmente-editorial-instrument-preview-v1' || github.ref == 'refs/heads/agent/contract-preparation-engine-v1' || (github.event_name == 'pull_request' && github.base_ref == 'feat/legalmente-editorial-instrument-preview-v1') }}
         run: |
           npm install --no-save --no-audit --no-fund playwright@1.55.0
           npx playwright install chromium
 
       - name: Capture integrated responsive proofs and accessibility smoke
-        if: github.ref == 'refs/heads/feat/legalmente-editorial-instrument-preview-v1'
+        if: ${{ github.ref == 'refs/heads/feat/legalmente-editorial-instrument-preview-v1' || github.ref == 'refs/heads/agent/contract-preparation-engine-v1' || (github.event_name == 'pull_request' && github.base_ref == 'feat/legalmente-editorial-instrument-preview-v1') }}
         run: |
           npm run start -- -p 3000 > /tmp/legalmente-next.log 2>&1 &
           APP_PID=$!
@@ -80,7 +86,7 @@ jobs:
           node scripts/accessibility-interaction-smoke.mjs
 
       - name: Upload integrated proof artifact
-        if: github.ref == 'refs/heads/feat/legalmente-editorial-instrument-preview-v1' && always()
+        if: ${{ (github.ref == 'refs/heads/feat/legalmente-editorial-instrument-preview-v1' || github.ref == 'refs/heads/agent/contract-preparation-engine-v1' || (github.event_name == 'pull_request' && github.base_ref == 'feat/legalmente-editorial-instrument-preview-v1')) && always() }}
         uses: actions/upload-artifact@v4
         with:
           name: legalmente-implementation-proofs-${{ github.sha }}
