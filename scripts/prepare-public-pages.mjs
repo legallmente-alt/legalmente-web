@@ -4,6 +4,7 @@ import path from "node:path";
 const protectedPaths = [
   ["out/internal", "internal routes"],
   ["out/internal-assets", "internal review assets"],
+  ["out/_next/static/chunks/app/internal", "internal route chunks"],
 ];
 
 for (const [relativePath, label] of protectedPaths) {
