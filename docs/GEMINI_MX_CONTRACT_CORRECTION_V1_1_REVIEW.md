@@ -107,9 +107,30 @@ Any later components in the correction packet not explicitly reviewed here remai
 - `DEPLOY = NOT_AUTHORIZED`
 - `PUBLICATION = BLOCKED`
 
+## P1 continuation implemented while V1.2 legal correction is pending
+
+Code owner added a structured-output adapter in `src/lib/contracts/outputs.ts`. It turns the existing synthetic Contract Record into permitted preparation outputs only:
+
+- contract brief;
+- party map;
+- representation map;
+- obligation matrix;
+- contract timeline events;
+- payment schedule;
+- missing-information list;
+- preparation red flags;
+- professional-review questions;
+- explicit annex-checklist gap (`NOT_MODELLED_IN_V1`).
+
+The adapter has an invariant `realDraftAllowed: false` and `draftPreview: null`, including when upstream technical evaluation would otherwise report draft eligibility. This preserves the founder decision that V1 is structured preparation only.
+
+`src/lib/contracts/outputs.test.ts` covers these outputs, label resolution, fail-closed red flags and the real-draft invariant.
+
+CI run `33247560231` on head `a8c67253007e05f085bad0ebce652afc7896c798` completed `SUCCESS`: legal-core, knowledge-safety, contract-core, typecheck, privacy smoke, production build, responsive/accessibility proof capture and artifact upload all passed. Proof artifact ID: `9713335306`.
+
 ## Next legal task
 
-Do **not** regenerate the full research pack. Perform one narrow correction/verification pass limited to:
+Do **not** regenerate the full research pack. Perform one narrow V1.2 correction/verification pass limited to:
 
 1. exact LFPPI 163–169 function map and removal of false universal marking requirement;
 2. exact official reform metadata reconciliation for sources that will become evidence records;
