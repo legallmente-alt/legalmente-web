@@ -4,6 +4,7 @@ import { join } from "node:path";
 const outputRoot = join(process.cwd(), "out");
 const requiredRoutes = [
   "index.html",
+  "404.html",
   "explorar/index.html",
   "antes-de-firmar/index.html",
   "casos/index.html",
@@ -39,6 +40,11 @@ const requiredHomeSignals = ["Entender el Derecho empieza por una pregunta", "An
 const missingSignals = requiredHomeSignals.filter((signal) => !home.includes(signal));
 if (missingSignals.length > 0) {
   throw new Error(`Home is missing expected educational signals: ${missingSignals.join(", ")}`);
+}
+
+const notFoundPage = readFileSync(join(outputRoot, "404.html"), "utf8");
+if (!notFoundPage.includes("404")) {
+  throw new Error("404 page is present but does not contain a 404 marker.");
 }
 
 console.log(`Public route proof passed: ${requiredRoutes.length} routes, internal route absent, security files present.`);
