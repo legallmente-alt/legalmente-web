@@ -41,6 +41,15 @@ const headersPath = join(outputRoot, "_headers");
 if (!existsSync(robotsPath) || !existsSync(headersPath)) {
   throw new Error("Public artifact is missing robots.txt or _headers.");
 }
+const sitemapPath = join(outputRoot, "sitemap.xml");
+if (!existsSync(sitemapPath)) {
+  throw new Error("Public artifact is missing sitemap.xml.");
+}
+const sitemap = readFileSync(sitemapPath, "utf8");
+const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+if (sitemapUrls.length < 40 || sitemapUrls.some((url) => /\/internal|product-lab|wave01a/i.test(url))) {
+  throw new Error("Sitemap is missing public educational URLs or exposes an internal URL.");
+}
 
 const home = readFileSync(join(outputRoot, "index.html"), "utf8");
 const requiredHomeSignals = ["Entender el Derecho empieza por una pregunta", "Antes de firmar"];
@@ -76,4 +85,4 @@ if (brokenLinks.length > 0) {
   throw new Error(`Broken public links found:\n${brokenLinks.join("\n")}`);
 }
 
-console.log(`Public route proof passed: ${requiredRoutes.length} routes, ${htmlFiles.length} HTML files, internal route absent, links valid, security files present.`);
+console.log(`Public route proof passed: ${requiredRoutes.length} routes, ${htmlFiles.length} HTML files, ${sitemapUrls.length} sitemap URLs, internal route absent, links valid, security files present.`);
