@@ -1,0 +1,63 @@
+{
+  "pack": "Wave 01A",
+  "visibility": "internal-review-only",
+  "contentUnits": [
+    {
+      "contentId": "LM-PC-013",
+      "territory": "México — PILOT_RESEARCH_TERRITORY",
+      "state": "HUMAN_REVIEW_REQUIRED",
+      "relatedContent": "PENDING_MAPPING",
+      "candidateRoute": "/proceso/leer-antes-de-aceptar",
+      "vertical": {
+        "driveFileId": "11CuPIof-4JlsWD95XbiFxMFv3Lv9jwK6",
+        "sourceName": "LM-PC-013_visual.png",
+        "width": 1440,
+        "height": 2560
+      },
+      "feed": {
+        "driveFileId": "1k91uereIAwG8oTIBN2nJWs0OoQqfsdHD",
+        "sourceName": "LM-PC-013_visual_4x5.png",
+        "width": 1664,
+        "height": 2080
+      }
+    },
+    {
+      "contentId": "LM-PC-031",
+      "territory": "México — PILOT_RESEARCH_TERRITORY",
+      "state": "HUMAN_REVIEW_REQUIRED",
+      "relatedContent": "PENDING_MAPPING",
+      "candidateRoute": "/mundo/empresa-comercio",
+      "vertical": {
+        "driveFileId": "1uaKSDh2JgPXJ6p4Zl3Su9hJzM-DNXiTz",
+        "sourceName": "LM-PC-031_visual.png",
+        "width": 1440,
+        "height": 2560
+      },
+      "feed": {
+        "driveFileId": "1pXrwi60WQkdgF8lhyVd1I0gWnbDzhVF-",
+        "sourceName": "LM-PC-031_visual_4x5.png",
+        "width": 1664,
+        "height": 2080
+      }
+    },
+    {
+      "contentId": "LM-PC-065",
+      "territory": "México — PILOT_RESEARCH_TERRITORY",
+      "state": "HUMAN_REVIEW_REQUIRED",
+      "relatedContent": "PENDING_MAPPING",
+      "candidateRoute": "/mundo/empresa-comercio",
+      "vertical": {
+        "driveFileId": "1U3ucv9Ti2Y4PB6cJpquNmJfnsOd3_CKc",
+        "sourceName": "LM-PC-065_visual.png",
+        "width": 1440,
+        "height": 2560
+      },
+      "feed": {
+        "driveFileId": "178BiETI3t3SNMhfFgzVNQDS_czIkWD4Q",
+        "sourceName": "LM-PC-065_visual_4x5.png",
+        "width": 1664,
+        "height": 2080
+      }
+    }
+  ]
+}
