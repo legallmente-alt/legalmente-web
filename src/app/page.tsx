@@ -18,7 +18,7 @@ const assets = {
     mobile: `${assetBase}/LM-PA-W02_history_responsive.webp`,
   },
   W03: {
-    alt: "Haz de luz dirigido hacia un sobre en una escena cinematográfica, imagen editorial de Cine y Derecho.",
+    alt: "Escena editorial ficticia de Cine y Derecho: un haz de luz dirigido hacia un sobre; no representa un caso, tribunal ni resultado jurídico.",
     desktop: `${assetBase}/LM-PA-W03_cinema_law_1200.webp`,
     mobile: `${assetBase}/LM-PA-W03_cinema_law_mobile.webp`,
   },
@@ -28,7 +28,12 @@ function AssetField({ assetId, className = "" }: { assetId: keyof typeof assets;
   const asset = assets[assetId];
 
   return (
-    <div data-asset-id={assetId} data-binary-status="local" className={`relative overflow-hidden bg-[#102A43] ${className}`}>
+    <div
+      data-asset-id={assetId}
+      data-binary-status="local"
+      data-context-guardrail={assetId === "W03" ? "cinema-law-only" : undefined}
+      className={`relative overflow-hidden bg-[#102A43] ${className}`}
+    >
       <picture>
         {assetId === "W01" ? (
           <>
@@ -42,6 +47,7 @@ function AssetField({ assetId, className = "" }: { assetId: keyof typeof assets;
         <img
           src={asset.desktop}
           alt={asset.alt}
+          aria-describedby={assetId === "W03" ? "w03-context" : undefined}
           className="absolute inset-0 h-full w-full object-cover"
           loading={assetId === "W01" ? "eager" : "lazy"}
           decoding="async"
@@ -73,18 +79,22 @@ export default function HomePage() {
             Entra por una situación, un concepto o un proceso. LegalMente conecta lo que estás viendo con su materia, su contexto, sus fuentes, su territorio y lo que conviene aprender después.
           </p>
 
-          <Link href="/explorar" className="mt-9 inline-flex min-h-12 items-center justify-center bg-[#102A43] px-6 text-sm font-semibold text-[#F5F0E8] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-4 motion-reduce:transform-none">
-            ¿Qué quieres entender?
+          <Link
+            href="/explorar"
+            className="group mt-9 inline-flex min-h-14 w-full items-center justify-between gap-8 bg-[#102A43] px-7 text-base font-semibold text-[#F5F0E8] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-4 motion-reduce:transform-none sm:w-auto sm:min-w-72 sm:px-8"
+          >
+            <span>¿Qué quieres entender?</span>
+            <span className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none" aria-hidden="true">→</span>
           </Link>
 
-          <div className="mt-11 divide-y divide-[#102A43]/10 border-t border-[#102A43]/10">
+          <div className="mt-10 divide-y divide-[#102A43]/8 border-t border-[#102A43]/10">
             {entryModes.map(([label, note, href]) => (
-              <Link key={label} href={href} className="group grid min-h-20 grid-cols-[1fr_auto] items-center gap-6 py-3 focus:outline-none focus:ring-2 focus:ring-[#102A43]">
+              <Link key={label} href={href} className="group grid min-h-[72px] grid-cols-[1fr_auto] items-center gap-6 py-3 focus:outline-none focus:ring-2 focus:ring-[#102A43]">
                 <span>
-                  <strong className="block text-sm">{label}</strong>
-                  <span className="mt-1 block text-xs leading-5 text-[#102A43]/56">{note}</span>
+                  <strong className="block text-sm font-medium text-[#102A43]/82">{label}</strong>
+                  <span className="mt-1 block text-xs leading-5 text-[#102A43]/50">{note}</span>
                 </span>
-                <span className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none" aria-hidden="true">→</span>
+                <span className="text-[#102A43]/55 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[#102A43] motion-reduce:transform-none" aria-hidden="true">→</span>
               </Link>
             ))}
           </div>
@@ -122,8 +132,8 @@ export default function HomePage() {
             ))}
           </div>
 
-          <Link href="/explorar#mundos" className="mt-7 inline-flex min-h-11 items-center border-b border-[#102A43]/30 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#102A43]">
-            Ver todas las rutas
+          <Link href="/explorar#mundos" className="mt-7 inline-flex min-h-12 items-center gap-2 border-b border-[#102A43]/60 px-1 py-2 text-sm font-semibold underline-offset-4 transition-colors hover:border-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43]">
+            Ver todas las rutas <span aria-hidden="true">→</span>
           </Link>
         </div>
       </section>
@@ -154,10 +164,11 @@ export default function HomePage() {
 
             <Link href="/explorar" className="group block self-end focus:outline-none focus:ring-2 focus:ring-[#63D7B0] focus:ring-offset-4 focus:ring-offset-[#102A43]">
               <AssetField assetId="W03" className="aspect-[4/5] w-full" />
-              <div className="mt-5 border-l border-[#D97745] pl-4">
-                <p className="text-xs uppercase tracking-[0.14em] text-[#F5F0E8]/48">Otra puerta de entrada</p>
+              <div id="w03-context" className="mt-5 border-l border-[#D97745] pl-4">
+                <p className="text-xs uppercase tracking-[0.14em] text-[#F5F0E8]/48">Lectura cultural · Cine y Derecho</p>
                 <h3 className="mt-2 font-serif text-2xl">Cine y Derecho</h3>
                 <p className="mt-2 max-w-[34ch] text-sm leading-6 text-[#F5F0E8]/62">Una historia también puede abrir preguntas sobre conducta, prueba, poder, responsabilidad y contexto.</p>
+                <p className="mt-3 max-w-[36ch] text-xs leading-5 text-[#F5F0E8]/48">Escena editorial: no representa un caso real, un tribunal ni un resultado jurídico.</p>
               </div>
             </Link>
           </div>
