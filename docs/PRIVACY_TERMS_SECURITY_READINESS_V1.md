@@ -6,7 +6,11 @@ Este documento no es aviso de privacidad, términos de uso ni dictamen jurídico
 
 ## 1. Estado técnico observado en la rama aislada
 
-En el runtime actual no se han introducido deliberadamente formularios de usuario, autenticación, pagos, PII, almacenamiento local de datos del usuario ni SDK de analítica/telemetría de terceros como parte de la experiencia relacional.
+El primer privacy smoke reveló una superficie legacy que contradecía la intención fail-closed: `/contacto` contenía nombre, correo y texto libre aunque el propio formulario indicaba que todavía no estaba conectado a backend.
+
+Ese formulario fue retirado. `/contacto` ahora es una superficie informativa cerrada que no acepta datos y advierte expresamente no enviar nombres, documentos, expedientes, datos de salud ni detalles identificables de una situación jurídica.
+
+En el runtime corregido no se introducen deliberadamente formularios de usuario, autenticación, pagos, PII, almacenamiento local de datos del usuario ni SDK de analítica/telemetría de terceros como parte de la experiencia relacional.
 
 CI incorpora `scripts/privacy-surface-smoke.mjs`, que falla si detecta nuevas superficies sensibles conocidas en `src/app`, `src/components` o `src/lib`, incluyendo formularios/inputs, localStorage/sessionStorage, client cookies, sendBeacon y trackers comunes.
 
