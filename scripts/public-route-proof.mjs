@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const outputRoot = join(process.cwd(), "out");
@@ -47,4 +47,26 @@ if (!notFoundPage.includes("404")) {
   throw new Error("404 page is present but does not contain a 404 marker.");
 }
 
-console.log(`Public route proof passed: ${requiredRoutes.length} routes, internal route absent, security files present.`);
+const htmlFiles = readdirSync(outputRoot, { recursive: true, withFileTypes: true })
+  .filter((entry) => entry.isFile() && entry.name.endsWith(".html"))
+  .map((entry) => join(entry.parentPath, entry.name));
+const brokenLinks = [];
+for (const htmlFile of htmlFiles) {
+  const html = readFileSync(htmlFile, "utf8");
+  for (const match of html.matchAll(/href="(\/[^"]*)"/g)) {
+    const href = match[1];
+    if (href.startsWith("/_next/") || href.startsWith("/assets/") || href.startsWith("/internal")) continue;
+    const pathname = decodeURIComponent(href.split("#")[0].split("?")[0]);
+    const candidates = pathname.endsWith("/")
+      ? [join(outputRoot, pathname, "index.html")]
+      : [join(outputRoot, pathname), join(outputRoot, `${pathname}.html`), join(outputRoot, pathname, "index.html")];
+    if (!candidates.some((candidate) => existsSync(candidate))) {
+      brokenLinks.push(`${htmlFile.replace(`${outputRoot}/`, "")}: ${href}`);
+    }
+  }
+}
+if (brokenLinks.length > 0) {
+  throw new Error(`Broken public links found:\n${brokenLinks.join("\n")}`);
+}
+
+console.log(`Public route proof passed: ${requiredRoutes.length} routes, ${htmlFiles.length} HTML files, internal route absent, links valid, security files present.`);
