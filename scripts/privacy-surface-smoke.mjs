@@ -35,7 +35,7 @@ async function walk(dir) {
 const files = [];
 for (const root of roots) {
   try {
-    if ((await stat(root)).isDirectory()) files.push(...(await walk(root));
+    if ((await stat(root)).isDirectory()) files.push(...(await walk(root)));
   } catch {
     // Missing optional root is not itself a privacy failure.
   }
