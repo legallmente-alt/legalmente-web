@@ -94,7 +94,7 @@ export default function HomePage() {
             </summary>
             <div className="divide-y divide-[#102A43]/8 border-t border-[#102A43]/8">
               {entryModes.map(([label, note, href]) => (
-                <Link key={label} href={href} className="group grid min-h-[72px] grid-cols-[1fr_auto] items-center gap-6 py-3 focus:outline-2 focus:outline-offset-4 focus:outline-[#102A43] focus:ring-2 focus:ring-[#102A43]">
+                <Link key={label} href={href} className="group grid min-h-[72px] grid-cols-[1fr_auto] items-center gap-6 py-3 focus:outline-2 focus:outline-offset-4 focus:outline-[#102A43] focus:ring-2 focus:ring-[#102A43] focus:underline focus:underline-offset-4">
                   <span>
                     <strong className="block text-sm font-medium text-[#102A43]/82">{label}</strong>
                     <span className="mt-1 block text-xs leading-5 text-[#102A43]/50">{note}</span>
