@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { EditorialCard, LegalStateBadge } from "@/components/legalmente/ProductPrimitives";
 import { productionAssetPack } from "@/lib/visual-system";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 export default function InternalProductLabPage() {
   if (process.env.LEGALMENTE_PRODUCT_LAB_INTERNAL !== "1") notFound();
