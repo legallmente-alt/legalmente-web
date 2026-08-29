@@ -44,6 +44,8 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npm run test:legal-core
       - run: npm run typecheck
+      - name: Privacy surface smoke
+        run: node scripts/privacy-surface-smoke.mjs
       - run: npm run build
 
       - name: Install proof browser
