@@ -28,6 +28,13 @@ const internalRoot = join(outputRoot, "internal");
 if (existsSync(internalRoot)) {
   throw new Error("Public artifact exposes the internal route directory.");
 }
+const publicFiles = readdirSync(outputRoot, { recursive: true, withFileTypes: true })
+  .filter((entry) => entry.isFile())
+  .map((entry) => join(entry.parentPath, entry.name));
+const internalLeaks = publicFiles.filter((file) => /[\\/]internal([\\/]|[-_]|$)|product-lab|wave01a/i.test(file));
+if (internalLeaks.length > 0) {
+  throw new Error(`Public artifact exposes internal files:\n${internalLeaks.join("\n")}`);
+}
 
 const robotsPath = join(outputRoot, "robots.txt");
 const headersPath = join(outputRoot, "_headers");
