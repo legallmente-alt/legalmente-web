@@ -79,13 +79,16 @@ export default function HomePage() {
             Entra por una situación, un concepto o un proceso. LegalMente conecta lo que estás viendo con su materia, su contexto, sus fuentes, su territorio y lo que conviene aprender después.
           </p>
 
-          <Link
+          <div className="mt-9">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/48">Empieza aquí</p>
+            <Link
             href="/antes-de-firmar"
-            className="group mt-9 inline-flex min-h-14 w-full items-center justify-between gap-8 bg-[#102A43] px-7 text-base font-semibold text-[#F5F0E8] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-4 motion-reduce:transform-none sm:w-auto sm:min-w-72 sm:px-8"
+            className="group inline-flex min-h-14 w-full items-center justify-between gap-8 bg-[#102A43] px-7 text-base font-semibold text-[#F5F0E8] transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:ring-offset-4 motion-reduce:transform-none sm:w-auto sm:min-w-72 sm:px-8"
           >
             <span>Revisar antes de firmar</span>
             <span className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none" aria-hidden="true">→</span>
-          </Link>
+            </Link>
+          </div>
 
           <div className="mt-10 divide-y divide-[#102A43]/8 border-t border-[#102A43]/10">
             {entryModes.map(([label, note, href]) => (

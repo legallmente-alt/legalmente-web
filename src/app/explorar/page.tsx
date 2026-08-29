@@ -18,7 +18,9 @@ export default function ExplorePage() {
           No necesitas saber primero qué rama del Derecho corresponde. Entra por una situación, un concepto, un proceso o un mundo y sigue conexiones comprensibles.
         </p>
 
-        <div className="mt-12 grid gap-x-8 gap-y-2 border-t border-[#102A43]/12 md:grid-cols-2">
+        <div className="mt-12 border-t border-[#102A43]/12">
+          <p className="mb-2 pt-5 text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/48">Empieza aquí si es tu primera visita</p>
+          <div className="grid gap-x-8 gap-y-2 md:grid-cols-2">
           {entryModes.map((mode) => (
             <Link key={mode.label} href={mode.href} className="group min-h-36 border-b border-[#102A43]/12 py-6 focus:outline-none focus:ring-2 focus:ring-[#102A43]">
               <div className="flex items-start justify-between gap-6">
@@ -30,6 +32,7 @@ export default function ExplorePage() {
               </div>
             </Link>
           ))}
+          </div>
         </div>
       </section>
 

@@ -131,18 +131,20 @@ export default function BeforeSigningPage() {
         </div>
 
         <aside className="border-t border-[#102A43]/12 pt-7 lg:border-l lg:border-t-0 lg:pl-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/50">3. Resultado</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/50">3. Salida de orientación</p>
           {!result ? (
             <div className="mt-6 border border-[#102A43]/15 bg-white/30 p-6">
               <h2 className="font-serif text-3xl leading-tight">La claridad también se prepara.</h2>
               <p className="mt-4 text-sm leading-7 text-[#102A43]/65">Marca lo que ya puedes identificar. La guía señalará puntos de atención, no una conclusión sobre si debes firmar.</p>
+              <p className="mt-4 border-l-2 border-[#D97745] pl-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#102A43]/55">Territorio: México · herramienta educativa</p>
             </div>
           ) : (
             <div className="mt-6">
               <div className="border border-[#102A43]/15 bg-white/30 p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/50">Estado educativo</p>
-                <h2 className="mt-3 font-serif text-3xl leading-tight">{result.state === "PASS" ? "Guía preparada." : "Revisión previa necesaria."}</h2>
+                <h2 className="mt-3 font-serif text-3xl leading-tight">{result.state === "PASS" ? "Orientación estructural disponible." : "Puntos de atención para aclarar."}</h2>
                 <p className="mt-4 text-sm leading-7 text-[#102A43]/65">{result.data?.disclaimer ?? result.reviewReasons?.join(" ")}</p>
+                <p className="mt-4 border-l-2 border-[#D97745] pl-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#102A43]/55">Territorio: México · no determina validez ni conveniencia</p>
               </div>
               {findings.length > 0 ? (
                 <div className="mt-6 space-y-3">
@@ -163,7 +165,7 @@ export default function BeforeSigningPage() {
           )}
 
           <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold">
-            <Link href="/confianza" className="border-b border-[#102A43]/60 pb-1 hover:border-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43]">Cómo trabajamos</Link>
+            <Link href="/proceso/leer-antes-de-aceptar" className="border-b border-[#102A43]/60 pb-1 hover:border-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43]">Ver proceso relacionado</Link>
             <Link href="/explorar" className="border-b border-[#102A43]/60 pb-1 hover:border-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43]">Explorar conceptos</Link>
           </div>
         </aside>
