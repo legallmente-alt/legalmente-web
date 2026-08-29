@@ -44,6 +44,10 @@ Estos cuatro pilotos comparten infraestructura estructural, pero cada uno requie
 
 El borrador real no se habilita en esta etapa. Requiere, como mínimo, validación territorial y de componentes, cierre de los gates aplicables y una autorización humana posterior separada. `DRAFT_ELIGIBLE` nunca equivale a `READY_TO_SIGN`.
 
+## Estado jurídico posterior
+
+La investigación de Gemini V1.0 y su corrección V1.1 no modifican estas decisiones. La revisión independiente posterior mantiene `LEGAL_COVERAGE = PENDING` y `COMPONENT_VERIFICATION = BLOCKED_PENDING_TARGETED_CORRECTIONS`, con problemas materiales todavía abiertos en NDA/LFPPI, servicios B2B, metadatos de fuentes y CCom art. 383.
+
 ## Gates que permanecen sin cambio
 
 - `PII = DISABLED`
@@ -54,9 +58,3 @@ El borrador real no se habilita en esta etapa. Requiere, como mínimo, validaci�
 - `MERGE = NOT_AUTHORIZED`
 - `DEPLOY = NOT_AUTHORIZED`
 - `PUBLICATION = BLOCKED`
-
-## Siguiente trabajo autorizado
-
-1. Investigación jurídica de México para los cuatro pilotos.
-2. Definición y verificación de primeros componentes contractuales por territorio.
-3. Continuación de P0/P1 técnico únicamente sobre modelos, validadores, salidas estructuradas, escalación y adapters; sin datos reales ni borradores contractuales reales.
