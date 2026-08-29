@@ -50,20 +50,26 @@ export function KnowledgeShell({
       {(previous || next || related.length) && (
         <section className="mx-auto max-w-[1120px] px-5 py-12 md:px-8 md:py-16">
           {(previous || next) && (
-            <div className="grid gap-4 border-b border-[#102A43]/12 pb-10 sm:grid-cols-2">
+            <div className="grid gap-3 border-b border-[#102A43]/12 pb-10 sm:grid-cols-2">
               <div>
                 {previous ? (
-                  <Link href={previous.href} className="block min-h-11 border-l border-[#102A43]/20 pl-4 focus:outline-none focus:ring-2 focus:ring-[#102A43]">
-                    <span className="text-xs uppercase tracking-[0.14em] text-[#102A43]/45">Anterior</span>
-                    <strong className="mt-1 block font-serif text-xl">{previous.label}</strong>
+                  <Link href={previous.href} className="group flex min-h-16 items-center gap-3 border-y border-[#102A43]/22 px-3 py-3 focus:outline-none focus:ring-2 focus:ring-[#102A43]">
+                    <span className="text-lg transition-transform duration-300 group-hover:-translate-x-1 motion-reduce:transform-none" aria-hidden="true">←</span>
+                    <span>
+                      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#102A43]/52">Anterior</span>
+                      <strong className="mt-1 block font-serif text-xl">{previous.label}</strong>
+                    </span>
                   </Link>
                 ) : null}
               </div>
-              <div className="sm:text-right">
+              <div>
                 {next ? (
-                  <Link href={next.href} className="block min-h-11 border-r border-[#102A43]/20 pr-4 focus:outline-none focus:ring-2 focus:ring-[#102A43]">
-                    <span className="text-xs uppercase tracking-[0.14em] text-[#102A43]/45">Siguiente</span>
-                    <strong className="mt-1 block font-serif text-xl">{next.label}</strong>
+                  <Link href={next.href} className="group flex min-h-16 items-center justify-between gap-3 border-y border-[#102A43]/22 px-3 py-3 focus:outline-none focus:ring-2 focus:ring-[#102A43] sm:text-right">
+                    <span className="sm:ml-auto">
+                      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#102A43]/52">Siguiente</span>
+                      <strong className="mt-1 block font-serif text-xl">{next.label}</strong>
+                    </span>
+                    <span className="text-lg transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none" aria-hidden="true">→</span>
                   </Link>
                 ) : null}
               </div>
@@ -75,9 +81,14 @@ export function KnowledgeShell({
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/45">Conecta con</p>
               <div className="mt-5 grid gap-3 md:grid-cols-3">
                 {related.map((item) => (
-                  <Link key={item.href} href={item.href} className="min-h-28 border-t border-[#102A43]/16 py-4 focus:outline-none focus:ring-2 focus:ring-[#102A43]">
-                    <strong className="font-serif text-xl">{item.label}</strong>
-                    {item.note ? <span className="mt-2 block text-sm leading-6 text-[#102A43]/62">{item.note}</span> : null}
+                  <Link key={item.href} href={item.href} className="group flex min-h-32 flex-col justify-between border-y border-[#102A43]/16 py-4 focus:outline-none focus:ring-2 focus:ring-[#102A43] md:border-b-0">
+                    <span>
+                      <strong className="font-serif text-xl">{item.label}</strong>
+                      {item.note ? <span className="mt-2 block text-sm leading-6 text-[#102A43]/62">{item.note}</span> : null}
+                    </span>
+                    <span className="mt-4 inline-flex min-h-11 items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#102A43]/60">
+                      Abrir <span className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none" aria-hidden="true">→</span>
+                    </span>
                   </Link>
                 ))}
               </div>
