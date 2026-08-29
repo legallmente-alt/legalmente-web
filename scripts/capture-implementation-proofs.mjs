@@ -14,13 +14,18 @@ const viewports = [
 
 const surfaces = [
   { name: "home", route: "/" },
+  { name: "before-signing", route: "/antes-de-firmar" },
   { name: "explore", route: "/explorar" },
+  { name: "catalog", route: "/catalogo" },
+  { name: "learning-scenes", route: "/casos" },
   { name: "world", route: "/mundo/vida-cotidiana" },
   { name: "series", route: "/serie/consentimiento-y-obligaciones" },
   { name: "chapter", route: "/capitulo/consentimiento-no-es-solo-firma" },
   { name: "concept", route: "/concepto/consentimiento" },
   { name: "process", route: "/proceso/organizar-hechos-y-prueba" },
   { name: "trust", route: "/confianza" },
+  { name: "about", route: "/sobre" },
+  { name: "contact", route: "/contacto" },
 ];
 
 await mkdir(outputDir, { recursive: true });
