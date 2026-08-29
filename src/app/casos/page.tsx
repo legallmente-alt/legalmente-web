@@ -1,16 +1,18 @@
+import Link from "next/link";
+
+const learningScenes = [
+  { number: "01", title: "Antes de aceptar una condición digital", summary: "Una escena para distinguir consentimiento, datos, condiciones, versión y evidencia de aceptación.", links: [["Concepto: consentimiento", "/concepto/consentimiento"], ["Proceso: leer antes de aceptar", "/proceso/leer-antes-de-aceptar"]] },
+  { number: "02", title: "Cuando una empresa actúa por medio de alguien", summary: "Una escena para separar representación, facultades, vigencia y prueba sin asumir que una formalidad es universal.", links: [["Concepto: representación", "/concepto/representacion"], ["Proceso: verificar representación", "/proceso/verificar-representacion"]] },
+  { number: "03", title: "Ordenar lo ocurrido antes de discutirlo", summary: "Una escena para distinguir cronología, afirmaciones, evidencia disponible y preguntas que requieren territorio.", links: [["Concepto: hecho jurídicamente relevante", "/concepto/hecho-juridicamente-relevante"], ["Proceso: organizar hechos y prueba", "/proceso/organizar-hechos-y-prueba"]] },
+  { number: "04", title: "Un hecho de tránsito, varias rutas", summary: "Una escena de aprendizaje sobre cómo un mismo acontecimiento puede abrir preguntas civiles, administrativas o penales sin determinar responsabilidad por sí solo.", links: [["Mundo: movilidad y transporte", "/mundo/movilidad-transporte"], ["Serie: hechos de tránsito", "/serie/hechos-de-transito"]] },
+] as const;
+
 export default function CasosPage() {
   return (
-    <article className="space-y-6">
-      <h1 className="font-serif text-3xl text-oro">Casos y ejemplos</h1>
-      <p className="text-crema/85">
-        Situaciones concretas, redactadas en lenguaje llano, que muestran
-        cómo se aplican en la práctica los conceptos jurídicos explicados
-        en el catálogo.
-      </p>
-      <p className="text-crema/70 text-sm">
-        Contenido pendiente. Cada caso debe verificarse antes de
-        publicarse (no inventar artículos, jurisprudencia ni cifras).
-      </p>
-    </article>
+    <main className="bg-[#F5F0E8] text-[#102A43]">
+      <section className="border-b border-[#102A43]/10"><div className="mx-auto grid max-w-[1320px] gap-10 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.82fr_1.18fr] lg:items-end"><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/45">Escenas de aprendizaje</p><h1 className="mt-5 max-w-[10ch] font-serif text-[clamp(3rem,8vw,6.2rem)] font-semibold leading-[0.92] tracking-[-0.05em]">Mirar antes de concluir.</h1></div><div className="max-w-[60ch] lg:pb-2"><p className="text-lg leading-8 text-[#102A43]/68">Estas escenas no son expedientes ni respuestas para un caso real. Son puntos de partida para aprender a ordenar preguntas, conceptos, procesos y evidencia.</p><p className="mt-5 border-l-2 border-[#C77C4D] pl-4 text-sm leading-6 text-[#102A43]/62">No incluyen nombres, artículos inventados, cifras, jurisprudencia ficticia ni conclusiones individualizadas.</p></div></div></section>
+      <section className="mx-auto max-w-[1320px] px-5 py-12 md:px-8 md:py-20"><div className="divide-y divide-[#102A43]/12 border-y border-[#102A43]/12">{learningScenes.map((scene) => <article key={scene.number} className="grid gap-6 py-8 md:grid-cols-[64px_0.75fr_1.25fr] md:items-start md:gap-8 md:py-11"><span className="text-xs tabular-nums text-[#102A43]/35">{scene.number}</span><h2 className="font-serif text-3xl leading-tight tracking-[-0.025em]">{scene.title}</h2><div><p className="max-w-[55ch] text-sm leading-7 text-[#102A43]/64">{scene.summary}</p><div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">{scene.links.map(([label, href]) => <Link key={href} href={href} className="group inline-flex items-center gap-2 border-b border-[#102A43]/35 pb-1 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#102A43]"><span>{label}</span><span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span></Link>)}</div></div></article>)}</div></section>
+      <section className="bg-[#102A43] text-[#F5F0E8]"><div className="mx-auto grid max-w-[1320px] gap-8 px-5 py-14 md:px-8 md:py-20 lg:grid-cols-[0.85fr_1.15fr] lg:items-end"><h2 className="max-w-[12ch] font-serif text-4xl leading-[1.02] tracking-[-0.035em] md:text-5xl">Una escena abre preguntas. No las cierra por ti.</h2><div><p className="max-w-[58ch] text-sm leading-7 text-[#F5F0E8]/66">Si la pregunta se refiere a una situación real, puede requerir hechos completos, fuente territorial y revisión profesional. LegalMente no recibe expedientes ni sustituye ese análisis.</p><Link href="/confianza" className="group mt-7 inline-flex min-h-12 items-center gap-2 border-b border-[#F5F0E8]/45 px-1 py-2 text-sm font-semibold text-[#F5F0E8] transition-colors hover:border-[#F5F0E8] focus:outline-none focus:ring-2 focus:ring-[#63D7B0] focus:ring-offset-4 focus:ring-offset-[#102A43]">Fuentes y límites <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span></Link></div></div></section>
+    </main>
   );
 }
