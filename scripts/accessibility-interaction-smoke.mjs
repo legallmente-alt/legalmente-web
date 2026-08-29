@@ -4,13 +4,18 @@ import { writeFile } from "node:fs/promises";
 const baseUrl = process.env.PROOF_BASE_URL ?? "http://127.0.0.1:3000";
 const routes = [
   "/",
+  "/antes-de-firmar",
   "/explorar",
+  "/catalogo",
+  "/casos",
   "/mundo/vida-cotidiana",
   "/serie/consentimiento-y-obligaciones",
   "/capitulo/consentimiento-no-es-solo-firma",
   "/concepto/consentimiento",
   "/proceso/organizar-hechos-y-prueba",
   "/confianza",
+  "/sobre",
+  "/contacto",
 ];
 const viewports = [
   { name: "1440", width: 1440, height: 1000 },
