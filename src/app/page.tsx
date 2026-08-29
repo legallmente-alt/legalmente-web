@@ -87,17 +87,23 @@ export default function HomePage() {
             <span className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transform-none" aria-hidden="true">→</span>
           </Link>
 
-          <div className="mt-10 divide-y divide-[#102A43]/8 border-t border-[#102A43]/10">
-            {entryModes.map(([label, note, href]) => (
-              <Link key={label} href={href} className="group grid min-h-[72px] grid-cols-[1fr_auto] items-center gap-6 py-3 focus:outline-none focus:ring-2 focus:ring-[#102A43]">
-                <span>
-                  <strong className="block text-sm font-medium text-[#102A43]/82">{label}</strong>
-                  <span className="mt-1 block text-xs leading-5 text-[#102A43]/50">{note}</span>
-                </span>
-                <span className="text-[#102A43]/55 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[#102A43] motion-reduce:transform-none" aria-hidden="true">→</span>
-              </Link>
-            ))}
-          </div>
+          <details className="group mt-10 border-t border-[#102A43]/10">
+            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#102A43]/55 focus:outline-none focus:ring-2 focus:ring-[#102A43] [&::-webkit-details-marker]:hidden">
+              <span>Otras formas de entrar</span>
+              <span className="text-lg font-normal transition-transform duration-300 group-open:rotate-45 motion-reduce:transform-none" aria-hidden="true">+</span>
+            </summary>
+            <div className="divide-y divide-[#102A43]/8 border-t border-[#102A43]/8">
+              {entryModes.map(([label, note, href]) => (
+                <Link key={label} href={href} className="group grid min-h-[72px] grid-cols-[1fr_auto] items-center gap-6 py-3 focus:outline-none focus:ring-2 focus:ring-[#102A43]">
+                  <span>
+                    <strong className="block text-sm font-medium text-[#102A43]/82">{label}</strong>
+                    <span className="mt-1 block text-xs leading-5 text-[#102A43]/50">{note}</span>
+                  </span>
+                  <span className="text-[#102A43]/55 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[#102A43] motion-reduce:transform-none" aria-hidden="true">→</span>
+                </Link>
+              ))}
+            </div>
+          </details>
         </div>
 
         <div className="order-1 lg:order-2">
