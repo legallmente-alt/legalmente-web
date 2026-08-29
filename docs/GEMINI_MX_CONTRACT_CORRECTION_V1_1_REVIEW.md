@@ -122,11 +122,13 @@ Code owner added a structured-output adapter in `src/lib/contracts/outputs.ts`. 
 - professional-review questions;
 - explicit annex-checklist gap (`NOT_MODELLED_IN_V1`).
 
-The adapter has an invariant `realDraftAllowed: false` and `draftPreview: null`, including when upstream technical evaluation would otherwise report draft eligibility. This preserves the founder decision that V1 is structured preparation only.
+The adapter has an invariant `realDraftAllowed: false` and `draftPreview: null`, including when upstream technical evaluation would otherwise report technical draft eligibility. This preserves the founder decision that V1 is structured preparation only.
 
 `src/lib/contracts/outputs.test.ts` covers these outputs, label resolution, fail-closed red flags and the real-draft invariant.
 
 CI run `33247560231` on head `a8c67253007e05f085bad0ebce652afc7896c798` completed `SUCCESS`: legal-core, knowledge-safety, contract-core, typecheck, privacy smoke, production build, responsive/accessibility proof capture and artifact upload all passed. Proof artifact ID: `9713335306`.
+
+Later documentation-only commits do not change that verified runtime.
 
 ## Next legal task
 
