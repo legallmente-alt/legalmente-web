@@ -6,7 +6,8 @@ const textExtensions = new Set([".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx"]);
 
 const guardedPatterns = [
   { id: "FORM", re: /<form\b/i, note: "user-submitted form surface" },
-  { id: "INPUT", re: /<input\b/i, note: "user input control" },
+  // A checkbox only records a transient structural choice in the current page; it is not a PII or case-text collection surface.
+  { id: "INPUT", re: /<input\b(?![^>]*\btype\s*=\s*["']checkbox["'])/i, note: "user data input control" },
   { id: "TEXTAREA", re: /<textarea\b/i, note: "user free-text input control" },
   { id: "LOCAL_STORAGE", re: /\blocalStorage\b/, note: "browser persistent storage" },
   { id: "SESSION_STORAGE", re: /\bsessionStorage\b/, note: "browser session storage" },
