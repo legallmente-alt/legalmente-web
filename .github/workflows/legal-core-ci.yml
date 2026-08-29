@@ -2,7 +2,6 @@ name: LegalMente product core CI
 
 on:
   pull_request:
-    branches: [main]
     paths:
       - 'src/app/**'
       - 'src/lib/legal-core/**'
