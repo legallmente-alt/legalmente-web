@@ -70,6 +70,13 @@ export type VisualQaResult = {
   nextAction: "KEEP" | "LOCAL_FIX" | "REGENERATE" | "COPY_BLOCK" | "HUMAN_REVIEW";
 };
 
+export type VisualQaDisposition = {
+  state: VisualProductionState;
+  classification: VisualQaResult["classification"];
+  nextAction: VisualQaResult["nextAction"];
+  reasons: readonly string[];
+};
+
 export type ImageGeneratorAdapter = {
   name: string;
   model: string;
@@ -116,30 +123,65 @@ export function routeGeneration(adapter: ImageGeneratorAdapter, unit: VisualProd
   return "PROGRAMMATIC_TEXT_COMPOSITION";
 }
 
-export function evaluateQa(unit: VisualProductionUnit, qa: VisualQaResult): VisualProductionUnit {
-  const hardGateFailed = Object.values(qa.hardGates).includes("FAIL");
-  const scoreValues = Object.values(qa.scores);
-  const scoresReady = scoreValues.length === requiredScoreKeys.length && scoreValues.every((score) => score >= 0 && score <= 5);
+export function deriveQaDisposition(qa: VisualQaResult): VisualQaDisposition {
+  const reasons: string[] = [];
+  const scoresReady = requiredScoreKeys.every((key) => {
+    const score = qa.scores[key];
+    return Number.isFinite(score) && score >= 0 && score <= 5;
+  });
+  const hardGatesReady = hardGateKeys.every((key) => qa.hardGates[key] === "PASS");
   const artPass = qa.visualArtQa === "PASS" && qa.editorialCompositionQa === "PASS";
   const mobilePass = (qa.scores.MOBILE_READABILITY ?? 0) >= 4;
   const copyPass = (qa.scores.LEGAL_COPY_EXACT ?? 0) >= 4 && (qa.scores.PSEUDOTEXT_ZERO ?? 0) >= 4;
 
-  let nextAction: VisualQaResult["nextAction"] = "HUMAN_REVIEW";
-  let state: VisualProductionState = "READY_FOR_HUMAN_VISUAL_REVIEW";
-  let classification: VisualQaResult["classification"] = "B_STATIC";
+  if (!scoresReady) reasons.push("SCORES_INCOMPLETE_OR_INVALID");
+  if (!hardGatesReady) reasons.push("HARD_GATES_INCOMPLETE_OR_FAILED");
+  if (!artPass) reasons.push("ART_OR_EDITORIAL_QA_NOT_PASSED");
+  if (!mobilePass) reasons.push("MOBILE_READABILITY_BELOW_THRESHOLD");
+  if (!copyPass) reasons.push("COPY_INTEGRITY_BELOW_THRESHOLD");
 
-  if (!scoresReady || hardGateFailed || !artPass || !mobilePass || !copyPass) {
-    nextAction = copyPass ? "LOCAL_FIX" : "COPY_BLOCK";
-    state = "REWORK_REQUIRED";
-    classification = "C_REWORK";
-  } else if ((qa.scores.ANIMATION_POTENTIAL ?? 0) >= 4 && (qa.scores.ORIGINALITY ?? 0) >= 4) {
-    classification = "A_HERO";
+  if (reasons.length > 0) {
+    return {
+      state: "REWORK_REQUIRED",
+      classification: "C_REWORK",
+      nextAction: copyPass ? "LOCAL_FIX" : "COPY_BLOCK",
+      reasons,
+    };
+  }
+
+  if ((qa.scores.ANIMATION_POTENTIAL ?? 0) >= 4 && (qa.scores.ORIGINALITY ?? 0) >= 4) {
+    return {
+      state: "READY_FOR_HUMAN_VISUAL_REVIEW",
+      classification: "A_HERO",
+      nextAction: "HUMAN_REVIEW",
+      reasons,
+    };
   }
 
   return {
+    state: "READY_FOR_HUMAN_VISUAL_REVIEW",
+    classification: "B_STATIC",
+    nextAction: "HUMAN_REVIEW",
+    reasons,
+  };
+}
+
+export function normalizeQaResult(qa: VisualQaResult): VisualQaResult {
+  const disposition = deriveQaDisposition(qa);
+  return {
+    ...qa,
+    classification: disposition.classification,
+    nextAction: disposition.nextAction,
+  };
+}
+
+export function evaluateQa(unit: VisualProductionUnit, qa: VisualQaResult): VisualProductionUnit {
+  const disposition = deriveQaDisposition(qa);
+  const normalizedQa = normalizeQaResult(qa);
+  return {
     ...unit,
-    QA_RESULTS: { ...qa, nextAction, classification },
-    STATE: state,
+    QA_RESULTS: normalizedQa,
+    STATE: disposition.state,
   };
 }
 
