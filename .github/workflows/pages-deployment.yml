@@ -1,6 +1,7 @@
 name: Deploy LegalMente public release
 
 on:
+  pull_request:
   push:
     branches: [main]
   workflow_dispatch:
@@ -14,11 +15,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    name: Deploy sanitized public artifact
+  validate:
+    name: Validate deployable public artifact
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    environment: production
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -43,6 +43,29 @@ jobs:
           test -f out/sitemap.xml
           test ! -e out/internal
           grep -q 'Disallow: /internal/' out/robots.txt
+
+  deploy:
+    name: Deploy sanitized public artifact
+    needs: validate
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build sanitized public artifact
+        run: npm run build:public
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
