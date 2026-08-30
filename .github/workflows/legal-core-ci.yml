@@ -47,9 +47,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install --no-audit --no-fund
+      - run: npm ci --no-audit --no-fund
       - run: npm run test:legal-core
       - run: npm run test:knowledge-safety
+      - run: npm run test:wave01a
+      - run: npm run test:provenance-manifest
       - run: npm run typecheck
       - run: npm run lint
       - name: Privacy surface smoke

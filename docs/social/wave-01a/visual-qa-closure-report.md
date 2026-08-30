@@ -1,0 +1,41 @@
+# Wave 01A — QA visual closure pass
+
+## LM-PC-013 · feed_4x5 · 1664×2080
+
+**Actual scene:** Bodegón editorial cálido con caja de cartón etiquetada en blanco, regla metálica sobre la caja, estructura vertical de varillas a la derecha, bandeja con cinta en primer plano y recipiente oscuro sobre base de piedra. **Crop:** composición 4:5 completa, objetos principales dentro del encuadre, sin recorte destructivo. **Focal point:** caja y etiqueta central; la regla crea una línea horizontal de lectura. **Legibility:** no hay texto incrustado; la etiqueta está en blanco y el contraste de objetos es claro. **Brand presence:** paleta cálida, materialidad y sobriedad compatibles con LegalMente; no aparece logotipo. **Text presence:** ausencia de texto legible/incrustado. **Distortion:** no observada. **Mobile quality:** PASS como imagen 4:5 de alta resolución; detalle central legible en pantalla móvil. **Result:** PASS — art base válido; visual QA completado, provenance humana aún `UNRESOLVED`.
+
+## LM-PC-013 · vertical_9x16 · 1440×2560
+
+**Actual scene:** Misma escena editorial, extendida verticalmente: caja y regla en el centro inferior, varillas a la derecha, bandeja con cinta abajo a la izquierda y recipiente oscuro abajo a la derecha. **Crop:** 9:16 estable; conserva caja, etiqueta, regla y elementos secundarios sin cortar los focos principales. **Focal point:** caja etiquetada y línea de la regla. **Legibility:** no hay texto incrustado; la etiqueta permanece vacía y visible. **Brand presence:** continuidad clara con el feed; no logotipo. **Text presence:** ausencia de texto legible/incrustado. **Distortion:** no observada. **Mobile quality:** PASS para Story/Reel cover estático; foco central se mantiene en viewport vertical. **Result:** PASS — art base válido; visual QA completado, provenance humana aún `UNRESOLVED`.
+
+## LM-PC-013 · pinterest_2x3 · 1000×1500
+
+**Actual scene:** Bodegón de caja, regla, varillas, bandeja con cinta y recipiente oscuro, con bandas de letterbox color crema arriba y abajo derivadas del proceso 2:3. **Crop:** el contenido principal conserva el encuadre; el letterbox reduce área útil pero no corta la caja ni el foco. **Focal point:** caja/etiqueta central; línea horizontal de la regla. **Legibility:** no texto incrustado; etiqueta vacía. **Brand presence:** paleta cálida y composición sobria coherentes; sin logotipo. **Text presence:** ausencia de texto legible. **Distortion:** no observada. **Mobile quality:** PASS para base Pinterest estática; foco reconocible. **Result:** PASS — art base válido; `VISUAL_QA_STATE=PASS`, `VISUAL_GATE_PROVENANCE=UNRESOLVED`.
+
+## LM-PC-031 · feed_4x5 · 1664×2080
+
+**Actual scene:** Bodegón de taller con caja de herramientas y herramientas manuales a la izquierda, delantal de tela colgado a la derecha, etiqueta de cartón en blanco al centro, recipiente oscuro y cuadernos con bolígrafo. **Crop:** composición 4:5 completa; objetos laterales se conservan y la etiqueta queda centrada. **Focal point:** etiqueta vacía con el delantal como contrapunto vertical; herramientas dan contexto material. **Legibility:** no texto incrustado; etiqueta claramente vacía. **Brand presence:** materialidad cálida, madera y composición editorial coherentes con LegalMente; sin logotipo. **Text presence:** ausencia de texto legible/incrustado. **Distortion:** no observada. **Mobile quality:** PASS como feed 4:5; los elementos principales se reconocen en tamaño móvil. **Result:** PASS — art base válido; `VISUAL_QA_STATE=PASS`, `VISUAL_GATE_PROVENANCE=UNRESOLVED`.
+
+## LM-PC-031 · pinterest_2x3 · 1000×1500
+
+**Actual scene:** Bodegón de taller con caja de herramientas, mazo, herramientas, delantal colgado, etiqueta de cartón vacía, recipiente oscuro y cuadernos con bolígrafo; conserva letterbox crema superior e inferior. **Crop:** el letterbox reduce la imagen útil, pero no corta los objetos ni la etiqueta central. **Focal point:** etiqueta central; delantal y herramientas crean dos anclas laterales. **Legibility:** no texto incrustado; la etiqueta está vacía y limpia. **Brand presence:** continuidad cromática y material con LegalMente; sin logotipo. **Text presence:** ausencia de texto legible. **Distortion:** no observada. **Mobile quality:** PASS para Pin estático 2:3. **Result:** PASS — art base válido; `VISUAL_QA_STATE=PASS`, `VISUAL_GATE_PROVENANCE=UNRESOLVED`.
+
+## LM-PC-031 · vertical_9x16 · 1440×2560
+
+**Actual scene:** Variante vertical del taller: delantal y soporte dominan el lado derecho, herramientas al lado izquierdo, etiqueta vacía centrada en la mesa, recipiente oscuro y cuadernos en la base. **Crop:** 9:16 conserva el foco central y no destruye los objetos principales; parte del espacio de mesa inferior queda comprimido, pero sigue funcional. **Focal point:** etiqueta vacía con el delantal como elemento vertical dominante. **Legibility:** no texto incrustado; etiqueta visible. **Brand presence:** misma luz, madera y paleta; sin logotipo. **Text presence:** ausencia de texto legible/incrustado. **Distortion:** no observada. **Mobile quality:** PASS para Story/Reel cover estático; composición reconocible en viewport vertical. **Result:** PASS — art base válido; `VISUAL_QA_STATE=PASS`, `VISUAL_GATE_PROVENANCE=UNRESOLVED`.
+
+## LM-PC-065 · feed_4x5 · 1664×2080
+
+**Actual scene:** Bodegón de materiales corporativos/archivísticos con tres soportes de madera, placas y piezas de distintas texturas, carpeta de cartón cerrada, placa metálica, recipiente oscuro y bandeja con cinta. **Crop:** encuadre 4:5 equilibrado; tres soportes alineados y elementos inferiores dentro del cuadro. **Focal point:** tríptico de soportes y carpeta central. **Legibility:** no texto incrustado; superficies limpias y sin marcas legibles. **Brand presence:** sobriedad material, madera y luz cálida compatibles con LegalMente; sin logotipo. **Text presence:** ausencia de texto legible/incrustado. **Distortion:** no observada. **Mobile quality:** PASS como feed 4:5; estructura de tres elementos se mantiene reconocible. **Result:** PASS — art base válido; `VISUAL_QA_STATE=PASS`, `VISUAL_GATE_PROVENANCE=UNRESOLVED`.
+
+## LM-PC-065 · pinterest_2x3 · 1000×1500
+
+**Actual scene:** Misma composición de tres soportes, carpeta, placa, recipiente y bandeja, con letterbox crema superior e inferior. **Crop:** el derivado conserva los tres soportes y la carpeta; el letterbox reduce área útil sin cortar el foco. **Focal point:** tríptico de soportes y carpeta de cartón. **Legibility:** no texto incrustado; las placas son visuales, no presentan texto legible. **Brand presence:** continuidad cromática y material; sin logotipo. **Text presence:** ausencia de texto legible. **Distortion:** no observada. **Mobile quality:** PASS para Pin estático 2:3. **Result:** PASS — art base válido; `VISUAL_QA_STATE=PASS`, `VISUAL_GATE_PROVENANCE=UNRESOLVED`.
+
+## LM-PC-065 · vertical_9x16 · 1440×2560
+
+**Actual scene:** Variante vertical del bodegón corporativo: tres soportes con materiales al centro, carpeta cerrada en primer plano, placa metálica a la derecha, recipiente oscuro sobre piedra y bandeja de muestras abajo. **Crop:** 9:16 conserva el tríptico y la carpeta; los elementos inferiores permanecen parcialmente visibles sin cortar los focos principales. **Focal point:** tríptico de materiales y carpeta; la placa y el recipiente funcionan como apoyos secundarios. **Legibility:** no texto incrustado; superficies y placa sin escritura legible. **Brand presence:** continuidad de paleta cálida, madera y sobriedad; sin logotipo. **Text presence:** ausencia de texto legible/incrustado. **Distortion:** no observada. **Mobile quality:** PASS para Story/Reel cover estático; foco reconocible en viewport vertical. **Result:** PASS — art base válido; `VISUAL_QA_STATE=PASS`, `VISUAL_GATE_PROVENANCE=UNRESOLVED`.
+
+## Cierre de inspección
+
+Los 9 assets reales fueron abiertos e inspeccionados individualmente. La inspección demuestra existencia, calidad visual y ausencia de texto incrustado, pero no constituye por sí sola un receipt humano ni autoriza `READY_FOR_VISUAL`. Hasta localizar un receipt exacto posterior a `FOUNDER_DECISION_WAVE_01A_READY_FOR_COPY_2026-08-29`, la provenance permanece `UNRESOLVED`.

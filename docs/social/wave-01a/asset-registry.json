@@ -1,0 +1,65 @@
+[
+  {
+    "asset_id": "LM-PC-013_feed_4x5",
+    "parent_content_id": "LM-PC-013",
+    "path": "docs/social/wave-01a/assets/LM-PC-013_feed_4x5.png",
+    "dimensions": "1664x2080",
+    "sha256": "95032d0a1dde2172a43f8721e6906983981fd5d1b27dde197fdf849310e9b6b4"
+  },
+  {
+    "asset_id": "LM-PC-013_pinterest_2x3",
+    "parent_content_id": "LM-PC-013",
+    "path": "docs/social/wave-01a/assets/LM-PC-013_pinterest_2x3.png",
+    "dimensions": "1000x1500",
+    "sha256": "cf5c03dd887b84db76f4377a00ed35476639b1268694e55955bb62a87642bcdd"
+  },
+  {
+    "asset_id": "LM-PC-013_vertical_9x16",
+    "parent_content_id": "LM-PC-013",
+    "path": "docs/social/wave-01a/assets/LM-PC-013_vertical_9x16.png",
+    "dimensions": "1440x2560",
+    "sha256": "5bf4fc4d3af0dbb6521d9c195c8340d44d3435a42d13b6b9d3a80e633e2fb09a"
+  },
+  {
+    "asset_id": "LM-PC-031_feed_4x5",
+    "parent_content_id": "LM-PC-031",
+    "path": "docs/social/wave-01a/assets/LM-PC-031_feed_4x5.png",
+    "dimensions": "1664x2080",
+    "sha256": "c1f2ad11d8f7e501663d3909e380966fbe77675e9425222dbb2d10440ec3cc8f"
+  },
+  {
+    "asset_id": "LM-PC-031_pinterest_2x3",
+    "parent_content_id": "LM-PC-031",
+    "path": "docs/social/wave-01a/assets/LM-PC-031_pinterest_2x3.png",
+    "dimensions": "1000x1500",
+    "sha256": "1ee29ba1511d52e4013200950c1cec4923ca6dad8252619332a51178baddc967"
+  },
+  {
+    "asset_id": "LM-PC-031_vertical_9x16",
+    "parent_content_id": "LM-PC-031",
+    "path": "docs/social/wave-01a/assets/LM-PC-031_vertical_9x16.png",
+    "dimensions": "1440x2560",
+    "sha256": "87a58ab030280ad5e40652da3835d0f02871a259812cac324181ec177434f3e4"
+  },
+  {
+    "asset_id": "LM-PC-065_feed_4x5",
+    "parent_content_id": "LM-PC-065",
+    "path": "docs/social/wave-01a/assets/LM-PC-065_feed_4x5.png",
+    "dimensions": "1664x2080",
+    "sha256": "5fc7b65e648a0eea8010da2aba1d4dc6d36770bde9c7778ab04e5172374d6c4e"
+  },
+  {
+    "asset_id": "LM-PC-065_pinterest_2x3",
+    "parent_content_id": "LM-PC-065",
+    "path": "docs/social/wave-01a/assets/LM-PC-065_pinterest_2x3.png",
+    "dimensions": "1000x1500",
+    "sha256": "a3cee3fa2bc8afda9d346939736696a9b375e506e9f96a3aaa467a95344e79ef"
+  },
+  {
+    "asset_id": "LM-PC-065_vertical_9x16",
+    "parent_content_id": "LM-PC-065",
+    "path": "docs/social/wave-01a/assets/LM-PC-065_vertical_9x16.png",
+    "dimensions": "1440x2560",
+    "sha256": "c7ee7186e35df7f34458968ceaad075c50d427fdfe180585fc680a5da962ca80"
+  }
+]
