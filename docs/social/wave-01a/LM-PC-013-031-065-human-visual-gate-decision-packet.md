@@ -4,7 +4,7 @@
 
 **Decision scope:** Los nueve assets visuales existentes de LM-PC-013, LM-PC-031 y LM-PC-065, en los formatos 4:5, 9:16 y 2:3.
 
-**Decision status:** Pendiente de decisión humana. Este packet es nuevo, fechado y trazable; no reconstruye ni sustituye ningún receipt anterior.
+**Decision status:** `APPROVE_VISUAL_GATE`, registrado mediante el nuevo receipt `LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md`. Este packet es nuevo, fechado y trazable; no reconstruye ni sustituye ningún receipt anterior.
 
 **Fecha de emisión:** 2026-08-29
 
@@ -34,15 +34,15 @@ Los nueve assets se presentan con `VISUAL_QA_STATE=PASS` en la evidencia individ
 
 | Opción | Decisión |
 |---|---|
-| `APPROVE_VISUAL_GATE` | ☐ |
+| `APPROVE_VISUAL_GATE` | ☑ |
 | `RETURN_VISUAL` | ☐ |
 | `KEEP_INTERNAL` | ☐ |
 
-**Responsable humano:** ____________________________________
+**Responsable humano:** Usuario solicitante
 
-**Fecha y hora de decisión:** ____________________________________
+**Fecha y hora de decisión:** 2026-08-29
 
-**Comentario o condición:**
+**Comentario o condición:** Aprobación exclusiva de los nueve assets y hashes listados; deriva únicamente `VISUAL_GATE_PROVENANCE=VALID_HUMAN_PROVENANCE`.
 
 __________________________________________________________________
 
@@ -54,4 +54,4 @@ Si se elige `APPROVE_VISUAL_GATE`, la decisión autoriza **únicamente estos nue
 
 `APPROVE_VISUAL_GATE` **no autoriza** publicación, integración adicional, Pinterest bulk upload, deploy, merge ni activación de analítica. Tampoco cambia ningún estado de publicación. LM-PC-031 y LM-PC-065 permanecen en `SEPARATED_PENDING_BINDING`; el visual gate no crea ni aprueba parents semánticos.
 
-`RETURN_VISUAL` y `KEEP_INTERNAL` no cambian ningún estado de publicación ni autorizan distribución, deploy, merge, Pinterest o analítica. Hasta una decisión humana explícita y un receipt nuevo, no se modifica ningún estado operativo.
+`RETURN_VISUAL` y `KEEP_INTERNAL` no cambian ningún estado de publicación ni autorizan distribución, deploy, merge, Pinterest o analítica. La decisión y el receipt nuevo modifican únicamente `VISUAL_GATE_PROVENANCE` para los nueve assets; no modifican estados de publicación, integración, Pinterest, deploy, merge ni analítica.

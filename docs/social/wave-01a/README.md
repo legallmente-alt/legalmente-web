@@ -6,11 +6,11 @@ Este paquete prepara cuatro carriles sin ejecutar gates humanos: integración ca
 
 | Unidad | Copy | Asset visual | QA visual | Provenance visual | Composición social | Integración | Publicación |
 |---|---|---|---|---|---|---|---|
-| `LM-PC-013` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `UNRESOLVED` | `REVIEW_REQUIRED` | `PUBLIC_INTEGRATION_APPROVED` | `NOT_PUBLIC` |
-| `LM-PC-031` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `UNRESOLVED` | `REVIEW_REQUIRED` | `SEPARATED_PENDING_BINDING` | `NOT_PUBLIC` |
-| `LM-PC-065` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `UNRESOLVED` | `REVIEW_REQUIRED` | `SEPARATED_PENDING_BINDING` | `NOT_PUBLIC` |
+| `LM-PC-013` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `PUBLIC_INTEGRATION_APPROVED` | `NOT_PUBLIC` |
+| `LM-PC-031` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `SEPARATED_PENDING_BINDING` | `NOT_PUBLIC` |
+| `LM-PC-065` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `SEPARATED_PENDING_BINDING` | `NOT_PUBLIC` |
 
-`PINTEREST_BULK_UPLOAD_AUTHORIZED = NO`. La aprobación Founder del 29 de agosto avanzó los seis claims exactos a `READY_FOR_COPY`; el receipt visual registra producción y QA, pero no autoriza `READY_FOR_VISUAL`. No se inventa esa autorización, ni se abre integración, publicación, merge o deploy. LM-PC-031 no se fuerza bajo el capítulo sanitario `deber-profesional`; LM-PC-065 conserva los claims de LGSM, pero la representación aparece únicamente como pregunta relacionada y no como claim soportado por los arts. 1 y 6.
+`PINTEREST_BULK_UPLOAD_AUTHORIZED = NO`. La aprobación Founder del 29 de agosto avanzó los seis claims exactos a `READY_FOR_COPY`; el receipt visual registra producción, QA y provenance humana válida; no autoriza `READY_FOR_VISUAL`. No se inventa esa autorización ni se abre publicación, merge o deploy. La provenance no autoriza integración adicional. LM-PC-031 no se fuerza bajo el capítulo sanitario `deber-profesional`; LM-PC-065 conserva los claims de LGSM, pero la representación aparece únicamente como pregunta relacionada y no como claim soportado por los arts. 1 y 6.
 
 ## Entregables
 

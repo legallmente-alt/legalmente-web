@@ -67,7 +67,7 @@ for row in matrix:
     assert row['CURRENT_VISUAL_STATE'] == 'VISUAL_QA_PASS_PROVENANCE_UNRESOLVED', cid
     assert row['VISUAL_ASSET_STATE'] == 'EXISTS', cid
     assert row['VISUAL_QA_STATE'] == 'PASS', cid
-    assert row['VISUAL_GATE_PROVENANCE'] == 'UNRESOLVED', cid
+    assert row['VISUAL_GATE_PROVENANCE'] == 'VALID_HUMAN_PROVENANCE', cid
     assert row['COPY_CHANNEL_QA'] == 'PASS', cid
     assert row['ART_BASE_STATE'] == 'READY', cid
     assert row['SOCIAL_COMPOSITION_STATE'] == 'REVIEW_REQUIRED', cid
