@@ -13,7 +13,9 @@
     "test:legal-core": "tsx --test src/lib/legal-core/legal-core.test.ts",
     "test:knowledge-safety": "tsx --test src/lib/knowledge-graph/safety.test.ts",
     "test:public-routes": "node scripts/public-route-proof.mjs",
-    "test:internal-review-surface": "node scripts/internal-review-surface-proof.mjs"
+    "test:internal-review-surface": "node scripts/internal-review-surface-proof.mjs",
+    "test:before-signing-copy": "node scripts/before-signing-copy-proof.mjs",
+    "test:linkedin-content": "node scripts/linkedin-content-proof.mjs"
   },
   "dependencies": {
     "next": "14.2.35",

@@ -142,8 +142,9 @@ export default function BeforeSigningPage() {
             <div className="mt-6">
               <div className="border border-[#102A43]/15 bg-white/30 p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/50">Estado educativo</p>
-                <h2 className="mt-3 font-serif text-3xl leading-tight">{result.state === "PASS" ? "Orientación estructural disponible." : "Puntos de atención para aclarar."}</h2>
+                <h2 className="mt-3 font-serif text-3xl leading-tight">{result.state === "PASS" ? "Sin puntos de atención en los checks declarados." : "Puntos de atención para aclarar."}</h2>
                 <p className="mt-4 text-sm leading-7 text-[#102A43]/65">{result.data?.disclaimer ?? result.reviewReasons?.join(" ")}</p>
+                {result.state === "PASS" ? <p className="mt-4 border-l-2 border-[#C8A24A] pl-3 text-sm leading-6 text-[#102A43]/68">El resultado solo refleja los checks estructurales declarados y la información marcada. No confirma validez, seguridad ni conveniencia.</p> : null}
                 <p className="mt-4 border-l-2 border-[#D97745] pl-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#102A43]/55">Territorio: México · no determina validez ni conveniencia</p>
               </div>
               {findings.length > 0 ? (
