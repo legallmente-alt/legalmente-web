@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { livingDictionary, searchHumanQuestion, validateLivingDictionary } from "./engine";
+import { getPublicDictionaryEligibility, livingDictionary, searchHumanQuestion, validateLivingDictionary } from "./engine";
 import { humanQueryGoldenSet } from "./golden-set";
 import { channelFormats, validateProductionUnit } from "../production/operating-contract";
 
@@ -8,6 +8,18 @@ test("living dictionary is sourced, related and territorially bounded", () => {
   assert.equal(livingDictionary.length, 8);
   assert.equal(validateLivingDictionary(), true);
   for (const entry of livingDictionary) assert.ok(entry.sources.length && entry.limits && entry.territory);
+});
+
+test("Mexico consent binding is primary, narrow and still human-review gated", () => {
+  const entry = livingDictionary.find((item) => item.conceptId === "consentimiento");
+  assert.ok(entry);
+  assert.equal(entry.publicEligibilityState, "LEGAL_REVIEW_REQUIRED");
+  assert.equal(getPublicDictionaryEligibility(entry), false);
+  const binding = entry.sources.find((item) => item.id === "SB-MX-CONSENTIMIENTO-CCF-1803-2025");
+  assert.ok(binding);
+  assert.equal(binding.kind, "PRIMARY_LEGAL_SOURCE");
+  assert.deepEqual(binding.articleRefs, ["1794", "1796", "1803", "1812"]);
+  assert.equal(binding.url, "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf");
 });
 
 test("human questions resolve to existing concepts deterministically", () => {
