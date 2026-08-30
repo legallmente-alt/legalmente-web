@@ -1,21 +1,29 @@
 # LegalMente — Wave 01A multichannel sprint
 
-Este paquete prepara cuatro carriles sin ejecutar gates humanos: integración candidata en rutas existentes, LinkedIn institucional y Founder, derivados de Instagram y Pinterest masivo. No contiene publicación, carga real, merge sensible ni deploy.
+Este paquete prepara cuatro carriles sin ejecutar gates humanos: integración candidata en rutas existentes, LinkedIn institucional y Founder, derivados de Instagram y Pinterest. No contiene publicación, carga real, merge, deploy, PII, documentos, pagos, servicios profesionales ni activación de analítica.
 
-## Estados
+## Autoridad y regla de evidencia
+
+El único receipt Founder verificado para esta Wave autoriza los seis claims exactos a `READY_FOR_COPY`. No autoriza `READY_FOR_VISUAL`, integración, merge, deploy ni publicación.
+
+Los archivos conservados con nombres `human-*-decision-receipt` fueron preparados por agentes como borradores de decisión. Se preservan para auditoría, pero no tienen efecto de gate hasta que exista una decisión Founder verificable y vinculada a su evidencia exacta. La existencia de assets o QA visual no sustituye esa decisión.
+
+## Estado vivo
 
 | Unidad | Copy | Asset visual | QA visual | Provenance visual | Composición social | Integración | Publicación |
 |---|---|---|---|---|---|---|---|
-| `LM-PC-013` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `PUBLIC_INTEGRATION_APPROVED` | `NOT_PUBLIC` |
-| `LM-PC-031` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS` | `NOT_PUBLIC` |
-| `LM-PC-065` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED` | `NOT_PUBLIC` |
+| `LM-PC-013` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `UNRESOLVED` | `REVIEW_REQUIRED` | `PRODUCT_REVIEW_REQUIRED` | `NOT_PUBLIC` |
+| `LM-PC-031` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `UNRESOLVED` | `REVIEW_REQUIRED` | `PRODUCT_REVIEW_REQUIRED` | `NOT_PUBLIC` |
+| `LM-PC-065` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `UNRESOLVED` | `REVIEW_REQUIRED` | `RELATED_ONLY_NO_PUBLIC_INTEGRATION` | `NOT_PUBLIC` |
 
-`PINTEREST_BULK_UPLOAD_AUTHORIZED = NO`. La aprobación Founder del 29 de agosto avanzó los seis claims exactos a `READY_FOR_COPY`; el receipt visual registra producción, QA y provenance humana válida; no autoriza `READY_FOR_VISUAL`. Los receipts posteriores autorizan únicamente la integración educativa existente de LM-PC-013 y LM-PC-031, sin abrir publicación, merge o deploy. LM-PC-031 conserva el proceso transversal `organizar-hechos-y-prueba` sin convertirlo en fuente laboral ni en capítulo; LM-PC-065 conserva los claims de LGSM, pero la representación aparece únicamente como pregunta relacionada y no como claim soportado por los arts. 1 y 6.
-
-## Entregables
-
-`integration-map.md` y `cross-channel-matrix.csv` documentan el destino y la continuidad sobre el Knowledge Graph existente. `current-state.json` es la capa viva de estado; los bindings históricos no se reescriben. `linkedin-package.md` contiene la cola separada para LegalMente y Founder. `instagram-package.md` contiene feed 4:5, story/reel cover 9:16 y copy vinculado. `pinterest-package.md` y `pinterest_bulk_upload.csv` contienen la preparación masiva base 2:3, con `MEDIA_URL_STATE=TEMPORARY_VALIDATION_URL` y filas separadas sin Link cuando falta un parent semántico seguro. `measurement-plan.md` contiene la instrumentación propuesta sin activar eventos ni campañas. `LM-PC-013-human-product-decision-packet.md` y `LM-PC-013-human-decision-receipt-2026-08-29.md` contienen la decisión humana registrada para la integración educativa en `/proceso/leer-antes-de-aceptar`; no incluye autorización de publicación. `asset-registry.json` y `assets/` contienen los derivados reales con hashes.
+`PINTEREST_BULK_UPLOAD_AUTHORIZED = NO`. Las URLs de media son temporales de validación; no son alojamiento durable ni autorización de carga.
 
 ## Regla de integración
 
-Una unidad solo puede entrar en una ruta pública cuando el registro conserva `CONTENT_ID`, claims aprobados, fuente y artículos, territorio, qualifier, copy, asset y gate actual. La existencia del asset o del CSV no autoriza su publicación. La aprobación de integración de LM-PC-013 solo abre QA de integración educativa; no resuelve el provenance visual ni autoriza publicación. Una unidad en `SEPARATED_PENDING_BINDING` permanece preservada, pero no se integra, no se promociona y no se carga en Pinterest.
+Una unidad sólo puede entrar a una ruta al existir evidencia verificable de: `CONTENT_ID`, claims aprobados, fuente y artículos, territorio, qualifier, copy, asset, decisión Founder de integración y gate actual. Una ruta candidata no es una ruta aprobada. La existencia de asset o CSV no autoriza publicación.
+
+LM-PC-031 puede conservar `/proceso/organizar-hechos-y-prueba` como candidato transversal; no crea una fuente laboral ni un parent de claim. LM-PC-065 permanece relacionado editorialmente sin ruta pública ni claim de representación.
+
+## Siguiente gate
+
+Primero: decisión Founder verificable sobre el gate visual y, por separado, sobre integración de producto. Después: QA de integración interna. Publicación continúa como decisión humana independiente.
