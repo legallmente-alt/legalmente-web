@@ -10,13 +10,6 @@ const wave01aReviews = [
     contentId: "LM-PC-013",
     question: "¿Qué tiene que quedar claro sobre lo que las partes se comprometen a hacer o entregar?",
     candidateRoute: "/proceso/leer-antes-de-aceptar",
-    sourceLabel: "Código Civil Federal",
-    sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
-    sourceVersion: "Texto reformado 2025-11-14 · México piloto",
-    claims: [
-      { article: "Art. 1824", text: "El objeto de los contratos es una categoría diferenciable dentro del Código Civil Federal.", qualifier: "No determina el efecto de una cláusula ni la exigibilidad de un documento concreto." },
-      { article: "Art. 1794", text: "El consentimiento y el objeto aparecen como elementos de existencia del contrato en el Código Civil Federal.", qualifier: "No prueba que un contrato concreto exista, sea válido o sea exigible." },
-    ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual_4x5.png",
     alt: "Bodegón editorial con caja, regla y papel para LM-PC-013; no incorpora texto jurídico.",
@@ -25,13 +18,6 @@ const wave01aReviews = [
     contentId: "LM-PC-031",
     question: "¿Qué elementos ayudan a describir una relación de trabajo sin asumir una conclusión sobre mi caso?",
     candidateRoute: "/mundo/empresa-comercio",
-    sourceLabel: "Ley Federal del Trabajo",
-    sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
-    sourceVersion: "Texto reformado 2026-05-14 · México piloto",
-    claims: [
-      { article: "Arts. 20–21", text: "La Ley Federal del Trabajo define la relación de trabajo con independencia del acto que le dé origen, mediante trabajo personal subordinado y salario.", qualifier: "No decide una controversia individual ni una prestación concreta." },
-      { article: "Art. 25", text: "Las condiciones de trabajo pueden incluir servicio, lugar, jornada, salario, pago y vacaciones en el marco escrito laboral.", qualifier: "No prueba los términos de una relación específica ni calcula derechos." },
-    ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual_4x5.png",
     alt: "Bodegón editorial con herramientas, delantal y etiqueta en blanco para LM-PC-031; no incorpora texto jurídico.",
@@ -40,13 +26,6 @@ const wave01aReviews = [
     contentId: "LM-PC-065",
     question: "¿Qué documentos y datos conviene ordenar para entender una sociedad mercantil?",
     candidateRoute: "/mundo/empresa-comercio",
-    sourceLabel: "Ley General de Sociedades Mercantiles",
-    sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/LGSM.pdf",
-    sourceVersion: "Texto reformado 2023-10-20 · México piloto",
-    claims: [
-      { article: "Art. 1", text: "La Ley General de Sociedades Mercantiles reconoce distintas especies de sociedades mercantiles.", qualifier: "No identifica la entidad de una persona ni valida su constitución." },
-      { article: "Art. 6", text: "La escritura o póliza constitutiva debe contener datos previstos por la Ley General de Sociedades Mercantiles.", qualifier: "No prueba que un documento concreto esté completo o sea válido." },
-    ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual_4x5.png",
     alt: "Bodegón editorial con muestras, carpeta y placa en blanco para LM-PC-065; no incorpora texto jurídico.",
@@ -121,7 +100,7 @@ export default function InternalProductLabPage() {
         <div className="max-w-3xl space-y-3">
           <p className="text-sm uppercase tracking-[0.08em] text-tinta/55">Wave 01A · revisión de integración</p>
           <h2 id="wave-01a-title" className="font-serif text-3xl">Visuales preparados, claims todavía bajo revisión humana.</h2>
-          <p className="text-base leading-7 text-tinta/70">Esta bandeja interna comprueba la presencia binaria y la relación candidata con rutas existentes. No muestra el claim jurídico, no abre publicación y no convierte una fuente en aprobación. El territorio de los tres expedientes es México — PILOT_RESEARCH_TERRITORY.</p>
+          <p className="text-base leading-7 text-tinta/70">Esta bandeja interna comprueba la presencia binaria y la relación candidata con rutas existentes. Solo muestra pregunta, identificador, territorio, ruta candidata y estado de revisión; no muestra claims jurídicos, no abre publicación y no convierte una fuente en aprobación. El territorio de los tres expedientes es México — PILOT_RESEARCH_TERRITORY.</p>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
           {wave01aReviews.map((item) => (
@@ -144,21 +123,7 @@ export default function InternalProductLabPage() {
                   <div className="flex justify-between gap-4"><dt className="font-semibold">Ruta candidata</dt><dd className="text-right">{item.candidateRoute}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="font-semibold">Formatos</dt><dd className="text-right">9:16 · 4:5</dd></div>
                 </dl>
-                <div className="space-y-3 border-t border-tinta/10 pt-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-tinta/50">Copy educativo interno</p>
-                    <a className="text-xs font-semibold underline underline-offset-2" href={item.sourceUrl} target="_blank" rel="noreferrer">Fuente oficial</a>
-                  </div>
-                  <p className="text-xs leading-5 text-tinta/60">{item.sourceLabel} · {item.sourceVersion}</p>
-                  <ul className="space-y-3 text-sm leading-6 text-tinta/80">
-                    {item.claims.map((claim) => (
-                      <li key={claim.article} className="border-l-2 border-oro pl-3">
-                        <strong className="mr-2 text-xs uppercase tracking-[0.08em] text-tinta/55">{claim.article}</strong>{claim.text}
-                        <span className="mt-1 block text-xs leading-5 text-tinta/60">Qualifier: {claim.qualifier}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                        <p className="border-t border-tinta/10 pt-4 text-xs leading-5 text-tinta/60">La fuente, el copy jurídico y el binding permanecen fuera de esta bandeja hasta completar la revisión humana correspondiente.</p>
                 <p className="border-l-2 border-oro pl-3 text-xs leading-5 text-tinta/60">Solo revisión interna de asset/procedencia. La relación de ruta requiere decisión de producto y el claim requiere revisión humana.</p>
               </div>
             </article>
