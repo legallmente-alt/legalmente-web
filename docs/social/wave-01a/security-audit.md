@@ -1,7 +1,9 @@
 # Wave 01A — Auditoría de dependencias y release gate
 
-**Fecha de revisión:** 2026-08-30 UTC  
-**Resultado funcional:** el paquete, el grafo, el tipado, lint, build y artefacto público pasan.  
+**Fecha de revisión:** 2026-08-30 UTC
+
+**Resultado funcional:** el paquete, el grafo, el tipado, lint, build y artefacto público pasan.
+
 **Resultado de seguridad:** `RELEASE_BLOCKED_PENDING_DEPENDENCY_REVIEW`.
 
 ## Hallazgos
