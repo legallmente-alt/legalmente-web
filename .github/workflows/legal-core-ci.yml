@@ -64,6 +64,8 @@ jobs:
           grep -q 'Disallow: /internal/' out/robots.txt
       - name: Public route and discovery proof
         run: npm run test:public-routes
+      - name: Internal review surface proof
+        run: npm run test:internal-review-surface
       - name: Upload sanitized public artifact
         if: always()
         uses: actions/upload-artifact@v4
