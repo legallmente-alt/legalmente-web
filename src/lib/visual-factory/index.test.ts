@@ -4,10 +4,12 @@ import {
   assertPublishBlocked,
   createEmptyQa,
   evaluateQa,
+  normalizeQaResult,
   routeGeneration,
   selectAsset,
   type ImageGeneratorAdapter,
   type VisualProductionUnit,
+  type VisualQaResult,
 } from "./index";
 
 const unit: VisualProductionUnit = {
@@ -49,6 +51,19 @@ const adapter: ImageGeneratorAdapter = {
   async generate() { return { asset: "asset", provenance: {} }; },
 };
 
+function passingQa(): VisualQaResult {
+  const qa = createEmptyQa();
+  qa.scores = Object.fromEntries(Object.keys(qa.scores).map((key) => [key, 4]));
+  qa.scores.LEGAL_COPY_EXACT = 5;
+  qa.scores.PSEUDOTEXT_ZERO = 5;
+  qa.hardGates = Object.fromEntries(Object.keys(qa.hardGates).map((key) => [key, "PASS"]));
+  qa.visualArtQa = "PASS";
+  qa.editorialCompositionQa = "PASS";
+  qa.classification = "B_STATIC";
+  qa.nextAction = "HUMAN_REVIEW";
+  return qa;
+}
+
 describe("VisualProductionUnit", () => {
   it("routes clean-copy providers to full composite and fallback providers to programmatic text", () => {
     assert.equal(routeGeneration({ ...adapter, capabilities: { ...adapter.capabilities, text: false } }, unit), "PROGRAMMATIC_TEXT_COMPOSITION");
@@ -68,6 +83,35 @@ describe("VisualProductionUnit", () => {
     const evaluated = evaluateQa(unit, qa);
     assert.equal(evaluated.STATE, "REWORK_REQUIRED");
     assert.equal(evaluated.QA_RESULTS?.classification, "C_REWORK");
+  });
+
+  it("normalizes a self-reported B_STATIC artifact to C_REWORK when a hard gate fails", () => {
+    const qa = passingQa();
+    qa.hardGates.NO_MURKY_DARK = "FAIL";
+    qa.classification = "B_STATIC";
+    qa.nextAction = "HUMAN_REVIEW";
+    const normalized = normalizeQaResult(qa);
+    const evaluated = evaluateQa(unit, qa);
+    assert.equal(normalized.classification, "C_REWORK");
+    assert.equal(normalized.nextAction, "LOCAL_FIX");
+    assert.equal(evaluated.STATE, "REWORK_REQUIRED");
+  });
+
+  it("fails closed while any hard gate remains NOT_CHECKED", () => {
+    const qa = passingQa();
+    qa.hardGates.NO_UNREADABLE_MOBILE_COPY = "NOT_CHECKED";
+    const evaluated = evaluateQa(unit, qa);
+    assert.equal(evaluated.STATE, "REWORK_REQUIRED");
+    assert.equal(evaluated.QA_RESULTS?.classification, "C_REWORK");
+  });
+
+  it("allows fully checked QA to reach human visual review", () => {
+    const qa = passingQa();
+    qa.scores.ANIMATION_POTENTIAL = 3;
+    const evaluated = evaluateQa(unit, qa);
+    assert.equal(evaluated.STATE, "READY_FOR_HUMAN_VISUAL_REVIEW");
+    assert.equal(evaluated.QA_RESULTS?.classification, "B_STATIC");
+    assert.equal(evaluated.QA_RESULTS?.nextAction, "HUMAN_REVIEW");
   });
 
   it("selects assets through registry fields instead of W01-style constants", () => {
