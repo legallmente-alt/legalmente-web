@@ -22,13 +22,19 @@ for cid in EXPECTED:
     assert unit['visual_gate_authorization'] == 'HUMAN_VISUAL_GATE_APPROVED', cid
     assert unit['current_publication_state'] == 'NOT_PUBLIC', cid
 assert state['LM-PC-013']['current_integration_state'] == 'PUBLIC_INTEGRATION_APPROVED'
+assert state['LM-PC-013']['integration_qa_state'] == 'PASS'
+assert state['LM-PC-013']['current_publication_state'] == 'NOT_PUBLIC'
 assert state['LM-PC-031']['current_integration_state'] == 'EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS'
+assert state['LM-PC-031']['integration_qa_state'] == 'PASS'
+assert state['LM-PC-031']['current_publication_state'] == 'NOT_PUBLIC'
 assert state['LM-PC-031']['candidate_public_route'] == '/proceso/organizar-hechos-y-prueba'
 assert state['LM-PC-031']['integration_decision'] == 'APPROVE_INTEGRATION:/proceso/organizar-hechos-y-prueba'
 assert state['LM-PC-031']['integration_receipt'] == 'LM-PC-031-065-human-integration-decision-receipt-2026-08-30.md'
 assert state['LM-PC-065']['current_integration_state'] == 'SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED'
 assert state['LM-PC-065']['integration_decision'] == 'KEEP_RELATED_ONLY_NO_PUBLIC_INTEGRATION'
 assert state['LM-PC-065']['integration_receipt'] == 'LM-PC-031-065-human-integration-decision-receipt-2026-08-30.md'
+assert state['LM-PC-065']['integration_qa_state'] == 'NOT_RUN'
+assert state['LM-PC-065']['current_publication_state'] == 'NOT_PUBLIC'
 for cid in ('LM-PC-031', 'LM-PC-065'):
     assert state[cid]['semantic_binding_receipt'] == semantic_receipt.name, cid
 
@@ -96,6 +102,7 @@ for row in matrix:
     assert row['SOCIAL_COMPOSITION_STATE'] == 'REVIEW_REQUIRED', cid
     assert row['MEDIA_URL_STATE'] == 'TEMPORARY_VALIDATION_URL', cid
     assert row['CURRENT_PUBLICATION_STATE'] == 'NOT_PUBLIC', cid
+    assert row['INTEGRATION_QA_STATE'] == ('PASS' if cid in {'LM-PC-013', 'LM-PC-031'} else 'NOT_RUN'), cid
     assert row['CLAIM_IDS'] and row['SOURCE_CONTEXT'] and row['TERRITORY_CONTEXT'] and row['QUALIFIER'], cid
     assert row['ALT_TEXT'].strip(), f'empty_alt:{cid}'
     assert not any(bad in row['ALT_TEXT'] for bad in ('hojas transparentes', 'Tablero editorial', 'Tres objetos de archivo conectados')), f'non_literal_alt:{cid}'

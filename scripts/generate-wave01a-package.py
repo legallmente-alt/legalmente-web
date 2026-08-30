@@ -275,6 +275,8 @@ lines = ['# Pinterest — Preparación masiva Wave 01A', '', '**Estado:** `ART_B
     'social_composition_state': 'REVIEW_REQUIRED',
     'media_url_state': 'TEMPORARY_VALIDATION_URL',
     'current_integration_state': 'PUBLIC_INTEGRATION_APPROVED' if cid == 'LM-PC-013' else ('EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS' if cid == 'LM-PC-031' else 'SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED'),
+    'integration_qa_state': 'PASS' if cid in {'LM-PC-013', 'LM-PC-031'} else 'NOT_RUN',
+    'integration_qa_receipt': 'LM-PC-013-031-integration-qa-closure-receipt-2026-08-30.md' if cid in {'LM-PC-013', 'LM-PC-031'} else None,
     'semantic_binding_decision': 'BIND_TO_EXISTING_PARENT:organizar-hechos-y-prueba' if cid == 'LM-PC-031' else ('RELATED_ONLY' if cid == 'LM-PC-065' else None),
     'semantic_binding_state': 'BOUND_TO_EXISTING_PROCESS_LEARNING_NAVIGATION_ONLY' if cid == 'LM-PC-031' else ('RELATED_ONLY_NO_CLAIM_PARENT' if cid == 'LM-PC-065' else None),
     'semantic_binding_receipt': 'LM-PC-031-065-human-semantic-binding-decision-receipt-2026-08-29.md' if cid in {'LM-PC-031', 'LM-PC-065'} else None,
