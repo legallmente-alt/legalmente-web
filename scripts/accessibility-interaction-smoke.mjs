@@ -1,5 +1,5 @@
 import { chromium } from "playwright";
-import { writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 
 const baseUrl = process.env.PROOF_BASE_URL ?? "http://127.0.0.1:3000";
 const routes = [
@@ -107,6 +107,7 @@ try {
 }
 
 const report = { generatedAt: new Date().toISOString(), baseUrl, passed: !failed, results };
+await mkdir("implementation-proofs", { recursive: true });
 await writeFile("implementation-proofs/accessibility-interaction-summary.json", `${JSON.stringify(report, null, 2)}\n`, "utf8");
 
 if (failed) {
