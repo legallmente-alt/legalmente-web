@@ -1,0 +1,53 @@
+name: Deploy LegalMente public release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: legalmente-production-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy sanitized public artifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build sanitized public artifact
+        run: npm run build:public
+
+      - name: Verify public artifact before deploy
+        run: |
+          npm run test:public-routes
+          test -f out/_headers
+          test -f out/robots.txt
+          test -f out/sitemap.xml
+          test ! -e out/internal
+          grep -q 'Disallow: /internal/' out/robots.txt
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=legalmente-educativo
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
