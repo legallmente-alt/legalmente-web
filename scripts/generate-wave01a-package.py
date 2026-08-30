@@ -185,18 +185,18 @@ with (ROOT / 'pinterest_bulk_upload.csv').open('w', encoding='utf-8', newline=''
     for cid, u in units.items():
         writer.writerow({
             'Title': u['pin_title'],
-            'Media URL': f'{RAW_ASSET_BASE}/{cid}_pinterest_2x3.png',
-            'Pinterest board': u['board'],
+            'Media URL': '',
+            'Pinterest board': '',
             'Thumbnail': '',
             'Description': u['pin_description'],
-            'Link': f'https://ef9882a7.legalmente-educativo.pages.dev{u["route"]}' if u['route'] else '',
+            'Link': '',
             'Publish date': '',
             'Keywords': u['hashtags'].replace('#', '').replace(' ', ', '),
         })
 
 # Integration and channel matrices.
 with (ROOT / 'cross-channel-matrix.csv').open('w', encoding='utf-8', newline='') as f:
-    fields = ['CONTENT_ID','CLAIM_IDS','USER_JOB','EXISTING_WORLD','EXISTING_SERIES','EXISTING_CHAPTER','EXISTING_CONCEPT','EXISTING_PROCESS','CANDIDATE_PUBLIC_ROUTE','PREVIOUS_LEARNING','NEXT_LEARNING','SOURCE_CONTEXT','TERRITORY_CONTEXT','QUALIFIER','WEB_ASSET','LINKEDIN_LEGALMENTE_ASSET','LINKEDIN_FOUNDER_ASSET','INSTAGRAM_FEED_ASSET','INSTAGRAM_9X16_ASSET','PINTEREST_ASSET','ALT_TEXT','CURRENT_COPY_STATE','CURRENT_VISUAL_STATE','VISUAL_ASSET_STATE','VISUAL_QA_STATE','VISUAL_GATE_PROVENANCE','COPY_CHANNEL_QA','ART_BASE_STATE','SOCIAL_COMPOSITION_STATE','MEDIA_URL_STATE','CURRENT_INTEGRATION_STATE','CURRENT_PUBLICATION_STATE','NEXT_GATE']
+    fields = ['CONTENT_ID','CLAIM_IDS','USER_JOB','EXISTING_WORLD','EXISTING_SERIES','EXISTING_CHAPTER','EXISTING_CONCEPT','EXISTING_PROCESS','CANDIDATE_PUBLIC_ROUTE','PREVIOUS_LEARNING','NEXT_LEARNING','SOURCE_CONTEXT','TERRITORY_CONTEXT','QUALIFIER','WEB_ASSET','LINKEDIN_LEGALMENTE_ASSET','LINKEDIN_FOUNDER_ASSET','INSTAGRAM_FEED_ASSET','INSTAGRAM_9X16_ASSET','PINTEREST_ASSET','ALT_TEXT','CURRENT_COPY_STATE','CURRENT_VISUAL_STATE','VISUAL_ASSET_STATE','VISUAL_QA_STATE','VISUAL_GATE_PROVENANCE','COPY_CHANNEL_QA','ART_BASE_STATE','SOCIAL_COMPOSITION_STATE','MEDIA_URL_STATE','CURRENT_INTEGRATION_STATE','INTEGRATION_QA_STATE','CURRENT_PUBLICATION_STATE','NEXT_GATE']
     writer = csv.DictWriter(f, fieldnames=fields, lineterminator='\n')
     writer.writeheader()
     for cid, u in units.items():
@@ -209,7 +209,7 @@ with (ROOT / 'cross-channel-matrix.csv').open('w', encoding='utf-8', newline='')
             'EXISTING_CHAPTER': f'{u["chapter"]} — {u["chapter_label"]}' if u['chapter'] else '',
             'EXISTING_CONCEPT': f'{u["concept"]} — {u["concept_label"]}' if u['concept'] else '',
             'EXISTING_PROCESS': f'{u["process"]} — {u["process_label"]}' if u['process'] else '',
-            'CANDIDATE_PUBLIC_ROUTE': u['route'],
+            'CANDIDATE_PUBLIC_ROUTE': '',
             'PREVIOUS_LEARNING': u['previous'],
             'NEXT_LEARNING': u['next'],
             'SOURCE_CONTEXT': u['source'],
@@ -230,10 +230,11 @@ with (ROOT / 'cross-channel-matrix.csv').open('w', encoding='utf-8', newline='')
             'COPY_CHANNEL_QA': 'PASS',
             'ART_BASE_STATE': 'READY',
             'SOCIAL_COMPOSITION_STATE': 'REVIEW_REQUIRED',
-            'MEDIA_URL_STATE': 'TEMPORARY_VALIDATION_URL',
-            'CURRENT_INTEGRATION_STATE': 'PRODUCT_REVIEW_REQUIRED' if cid == 'LM-PC-013' else 'SEPARATED_PENDING_BINDING',
+            'MEDIA_URL_STATE': 'NO_DURABLE_MEDIA_URL',
+            'CURRENT_INTEGRATION_STATE': 'PRODUCT_REVIEW_REQUIRED' if cid == 'LM-PC-013' else ('SEPARATED_PENDING_BINDING' if cid == 'LM-PC-031' else 'RELATED_ONLY_NO_PUBLIC_INTEGRATION'),
+            'INTEGRATION_QA_STATE': 'NOT_RUN',
             'CURRENT_PUBLICATION_STATE': 'NOT_PUBLIC',
-            'NEXT_GATE': 'Human product decision per unit; then integration QA; then publication decision' if cid == 'LM-PC-013' else 'Founder/Editor row-level mapping to a semantically correct existing parent or explicitly related-only record; then product decision; integration QA; publication decision',
+            'NEXT_GATE': 'Founder visual decision; separate product integration decision; then internal integration QA' if cid == 'LM-PC-013' else ('Founder visual decision; semantically safe binding decision; then internal integration QA' if cid == 'LM-PC-031' else 'Founder visual decision; separately recorded societary mapping decision; then internal QA'),
         })
 
 # Markdown channel packages.
@@ -258,35 +259,72 @@ lines = ['# Pinterest — Preparación masiva Wave 01A', '', '**Estado:** `ART_B
 
 (ROOT / 'current-state.json').write_text(json.dumps({cid: {
     'source_binding_original_state': 'HUMAN_REVIEW_REQUIRED (historical; not rewritten)',
-    'human_decision_id': 'HUMAN_DECISION_LM-PC-013_APPROVE_INTEGRATION_2026-08-29' if cid == 'LM-PC-013' else 'FOUNDER_DECISION_WAVE_01A_READY_FOR_COPY_2026-08-29',
+    'founder_copy_decision_id': 'FOUNDER_DECISION_WAVE_01A_READY_FOR_COPY_2026-08-29',
+    'founder_copy_evidence_locator': 'PRIVATE_FOUNDER_RECORD_OUTSIDE_REPOSITORY',
+    'founder_copy_scope': 'CLAIM_APPROVAL -> READY_FOR_COPY only',
     'human_decision_date': '2026-08-29',
-    'human_decision_receipt': 'LM-PC-013-human-decision-receipt-2026-08-29.md' if cid == 'LM-PC-013' else None,
-    'human_decision': 'APPROVE_INTEGRATION' if cid == 'LM-PC-013' else None,
     'current_copy_state': 'READY_FOR_COPY',
-    'current_visual_state': 'VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN',
+    'current_visual_state': 'VISUAL_QA_PASS_PROVENANCE_UNRESOLVED',
     'visual_asset_state': 'EXISTS',
     'visual_qa_state': 'PASS',
-    'visual_gate_provenance': 'VALID_HUMAN_PROVENANCE',
-    'visual_gate_decision_receipt': 'LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md',
-    'visual_gate_authorization': 'HUMAN_VISUAL_GATE_APPROVED',
+    'visual_gate_provenance': 'UNRESOLVED',
+    'visual_gate_decision_receipt': None,
+    'visual_gate_authorization': 'NOT_RECORDED',
     'visual_qa_receipt': '99_VISUAL_PRODUCTION_RECEIPT.md',
     'copy_channel_qa': 'PASS',
     'art_base_state': 'READY',
     'social_composition_state': 'REVIEW_REQUIRED',
-    'media_url_state': 'TEMPORARY_VALIDATION_URL',
-    'current_integration_state': 'PUBLIC_INTEGRATION_APPROVED' if cid == 'LM-PC-013' else ('EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS' if cid == 'LM-PC-031' else 'SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED'),
-    'integration_qa_state': 'PASS' if cid in {'LM-PC-013', 'LM-PC-031'} else 'NOT_RUN',
-    'integration_qa_receipt': 'LM-PC-013-031-integration-qa-closure-receipt-2026-08-30.md' if cid in {'LM-PC-013', 'LM-PC-031'} else None,
-    'semantic_binding_decision': 'BIND_TO_EXISTING_PARENT:organizar-hechos-y-prueba' if cid == 'LM-PC-031' else ('RELATED_ONLY' if cid == 'LM-PC-065' else None),
-    'semantic_binding_state': 'BOUND_TO_EXISTING_PROCESS_LEARNING_NAVIGATION_ONLY' if cid == 'LM-PC-031' else ('RELATED_ONLY_NO_CLAIM_PARENT' if cid == 'LM-PC-065' else None),
-    'semantic_binding_receipt': 'LM-PC-031-065-human-semantic-binding-decision-receipt-2026-08-29.md' if cid in {'LM-PC-031', 'LM-PC-065'} else None,
+    'media_url_state': 'NO_DURABLE_MEDIA_URL',
+    'current_integration_state': 'PRODUCT_REVIEW_REQUIRED' if cid == 'LM-PC-013' else ('SEPARATED_PENDING_BINDING' if cid == 'LM-PC-031' else 'RELATED_ONLY_NO_PUBLIC_INTEGRATION'),
+    'integration_qa_state': 'NOT_RUN',
+    'semantic_binding_candidate': 'organizar-hechos-y-prueba (transversal; not an approved claim parent)' if cid == 'LM-PC-031' else None,
+    'semantic_binding_state': 'RELATED_ONLY_NO_CLAIM_PARENT' if cid == 'LM-PC-065' else None,
     'current_publication_state': 'NOT_PUBLIC',
     'supersedes': 'Historical source-binding addendum remains preserved',
     'superseded_by': 'Current operational state layer in this package',
-    'next_gate': 'Integration QA for the educational route; separate publication decision' if cid == 'LM-PC-013' else ('Integration QA for /proceso/organizar-hechos-y-prueba; separate publication decision' if cid == 'LM-PC-031' else 'No public integration; separate publication decision remains closed'),
+    'next_gate': 'Founder visual decision; separate product integration decision; then internal integration QA' if cid == 'LM-PC-013' else ('Founder visual decision; semantically safe binding decision; then internal integration QA' if cid == 'LM-PC-031' else 'Founder visual decision; separately recorded societary mapping decision; then internal QA'),
 } for cid in units}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 (ROOT / 'README.md').write_text('''# LegalMente — Wave 01A multichannel sprint\n\nEste paquete prepara cuatro carriles sin ejecutar gates humanos: integración candidata en rutas existentes, LinkedIn institucional y Founder, derivados de Instagram y Pinterest masivo. No contiene publicación, carga real, merge sensible ni deploy.\n\n## Estados\n\n| Unidad | Copy | Asset visual | QA visual | Provenance visual | Composición social | Integración | Publicación |\n|---|---|---|---|---|---|---|---|\n| `LM-PC-013` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `PUBLIC_INTEGRATION_APPROVED` | `NOT_PUBLIC` |\n| `LM-PC-031` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS` | `NOT_PUBLIC` |\n| `LM-PC-065` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED` | `NOT_PUBLIC` |\n\n`PINTEREST_BULK_UPLOAD_AUTHORIZED = NO`. La aprobación Founder del 29 de agosto avanzó los seis claims exactos a `READY_FOR_COPY`; el receipt visual registra producción y QA, pero no autoriza `READY_FOR_VISUAL`. No se inventa esa autorización, ni se abre integración, publicación, merge o deploy. LM-PC-031 no se fuerza bajo el capítulo sanitario `deber-profesional`; LM-PC-065 conserva los claims de LGSM, pero la representación aparece únicamente como pregunta relacionada y no como claim soportado por los arts. 1 y 6.\n\n## Entregables\n\n`integration-map.md` y `cross-channel-matrix.csv` documentan el destino y la continuidad sobre el Knowledge Graph existente. `current-state.json` es la capa viva de estado; los bindings históricos no se reescriben. `linkedin-package.md` contiene la cola separada para LegalMente y Founder. `instagram-package.md` contiene feed 4:5, story/reel cover 9:16 y copy vinculado. `pinterest-package.md` y `pinterest_bulk_upload.csv` contienen la preparación masiva base 2:3, con `MEDIA_URL_STATE=TEMPORARY_VALIDATION_URL` y filas separadas sin Link cuando falta un parent semántico seguro. `measurement-plan.md` contiene la instrumentación propuesta sin activar eventos ni campañas. `asset-registry.json` y `assets/` contienen los derivados reales con hashes.\n\n## Regla de integración\n\nUna unidad solo puede entrar en una ruta pública cuando el registro conserva `CONTENT_ID`, claims aprobados, fuente y artículos, territorio, qualifier, copy, asset y gate actual. La existencia del asset o del CSV no autoriza su publicación. La aprobación de integración de LM-PC-013 solo abre QA de integración educativa; no resuelve el provenance visual ni autoriza publicación. Una unidad con `SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED` permanece fuera de integración pública, no se promociona y no se carga en Pinterest.\n''', encoding='utf-8')
+
+# P0 overrides the historical templates written above. They remain in source
+# history for audit, but this final pass is the only live package output.
+(ROOT / 'integration-map.md').write_text('''# Wave 01A — Mapa de integración candidata
+
+**Estado vivo:** `READY_FOR_COPY` → `VISUAL_QA=PASS` → `VISUAL_GATE_PROVENANCE=UNRESOLVED` → `INTERNAL_QA_ONLY` → `NOT_PUBLIC`.
+
+| Unidad | Ruta pública | Estado de integración | QA de integración | Siguiente gate |
+|---|---|---|---|---|
+| `LM-PC-013` | — | `PRODUCT_REVIEW_REQUIRED` | `NOT_RUN` | Decisión Founder sobre visual; decisión separada de producto; QA interna. |
+| `LM-PC-031` | — | `SEPARATED_PENDING_BINDING` | `NOT_RUN` | Binding semántico seguro y separado; no es fuente laboral. |
+| `LM-PC-065` | — | `RELATED_ONLY_NO_PUBLIC_INTEGRATION` | `NOT_RUN` | Mapeo societario separado; representación no queda cubierta por estos claims. |
+
+Una ruta candidata interna no es una ruta aprobada ni pública. El componente recibe únicamente el manifiesto P0 validado; no solicita documentos, nombres, texto libre ni activa servicios.
+''', encoding='utf-8')
+
+(ROOT / 'pinterest-package.md').write_text('''# Pinterest — Preparación masiva Wave 01A
+
+**Estado:** `ART_BASE_STATE=READY` / `SOCIAL_COMPOSITION_STATE=REVIEW_REQUIRED` / `MEDIA_URL_STATE=NO_DURABLE_MEDIA_URL` / `READY_FOR_BULK_UPLOAD=NO` / `BULK_UPLOAD_AUTHORIZED=NO` / `NOT_PUBLIC`.
+
+El CSV conserva copy de preparación, pero deja `Media URL`, `Link` y `Publish date` vacíos. No existe alojamiento durable, destino público ni autorización de carga. La composición final por canal sigue cerrada.
+''', encoding='utf-8')
+
+(ROOT / 'README.md').write_text('''# LegalMente — Wave 01A multichannel sprint
+
+Este paquete conserva producción y preparación de canales sin abrir publicación, carga real, merge, deploy, PII, documentos, pagos, servicios profesionales ni analítica.
+
+## Autoridad y estado vivo
+
+El único receipt Founder verificado para Wave 01A es `FOUNDER_DECISION_WAVE_01A_READY_FOR_COPY_2026-08-29`: autoriza únicamente los seis claims exactos a `READY_FOR_COPY`. Los archivos de decisión preparados por agentes se retienen como historia y no abren gates.
+
+| Unidad | Copy | Visual | Integración | Publicación |
+|---|---|---|---|---|
+| `LM-PC-013` | `READY_FOR_COPY` | `EXISTS` / `PASS` / `UNRESOLVED` | `PRODUCT_REVIEW_REQUIRED` | `NOT_PUBLIC` |
+| `LM-PC-031` | `READY_FOR_COPY` | `EXISTS` / `PASS` / `UNRESOLVED` | `SEPARATED_PENDING_BINDING` | `NOT_PUBLIC` |
+| `LM-PC-065` | `READY_FOR_COPY` | `EXISTS` / `PASS` / `UNRESOLVED` | `RELATED_ONLY_NO_PUBLIC_INTEGRATION` | `NOT_PUBLIC` |
+
+`PINTEREST_BULK_UPLOAD_AUTHORIZED = NO`. No existen URLs de media durables ni rutas públicas aprobadas. El siguiente gate es el manifiesto P0: decisión Founder visual separada, decisión de integración separada y QA interna; la publicación sigue siendo un gate independiente.
+''', encoding='utf-8')
 
 print(f'Generated Wave 01A package at {ROOT}')
 print(f'Assets: {len(asset_rows)}')

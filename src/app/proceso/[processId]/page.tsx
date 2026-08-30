@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { KnowledgeShell } from "@/components/knowledge/KnowledgeShell";
 import { Wave01aIntegrationPreview } from "@/components/knowledge/Wave01aIntegrationPreview";
 import { getConcept, getProcess, processes } from "@/lib/knowledge-graph/content";
-import { getWave01aForRoute } from "@/lib/knowledge-graph/wave01a";
+import { getWave01aInternalQaUnitForRoute, isWave01aInternalQaPreviewEnabled } from "@/lib/knowledge-graph/wave01a-provenance";
 
 export function generateStaticParams() {
   return processes.map((item) => ({ processId: item.id }));
@@ -14,8 +14,8 @@ export default function ProcessPage({ params }: { params: { processId: string } 
   if (!processNode) notFound();
 
   const concepts = processNode.relatedConceptIds.map(getConcept).filter(Boolean);
-  const waveUnit = process.env.LEGALMENTE_WAVE01A_INTEGRATION_PREVIEW === "1"
-    ? getWave01aForRoute(`/proceso/${processNode.id}`)
+  const waveUnit = isWave01aInternalQaPreviewEnabled()
+    ? getWave01aInternalQaUnitForRoute(`/proceso/${processNode.id}`)
     : null;
 
   return (

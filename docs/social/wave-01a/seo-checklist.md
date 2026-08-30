@@ -14,4 +14,4 @@
 
 ## Regla de publicación
 
-No indexar, enlazar desde campañas ni publicar una unidad Wave 01A hasta que exista `PUBLIC_INTEGRATION_APPROVED`, se ejecute QA de integración y se tome una decisión separada de publicación. `LM-PC-031` y `LM-PC-065` no deben recibir URL, breadcrumbs ni enlaces públicos mientras estén `SEPARATED_PENDING_BINDING`. La preparación social utiliza URLs públicas directas solo para media de Pinterest; el CSV no autoriza carga ni publicación.
+No indexar, enlazar desde campañas ni publicar una unidad Wave 01A hasta que exista evidencia Founder verificable de integración, se ejecute QA de integración y se tome una decisión separada de publicación. Ninguna unidad tiene URL, breadcrumbs ni enlaces públicos aprobados. La preparación social conserva assets locales; no existen URLs de media durables y el CSV no autoriza carga ni publicación.

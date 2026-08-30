@@ -18,26 +18,27 @@ export type Wave01aIntegrationUnit = {
   visualAsset: string;
   altText: string;
   copyState: "READY_FOR_COPY";
-  visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN";
+  visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED";
   visualAssetState: "EXISTS";
   visualQaState: "PASS";
-  visualGateProvenance: "VALID_HUMAN_PROVENANCE";
+  visualGateProvenance: "UNRESOLVED";
   visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md";
-  visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md";
-  visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED";
+  visualGateDecisionReceipt: null;
+  visualGateAuthorization: "NOT_RECORDED";
   semanticBindingDecision?: string;
-  semanticBindingState?: "BOUND_TO_EXISTING_PROCESS_LEARNING_NAVIGATION_ONLY" | "RELATED_ONLY_NO_CLAIM_PARENT";
+  semanticBindingState?: "SEPARATED_PENDING_BINDING" | "RELATED_ONLY_NO_CLAIM_PARENT";
   copyChannelQa: "PASS";
   artBaseState: "READY";
   socialCompositionState: "REVIEW_REQUIRED";
-  integrationState: "PUBLIC_INTEGRATION_APPROVED" | "EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS" | "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED";
-  integrationQaState: "PASS" | "NOT_RUN";
+  integrationState: "PRODUCT_REVIEW_REQUIRED" | "SEPARATED_PENDING_BINDING" | "RELATED_ONLY_NO_PUBLIC_INTEGRATION";
+  integrationQaState: "NOT_RUN";
   publicationState: "NOT_PUBLIC";
 };
 
 /**
- * Live operational state for Wave 01A. Historical source bindings remain
- * untouched; this layer records the later human decision and current gates.
+ * Live technical state for Wave 01A. The verified Founder receipt authorizes
+ * only READY_FOR_COPY for six exact claims. Historical agent-prepared decision
+ * drafts remain preserved outside this module and cannot open later gates.
  */
 export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
   {
@@ -60,24 +61,24 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     visualAsset: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual_4x5.png",
     altText: "Bodegón cálido sobre una mesa de madera: una caja de cartón con etiqueta en blanco y una regla metálica, junto a una estructura de varillas, una bandeja con cinta y un recipiente oscuro.",
     copyState: "READY_FOR_COPY",
-    visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN",
+    visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED",
     visualAssetState: "EXISTS",
     visualQaState: "PASS",
-    visualGateProvenance: "VALID_HUMAN_PROVENANCE",
+    visualGateProvenance: "UNRESOLVED",
     visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md",
-    visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md",
-    visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED",
+    visualGateDecisionReceipt: null,
+    visualGateAuthorization: "NOT_RECORDED",
     copyChannelQa: "PASS",
     artBaseState: "READY",
     socialCompositionState: "REVIEW_REQUIRED",
-    integrationState: "PUBLIC_INTEGRATION_APPROVED",
-    integrationQaState: "PASS",
+    integrationState: "PRODUCT_REVIEW_REQUIRED",
+    integrationQaState: "NOT_RUN",
     publicationState: "NOT_PUBLIC",
   },
   {
     contentId: "LM-PC-031",
-    semanticBindingDecision: "BIND_TO_EXISTING_PARENT:organizar-hechos-y-prueba",
-    semanticBindingState: "BOUND_TO_EXISTING_PROCESS_LEARNING_NAVIGATION_ONLY",
+    semanticBindingDecision: "CANDIDATE_EXISTING_PROCESS:organizar-hechos-y-prueba",
+    semanticBindingState: "SEPARATED_PENDING_BINDING",
     claimIds: ["LM-PC-031-CL-01", "LM-PC-031-CL-02"],
     userJob: "¿Qué elementos ayudan a describir una relación de trabajo sin asumir una conclusión sobre mi caso?",
     world: "Empresa y comercio",
@@ -85,7 +86,7 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     chapter: null,
     concept: null,
     process: "Organizar hechos y prueba",
-    candidateRoute: "/proceso/organizar-hechos-y-prueba",
+    candidateRoute: null,
     previousLearning: "Describir los hechos: quién trabaja, bajo qué organización y qué está documentado.",
     nextLearning: "Ordenar funciones, lugar, jornada, salario, pagos y vacaciones sin convertir la lista en una conclusión individual.",
     sourceContext: "Ley Federal del Trabajo, arts. 20–21 y 25",
@@ -96,18 +97,18 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     visualAsset: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual_4x5.png",
     altText: "Bodegón cálido sobre una mesa de madera: una caja de herramientas con herramientas y un mazo, un delantal de tela colgado, una etiqueta de cartón con cordón, un recipiente oscuro y cuadernos con un bolígrafo.",
     copyState: "READY_FOR_COPY",
-    visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN",
+    visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED",
     visualAssetState: "EXISTS",
     visualQaState: "PASS",
-    visualGateProvenance: "VALID_HUMAN_PROVENANCE",
+    visualGateProvenance: "UNRESOLVED",
     visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md",
-    visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md",
-    visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED",
+    visualGateDecisionReceipt: null,
+    visualGateAuthorization: "NOT_RECORDED",
     copyChannelQa: "PASS",
     artBaseState: "READY",
     socialCompositionState: "REVIEW_REQUIRED",
-    integrationState: "EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS",
-    integrationQaState: "PASS",
+    integrationState: "SEPARATED_PENDING_BINDING",
+    integrationQaState: "NOT_RUN",
     publicationState: "NOT_PUBLIC",
   },
   {
@@ -132,22 +133,22 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     visualAsset: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual_4x5.png",
     altText: "Bodegón cálido sobre una mesa de madera: tres soportes de madera con piezas de distintas texturas, una carpeta de cartón cerrada, una placa metálica, un recipiente oscuro sobre una base de piedra y una bandeja con cinta.",
     copyState: "READY_FOR_COPY",
-    visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN",
+    visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED",
     visualAssetState: "EXISTS",
     visualQaState: "PASS",
-    visualGateProvenance: "VALID_HUMAN_PROVENANCE",
+    visualGateProvenance: "UNRESOLVED",
     visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md",
-    visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md",
-    visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED",
+    visualGateDecisionReceipt: null,
+    visualGateAuthorization: "NOT_RECORDED",
     copyChannelQa: "PASS",
     artBaseState: "READY",
     socialCompositionState: "REVIEW_REQUIRED",
-    integrationState: "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED",
+    integrationState: "RELATED_ONLY_NO_PUBLIC_INTEGRATION",
     integrationQaState: "NOT_RUN",
     publicationState: "NOT_PUBLIC",
   },
 ];
 
-export function getWave01aForRoute(route: string) {
+export function getWave01aCandidateForRoute(route: string) {
   return wave01aIntegrationUnits.find((unit) => unit.candidateRoute === route) ?? null;
 }

@@ -1,66 +1,14 @@
 import { notFound } from "next/navigation";
 
 import { EditorialCard, LegalStateBadge } from "@/components/legalmente/ProductPrimitives";
+import { getWave01aInternalQaManifest } from "@/lib/knowledge-graph/wave01a-provenance";
 import { productionAssetPack } from "@/lib/visual-system";
 
 export const dynamic = "force-static";
 
-const wave01aReviews = [
-  {
-    contentId: "LM-PC-013",
-    question: "¿Qué tiene que quedar claro sobre lo que las partes se comprometen a hacer o entregar?",
-    candidateRoute: "/proceso/leer-antes-de-aceptar",
-    integrationState: "PRODUCT_REVIEW_REQUIRED",
-    stateReason: "Copy aprobado para producción; la ruta aún requiere decisión de producto.",
-    sourceLabel: "Código Civil Federal",
-    sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
-    sourceVersion: "Texto reformado 2025-11-14 · México piloto",
-    claims: [
-      { article: "Art. 1824", text: "El objeto de los contratos es una categoría diferenciable dentro del Código Civil Federal.", qualifier: "No determina el efecto de una cláusula ni la exigibilidad de un documento concreto." },
-      { article: "Art. 1794", text: "El consentimiento y el objeto aparecen como elementos de existencia del contrato en el Código Civil Federal.", qualifier: "No prueba que un contrato concreto exista, sea válido o sea exigible." },
-    ],
-    vertical: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual.png",
-    feed: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual_4x5.png",
-    alt: "Bodegón cálido sobre una mesa de madera: una caja de cartón con etiqueta en blanco y una regla metálica; a la derecha hay una estructura de varillas y en primer plano una bandeja con cinta y un recipiente oscuro.",
-  },
-  {
-    contentId: "LM-PC-031",
-    question: "¿Qué elementos ayudan a describir una relación de trabajo sin asumir una conclusión sobre mi caso?",
-    candidateRoute: null,
-    integrationState: "SEPARATED_PENDING_BINDING",
-    stateReason: "Copy aprobado para producción; no existe parent laboral seguro en el grafo actual.",
-    sourceLabel: "Ley Federal del Trabajo",
-    sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
-    sourceVersion: "Texto reformado 2026-05-14 · México piloto",
-    claims: [
-      { article: "Arts. 20–21", text: "La Ley Federal del Trabajo define la relación de trabajo con independencia del acto que le dé origen, mediante trabajo personal subordinado y salario.", qualifier: "No decide una controversia individual ni una prestación concreta." },
-      { article: "Art. 25", text: "Las condiciones de trabajo pueden incluir servicio, lugar, jornada, salario, pago y vacaciones en el marco escrito laboral.", qualifier: "No prueba los términos de una relación específica ni calcula derechos." },
-    ],
-    vertical: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual.png",
-    feed: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual_4x5.png",
-    alt: "Bodegón cálido sobre una mesa de madera: una caja de herramientas con herramientas y un mazo; un delantal de tela cuelga al fondo, junto a una etiqueta de cartón con cordón, un recipiente oscuro y cuadernos con un bolígrafo.",
-  },
-  {
-    contentId: "LM-PC-065",
-    question: "¿Qué documentos y datos conviene ordenar para entender una sociedad mercantil?",
-    candidateRoute: null,
-    integrationState: "SEPARATED_PENDING_BINDING",
-    stateReason: "Copy aprobado para producción; no existe parent societario seguro y representación requiere binding propio.",
-    sourceLabel: "Ley General de Sociedades Mercantiles",
-    sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/LGSM.pdf",
-    sourceVersion: "Texto reformado 2023-10-20 · México piloto",
-    claims: [
-      { article: "Art. 1", text: "La Ley General de Sociedades Mercantiles reconoce distintas especies de sociedades mercantiles.", qualifier: "No identifica la entidad de una persona ni valida su constitución." },
-      { article: "Art. 6", text: "La escritura o póliza constitutiva debe contener datos previstos por la Ley General de Sociedades Mercantiles.", qualifier: "No prueba que un documento concreto esté completo o sea válido." },
-    ],
-    vertical: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual.png",
-    feed: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual_4x5.png",
-    alt: "Bodegón cálido sobre una mesa de madera: tres soportes de madera con piezas de distintas texturas, una carpeta de cartón cerrada, una placa metálica, un recipiente oscuro sobre una base de piedra y una bandeja con cinta.",
-  },
-] as const;
-
 export default function InternalProductLabPage() {
   if (process.env.LEGALMENTE_PRODUCT_LAB_INTERNAL !== "1") notFound();
+  const wave01aReviews = getWave01aInternalQaManifest().units;
 
   return (
     <main className="mx-auto max-w-[1180px] space-y-12 px-5 py-10 text-tinta md:px-8">
@@ -126,15 +74,15 @@ export default function InternalProductLabPage() {
       <section id="wave-01a-review" aria-labelledby="wave-01a-title" className="space-y-6">
         <div className="max-w-3xl space-y-3">
           <p className="text-sm uppercase tracking-[0.08em] text-tinta/55">Wave 01A · revisión de integración</p>
-          <h2 id="wave-01a-title" className="font-serif text-3xl">Visuales preparados, claims todavía bajo revisión humana.</h2>
-          <p className="text-base leading-7 text-tinta/70">Esta bandeja interna muestra claims con su fuente, territorio, qualifier y asset real, y distingue copy/visual de integración y publicación. No abre publicación ni convierte una fuente en aprobación. LM-PC-031 y LM-PC-065 permanecen separados hasta cerrar un parent semántico seguro. El territorio de los tres expedientes es México — PILOT_RESEARCH_TERRITORY.</p>
+          <h2 id="wave-01a-title" className="font-serif text-3xl">Copy delimitado; visuales bajo QA interna.</h2>
+          <p className="text-base leading-7 text-tinta/70">Esta bandeja se construye sólo desde el manifiesto P0 validado: claims, fuente, territorio, qualifier y asset real. El receipt Founder registrado abre `READY_FOR_COPY`; visual, integración y publicación permanecen en gates separados. LM-PC-031 y LM-PC-065 siguen sin ruta pública.</p>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
           {wave01aReviews.map((item) => (
-            <article key={item.contentId} data-content-id={item.contentId} data-review-state={item.integrationState} className="overflow-hidden border border-tinta/15 bg-white shadow-sm">
+            <article key={item.contentId} data-content-id={item.contentId} data-review-state={item.gates.integrationState} className="overflow-hidden border border-tinta/15 bg-white shadow-sm">
               <picture>
-                <source media="(min-width: 768px)" srcSet={item.vertical} />
-                <img src={item.feed} alt={item.alt} className="aspect-[4/5] w-full object-cover lg:aspect-[9/16]" loading="lazy" decoding="async" />
+                <source media="(min-width: 768px)" srcSet={item.visualAssets.vertical} />
+                <img src={item.visualAssets.feed} alt={item.altText} className="aspect-[4/5] w-full object-cover lg:aspect-[9/16]" loading="lazy" decoding="async" />
               </picture>
               <div className="space-y-4 p-5">
                 <div className="flex items-start justify-between gap-3">
@@ -142,11 +90,11 @@ export default function InternalProductLabPage() {
                     <p className="text-xs font-semibold uppercase tracking-[0.12em] text-tinta/50">{item.contentId}</p>
                     <h3 className="mt-2 font-serif text-2xl">Unidad visual</h3>
                   </div>
-                  <LegalStateBadge state="reviewRequired" symbol="source" reason={item.stateReason} />
+                  <LegalStateBadge state="reviewRequired" symbol="source" reason={`Visual gate: ${item.gates.visualGateProvenance}. Integración: ${item.gates.integrationState}.`} />
                 </div>
-                <p className="text-sm leading-6 text-tinta/75">{item.question}</p>
+                <p className="text-sm leading-6 text-tinta/75">{item.userJob}</p>
                 <dl className="grid gap-2 border-t border-tinta/10 pt-4 text-xs leading-5 text-tinta/65">
-                  <div className="flex justify-between gap-4"><dt className="font-semibold">Territorio</dt><dd className="text-right">México · piloto</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="font-semibold">Territorio</dt><dd className="text-right">{item.territory}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="font-semibold">Ruta candidata</dt><dd className="text-right">{item.candidateRoute ?? "Sin ruta: binding pendiente"}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="font-semibold">Formatos</dt><dd className="text-right">9:16 · 4:5</dd></div>
                 </dl>
@@ -155,11 +103,11 @@ export default function InternalProductLabPage() {
                     <p className="text-xs font-semibold uppercase tracking-[0.12em] text-tinta/50">Copy educativo interno</p>
                     <a className="text-xs font-semibold underline underline-offset-2" href={item.sourceUrl} target="_blank" rel="noreferrer">Fuente oficial</a>
                   </div>
-                  <p className="text-xs leading-5 text-tinta/60">{item.sourceLabel} · {item.sourceVersion}</p>
+                  <p className="text-xs leading-5 text-tinta/60">Evidencia de copy registrada: {item.claims[0].source.verificationDate}</p>
                   <ul className="space-y-3 text-sm leading-6 text-tinta/80">
                     {item.claims.map((claim) => (
-                      <li key={claim.article} className="border-l-2 border-oro pl-3">
-                        <strong className="mr-2 text-xs uppercase tracking-[0.08em] text-tinta/55">{claim.article}</strong>{claim.text}
+                      <li key={claim.claimId} className="border-l-2 border-oro pl-3">
+                        <strong className="mr-2 text-xs uppercase tracking-[0.08em] text-tinta/55">Art. {claim.source.article}</strong>{claim.statement}
                         <span className="mt-1 block text-xs leading-5 text-tinta/60">Qualifier: {claim.qualifier}</span>
                       </li>
                     ))}

@@ -1,15 +1,17 @@
 import Image from "next/image";
-import type { Wave01aIntegrationUnit } from "@/lib/knowledge-graph/wave01a";
+import type { Wave01aProvenanceManifest } from "@/lib/knowledge-graph/wave01a-provenance";
 
-export function Wave01aIntegrationPreview({ unit }: { unit: Wave01aIntegrationUnit }) {
+type Wave01aInternalQaUnit = Wave01aProvenanceManifest["units"][number];
+
+export function Wave01aIntegrationPreview({ unit }: { unit: Wave01aInternalQaUnit }) {
   return (
     <section
       aria-labelledby={`${unit.contentId}-integration-title`}
       data-content-id={unit.contentId}
-      data-copy-state={unit.copyState}
-      data-visual-state={unit.visualState}
-      data-integration-state={unit.integrationState}
-      data-publication-state={unit.publicationState}
+      data-copy-state={unit.gates.copyState}
+      data-visual-state={unit.gates.visualState}
+      data-integration-state={unit.gates.integrationState}
+      data-publication-state={unit.gates.publicationState}
       className="mt-12 border-y border-[#102A43]/15 bg-white/65 py-8 md:py-10"
     >
       <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
@@ -22,14 +24,14 @@ export function Wave01aIntegrationPreview({ unit }: { unit: Wave01aIntegrationUn
 
         <div className="grid gap-6 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
           <figure>
-            <Image src={unit.visualAsset} alt={unit.altText} width={1664} height={2080} className="aspect-[4/5] w-full object-cover" loading="lazy" unoptimized />
+            <Image src={unit.visualAssets.feed} alt={unit.altText} width={1664} height={2080} className="aspect-[4/5] w-full object-cover" loading="lazy" unoptimized />
             <figcaption className="mt-2 text-xs leading-5 text-[#102A43]/48">Apoyo visual editorial; no representa una conclusión jurídica.</figcaption>
           </figure>
           <div className="space-y-5 text-sm leading-6 text-[#102A43]/68">
             <dl className="grid gap-3 border-y border-[#102A43]/12 py-4">
               <div><dt className="font-semibold text-[#102A43]">Fuente y artículos</dt><dd>{unit.sourceContext}</dd></div>
               <div><dt className="font-semibold text-[#102A43]">Territorio</dt><dd>{unit.territory}</dd></div>
-              <div><dt className="font-semibold text-[#102A43]">Claims vinculados</dt><dd>{unit.claimIds.join(" · ")}</dd></div>
+              <div><dt className="font-semibold text-[#102A43]">Claims vinculados</dt><dd>{unit.claims.map((claim) => claim.claimId).join(" · ")}</dd></div>
             </dl>
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#102A43]/50">Continuidad</p>
