@@ -79,7 +79,7 @@ for row in matrix:
     assert '/capitulo/deber-profesional' not in row['CANDIDATE_PUBLIC_ROUTE']
     assert '/concepto/representacion' not in row['CANDIDATE_PUBLIC_ROUTE']
     if cid == 'LM-PC-013':
-        assert row['CURRENT_INTEGRATION_STATE'] == 'PRODUCT_REVIEW_REQUIRED', cid
+        assert row['CURRENT_INTEGRATION_STATE'] == 'PUBLIC_INTEGRATION_APPROVED', cid
         assert row['CANDIDATE_PUBLIC_ROUTE'] == '/proceso/leer-antes-de-aceptar', cid
     else:
         assert row['CURRENT_INTEGRATION_STATE'] == 'SEPARATED_PENDING_BINDING', cid

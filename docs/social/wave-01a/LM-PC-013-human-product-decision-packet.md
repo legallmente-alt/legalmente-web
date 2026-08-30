@@ -2,7 +2,7 @@
 
 **Unidad:** LM-PC-013  
 **Estado actual:** `COPY_STATE=READY_FOR_COPY` · `VISUAL_ASSET_STATE=EXISTS` · `VISUAL_QA_STATE=PASS` · `VISUAL_GATE_PROVENANCE=UNRESOLVED` · `PUBLICATION_STATE=NOT_PUBLIC`  
-**Integración actual:** `PRODUCT_REVIEW_REQUIRED`  
+**Integración actual:** `PUBLIC_INTEGRATION_APPROVED`
 **Territorio:** México  
 **Fuente:** Código Civil Federal, arts. 1794 y 1824  
 **Qualifiers:** No determina la validez, nulidad, exigibilidad ni efecto de una cláusula o documento concreto; no sustituye revisión individual.  
@@ -22,11 +22,11 @@
 
 ## HUMAN DECISION
 
-**Decisión:** ☐ `APPROVE_INTEGRATION` · ☐ `RETURN` · ☐ `KEEP_INTERNAL`  
+**Decisión:** ☑ `APPROVE_INTEGRATION` · ☐ `RETURN` · ☐ `KEEP_INTERNAL`
 
-**Responsable humano:** ______________________________  
-**Fecha y hora:** ______________________________  
-**Comentario o condición:**
+**Responsable humano:** Usuario solicitante
+**Fecha y hora:** 2026-08-29
+**Comentario o condición:** Integración educativa únicamente en `/proceso/leer-antes-de-aceptar`, manteniendo México, CCF arts. 1794/1824, qualifiers existentes, `NO_PII`, `NO_ADVICE` y `NOT_PUBLIC`. No autoriza publicación social, Pinterest bulk upload, deploy, merge, analítica ni resolución del visual gate.
 
 __________________________________________________________________
 

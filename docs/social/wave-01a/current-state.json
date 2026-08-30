@@ -1,8 +1,10 @@
 {
   "LM-PC-013": {
     "source_binding_original_state": "HUMAN_REVIEW_REQUIRED (historical; not rewritten)",
-    "human_decision_id": "FOUNDER_DECISION_WAVE_01A_READY_FOR_COPY_2026-08-29",
+    "human_decision_id": "HUMAN_DECISION_LM-PC-013_APPROVE_INTEGRATION_2026-08-29",
     "human_decision_date": "2026-08-29",
+    "human_decision_receipt": "LM-PC-013-human-decision-receipt-2026-08-29.md",
+    "human_decision": "APPROVE_INTEGRATION",
     "current_copy_state": "READY_FOR_COPY",
     "current_visual_state": "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED",
     "visual_asset_state": "EXISTS",
@@ -14,11 +16,11 @@
     "art_base_state": "READY",
     "social_composition_state": "REVIEW_REQUIRED",
     "media_url_state": "TEMPORARY_VALIDATION_URL",
-    "current_integration_state": "PRODUCT_REVIEW_REQUIRED",
+    "current_integration_state": "PUBLIC_INTEGRATION_APPROVED",
     "current_publication_state": "NOT_PUBLIC",
     "supersedes": "Historical source-binding addendum remains preserved",
     "superseded_by": "Current operational state layer in this package",
-    "next_gate": "Human product decision per unit; integration QA; publication decision"
+    "next_gate": "Integration QA for the educational route; separate publication decision"
   },
   "LM-PC-031": {
     "source_binding_original_state": "HUMAN_REVIEW_REQUIRED (historical; not rewritten)",
