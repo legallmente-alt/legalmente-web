@@ -1,6 +1,6 @@
 # Pinterest — Preparación masiva Wave 01A
 
-**Estado:** assets `READY_FOR_BULK_UPLOAD`; CSV con esquema oficial y media URL pública directa; `BULK_UPLOAD_AUTHORIZED = NO`; publicación: `NOT_PUBLIC`. Las filas de LM-PC-031 y LM-PC-065 no tienen `Link` porque permanecen `SEPARATED_PENDING_BINDING`.
+**Estado:** `ART_BASE_STATE=READY` / `SOCIAL_COMPOSITION_STATE=REVIEW_REQUIRED` / `MEDIA_URL_STATE=TEMPORARY_VALIDATION_URL`; CSV con esquema oficial; `READY_FOR_BULK_UPLOAD = NO`; `BULK_UPLOAD_AUTHORIZED = NO`; publicación: `NOT_PUBLIC`. La composición final aún no existe. Las filas de LM-PC-031 y LM-PC-065 no tienen `Link` porque permanecen `SEPARATED_PENDING_BINDING`.
 
 Se prepara un Pin base 2:3 por unidad, vinculado a un asset real mediante una URL pública directa. El CSV usa la plantilla de Pinterest (`Title`, `Media URL`, `Pinterest board`, `Thumbnail`, `Description`, `Link`, `Publish date`, `Keywords`). No se simula publicación ni se asigna una ruta candidata inexistente. Los derivados 9:16 se reservan para Instagram.
 

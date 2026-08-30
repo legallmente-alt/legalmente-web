@@ -43,3 +43,15 @@ test("all Wave 01A alt text strings describe the real scenes instead of invented
     assert.doesNotMatch(unit.altText, /hojas transparentes|Tablero editorial|Tres objetos de archivo conectados/);
   }
 });
+
+test("visual existence and QA remain separate from unresolved gate provenance", () => {
+  for (const unit of wave01aIntegrationUnits) {
+    assert.equal(unit.visualAssetState, "EXISTS");
+    assert.equal(unit.visualQaState, "PASS");
+    assert.equal(unit.visualGateProvenance, "UNRESOLVED");
+    assert.equal(unit.visualState, "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED");
+    assert.equal(unit.copyChannelQa, "PASS");
+    assert.equal(unit.artBaseState, "READY");
+    assert.equal(unit.socialCompositionState, "REVIEW_REQUIRED");
+  }
+});

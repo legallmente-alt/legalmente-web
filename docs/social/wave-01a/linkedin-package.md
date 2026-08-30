@@ -1,6 +1,6 @@
 # LinkedIn — LegalMente + Founder
 
-**Estado:** `CHANNEL_ADAPTED` / `QA_CHANNEL_PASS` / `READY_FOR_PUBLICATION_DECISION`; no publicado.
+**Estado:** `CHANNEL_ADAPTED` / `COPY_CHANNEL_QA=PASS` / `ART_BASE_STATE=READY` / `SOCIAL_COMPOSITION_STATE=REVIEW_REQUIRED` / `PUBLICATION_STATE=NOT_PUBLIC`. La composición final aún no existe; no publicado.
 
 ## Cuenta institucional: LinkedIn LegalMente
 
@@ -47,43 +47,43 @@ La cola Founder no copia el canal institucional. Su función es criterio profesi
 
 **FOUNDER_POST_ID:** `FOUNDER-LM-PC-013-01`
 **RELATED_CONTENT_ID:** `LM-PC-013`
-**ANGLE:** Separar descripción, clasificación y decisión antes de operar.
-**CORPORATE_PROBLEM:** La empresa puede confundir una categoría general o un documento con una conclusión sobre una relación, entidad o contrato concreto.
-**DECISION_CONTEXT:** Preparar una revisión ordenada con hechos, fuente, territorio, documento y evidencia pertinente.
+**ANGLE:** Un contrato se vuelve operable cuando el objeto deja de ser una palabra abstracta y se convierte en un alcance que alguien puede revisar.
+**CORPORATE_PROBLEM:** Operar con un objeto contractual ambiguo puede hacer que equipos distintos entiendan entregables, conductas u obligaciones diferentes.
+**DECISION_CONTEXT:** Antes de discutir consecuencias, fijar qué se hará, qué se entregará y qué conducta se espera; después contrastar esa descripción con el documento y sus hechos.
 **LEGAL_CONCEPT:** Consentimiento; fuente: Código Civil Federal, arts. 1794 y 1824.
-**BUSINESS_RISK:** Decidir con una etiqueta incompleta puede ocultar diferencias entre documento, operación, relación, entidad y hechos.
-**WHAT_TO_REVIEW:** Nombrar qué se está aceptando antes de preguntar por sus efectos. Separar objeto, obligaciones y consecuencias al revisar el documento concreto.
+**BUSINESS_RISK:** Si el alcance operativo queda abierto, la ejecución puede desviarse aunque las partes crean estar hablando del mismo acuerdo.
+**WHAT_TO_REVIEW:** Escribir la unidad de objeto, el entregable o la conducta esperada y luego separar obligaciones y consecuencias; no tratar la etiqueta del documento como respuesta suficiente.
 **LIMIT:** No determina la validez, nulidad, exigibilidad ni efecto de un contrato concreto. Información educativa, no asesoría individual.
 **SOURCE:** Código Civil Federal, arts. 1794 y 1824 — https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf
-**CTA / QUESTION:** ¿Qué capa conviene separar primero en esta revisión: hechos, documento, clasificación o relación?
+**CTA / QUESTION:** ¿El equipo puede describir el mismo objeto y el mismo alcance operacional antes de discutir consecuencias?
 **VISUAL_4X5:** `assets/LM-PC-013_feed_4x5.png`
 
 ### FOUNDER-LM-PC-031
 
 **FOUNDER_POST_ID:** `FOUNDER-LM-PC-031-01`
 **RELATED_CONTENT_ID:** `LM-PC-031`
-**ANGLE:** Separar descripción, clasificación y decisión antes de operar.
-**CORPORATE_PROBLEM:** La empresa puede confundir una categoría general o un documento con una conclusión sobre una relación, entidad o contrato concreto.
-**DECISION_CONTEXT:** Preparar una revisión ordenada con hechos, fuente, territorio, documento y evidencia pertinente.
+**ANGLE:** Describir la organización laboral antes de clasificarla: los hechos y los documentos deben ir delante de la etiqueta.
+**CORPORATE_PROBLEM:** Clasificar demasiado pronto puede borrar diferencias entre funciones reales, subordinación, pagos, lugar de trabajo y lo que efectivamente está documentado.
+**DECISION_CONTEXT:** Ordenar quién trabaja, bajo qué organización, qué ocurre en la práctica y qué documentos existen; solo después formular la pregunta de clasificación que corresponda.
 **LEGAL_CONCEPT:** Relación de trabajo; fuente: Ley Federal del Trabajo, arts. 20–21 y 25.
-**BUSINESS_RISK:** Decidir con una etiqueta incompleta puede ocultar diferencias entre documento, operación, relación, entidad y hechos.
-**WHAT_TO_REVIEW:** Describir los hechos: quién trabaja, bajo qué organización y qué está documentado. Ordenar funciones, lugar, jornada, salario, pagos y vacaciones sin convertir la lista en una conclusión individual. El parent laboral específico queda pendiente de binding.
+**BUSINESS_RISK:** Una etiqueta laboral aplicada antes de describir los hechos puede orientar mal la documentación y la conversación de riesgo de la empresa.
+**WHAT_TO_REVIEW:** Comparar funciones, organización, lugar, jornada, salario, pagos y vacaciones con los documentos disponibles, manteniendo separadas descripción y clasificación. El parent laboral específico queda pendiente de binding.
 **LIMIT:** No etiqueta una relación concreta ni calcula derechos o prestaciones. Información educativa, no asesoría individual.
 **SOURCE:** Ley Federal del Trabajo, arts. 20–21 y 25 — https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf
-**CTA / QUESTION:** ¿Qué capa conviene separar primero en esta revisión: hechos, documento, clasificación o relación?
+**CTA / QUESTION:** ¿Qué hecho o documento falta describir antes de intentar clasificar la relación?
 **VISUAL_4X5:** `assets/LM-PC-031_feed_4x5.png`
 
 ### FOUNDER-LM-PC-065
 
 **FOUNDER_POST_ID:** `FOUNDER-LM-PC-065-01`
 **RELATED_CONTENT_ID:** `LM-PC-065`
-**ANGLE:** Separar descripción, clasificación y decisión antes de operar.
-**CORPORATE_PROBLEM:** La empresa puede confundir una categoría general o un documento con una conclusión sobre una relación, entidad o contrato concreto.
-**DECISION_CONTEXT:** Preparar una revisión ordenada con hechos, fuente, territorio, documento y evidencia pertinente.
+**ANGLE:** La información corporativa gana calidad cuando la especie de sociedad y su instrumento constitutivo se leen como capas distintas.
+**CORPORATE_PROBLEM:** Tratar cualquier documento corporativo como equivalente puede ocultar qué sociedad se estudia, qué instrumento existe y qué datos todavía deben comprobarse.
+**DECISION_CONTEXT:** Separar la categoría societaria, la escritura o póliza constitutiva y la calidad de los datos corporativos antes de formular preguntas relacionadas de representación.
 **LEGAL_CONCEPT:** Especies y escritura o póliza constitutiva; fuente: Ley General de Sociedades Mercantiles, arts. 1 y 6.
-**BUSINESS_RISK:** Decidir con una etiqueta incompleta puede ocultar diferencias entre documento, operación, relación, entidad y hechos.
-**WHAT_TO_REVIEW:** Identificar la categoría de sociedad antes de leer un documento como si fuera intercambiable con otro. Separar escritura o póliza constitutiva y datos corporativos; la representación queda como pregunta relacionada y requiere un binding propio.
+**BUSINESS_RISK:** Una base corporativa de baja calidad puede llevar a revisar el instrumento equivocado o a atribuir a una entidad datos que aún no fueron verificados.
+**WHAT_TO_REVIEW:** Identificar la especie de sociedad, separar escritura o póliza constitutiva de los demás datos corporativos y registrar qué información falta; la representación queda como pregunta relacionada y requiere un binding propio.
 **LIMIT:** No identifica ni valida una entidad concreta ni confirma que un documento esté completo o vigente. Información educativa, no asesoría individual.
 **SOURCE:** Ley General de Sociedades Mercantiles, arts. 1 y 6 — https://www.diputados.gob.mx/LeyesBiblio/pdf/LGSM.pdf
-**CTA / QUESTION:** ¿Qué capa conviene separar primero en esta revisión: hechos, documento, clasificación o relación?
+**CTA / QUESTION:** ¿La información corporativa permite distinguir la sociedad, el instrumento constitutivo y lo que aún debe comprobarse?
 **VISUAL_4X5:** `assets/LM-PC-065_feed_4x5.png`

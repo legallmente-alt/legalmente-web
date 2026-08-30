@@ -64,7 +64,14 @@ assert {row['CONTENT_ID'] for row in matrix} == EXPECTED, 'matrix_content_ids'
 for row in matrix:
     cid = row['CONTENT_ID']
     assert row['CURRENT_COPY_STATE'] == 'READY_FOR_COPY', cid
-    assert row['CURRENT_VISUAL_STATE'] == 'READY_FOR_VISUAL', cid
+    assert row['CURRENT_VISUAL_STATE'] == 'VISUAL_QA_PASS_PROVENANCE_UNRESOLVED', cid
+    assert row['VISUAL_ASSET_STATE'] == 'EXISTS', cid
+    assert row['VISUAL_QA_STATE'] == 'PASS', cid
+    assert row['VISUAL_GATE_PROVENANCE'] == 'UNRESOLVED', cid
+    assert row['COPY_CHANNEL_QA'] == 'PASS', cid
+    assert row['ART_BASE_STATE'] == 'READY', cid
+    assert row['SOCIAL_COMPOSITION_STATE'] == 'REVIEW_REQUIRED', cid
+    assert row['MEDIA_URL_STATE'] == 'TEMPORARY_VALIDATION_URL', cid
     assert row['CURRENT_PUBLICATION_STATE'] == 'NOT_PUBLIC', cid
     assert row['CLAIM_IDS'] and row['SOURCE_CONTEXT'] and row['TERRITORY_CONTEXT'] and row['QUALIFIER'], cid
     assert row['ALT_TEXT'].strip(), f'empty_alt:{cid}'
