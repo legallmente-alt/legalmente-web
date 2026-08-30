@@ -21,7 +21,7 @@ Guarda la pregunta: ¿ambas partes están describiendo el mismo objeto?
 Información educativa; no asesoría individual.
 **SOURCE_NOTE:** Fuente: Código Civil Federal, arts. 1794 y 1824. No determina la validez, nulidad, exigibilidad ni efecto de un contrato concreto.
 **CTA:** Guárdalo para la próxima revisión.
-**ALT_TEXT:** Dos hojas transparentes superpuestas sobre una mesa de trabajo; un centro común representa el objeto y alrededor aparecen referencias visuales a entrega, conducta y alcance.
+**ALT_TEXT:** Bodegón cálido sobre una mesa de madera: una caja de cartón con etiqueta en blanco y una regla metálica; a la derecha hay una estructura de varillas y en primer plano una bandeja con cinta y un recipiente oscuro.
 **HASHTAGS_LIMITED:** #LegalMente #CulturaJuridica #AntesDeFirmar
 **4X5_VISUAL:** `assets/LM-PC-013_feed_4x5.png`
 **9X16_VISUAL:** `assets/LM-PC-013_vertical_9x16.png`
@@ -45,7 +45,7 @@ Primero describe; después identifica qué necesita aclaración.
 Información educativa; no asesoría individual.
 **SOURCE_NOTE:** Fuente: Ley Federal del Trabajo, arts. 20–21 y 25. No etiqueta una relación concreta ni calcula derechos o prestaciones.
 **CTA:** Guárdalo como mapa de preguntas.
-**ALT_TEXT:** Tablero editorial con tres franjas conectadas: hechos, documentos y preguntas; una línea atraviesa las palabras personal, subordinación y salario, con una tarjeta lateral de condiciones de trabajo.
+**ALT_TEXT:** Bodegón cálido sobre una mesa de madera: una caja de herramientas con herramientas y un mazo; un delantal de tela cuelga al fondo, junto a una etiqueta de cartón con cordón, un recipiente oscuro y cuadernos con un bolígrafo.
 **HASHTAGS_LIMITED:** #LegalMente #Trabajo #CulturaJuridica
 **4X5_VISUAL:** `assets/LM-PC-031_feed_4x5.png`
 **9X16_VISUAL:** `assets/LM-PC-031_vertical_9x16.png`
@@ -62,14 +62,14 @@ Información educativa; no asesoría individual.
 **HOOK:** Una sociedad no se entiende con un solo documento leído fuera de contexto.
 **INSTAGRAM_FEED_COPY:** La Ley General de Sociedades Mercantiles reconoce distintas especies de sociedades mercantiles y prevé datos para la escritura o póliza constitutiva.
 
-Eso permite ordenar una revisión en capas: primero la categoría; después el instrumento y sus datos; por separado, las facultades de representación. La explicación no identifica ni valida una entidad concreta, ni confirma que un documento esté completo o vigente.
+Eso permite ordenar una revisión en capas: primero la categoría; después el instrumento y sus datos. La cuestión de representación queda separada y requiere su propio binding; estos claims no la soportan. La explicación no identifica ni valida una entidad concreta, ni confirma que un documento esté completo o vigente.
 
 Separar preguntas también es una forma de revisar mejor.
 
 Información educativa; no asesoría individual.
 **SOURCE_NOTE:** Fuente: Ley General de Sociedades Mercantiles, arts. 1 y 6. No identifica ni valida una entidad concreta ni confirma que un documento esté completo o vigente.
 **CTA:** Guárdalo para ordenar una revisión corporativa.
-**ALT_TEXT:** Tres objetos de archivo conectados sin fusionarse: una tarjeta de especie societaria, un documento constitutivo y una tarjeta de representación, cada uno con una línea de revisión independiente.
+**ALT_TEXT:** Bodegón cálido sobre una mesa de madera: tres soportes de madera con piezas de distintas texturas, una carpeta de cartón cerrada, una placa metálica, un recipiente oscuro sobre una base de piedra y una bandeja con cinta.
 **HASHTAGS_LIMITED:** #LegalMente #Empresa #CulturaJuridica
 **4X5_VISUAL:** `assets/LM-PC-065_feed_4x5.png`
 **9X16_VISUAL:** `assets/LM-PC-065_vertical_9x16.png`

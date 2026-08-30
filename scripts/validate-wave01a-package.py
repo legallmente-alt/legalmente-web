@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import struct
 from pathlib import Path
+from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1] / 'docs/social/wave-01a'
 ASSETS = ROOT / 'assets'
@@ -27,31 +28,56 @@ def read_csv(path: Path):
         return list(csv.DictReader(fh))
 
 
+def assert_public_media(url: str) -> None:
+    request = Request(url, headers={'User-Agent': 'LegalMente-Wave01A-validator/1.0'})
+    with urlopen(request, timeout=15) as response:
+        content_type = response.headers.get('content-type', '')
+        assert response.status == 200, f'media_status:{url}:{response.status}'
+        assert content_type.startswith('image/'), f'media_content_type:{url}:{content_type}'
+        assert response.read(8) == b'\x89PNG\r\n\x1a\n', f'media_not_png:{url}'
+
+
 pins = read_csv(ROOT / 'pinterest_bulk_upload.csv')
+pinterest_fields = {'Title', 'Media URL', 'Pinterest board', 'Thumbnail', 'Description', 'Link', 'Publish date', 'Keywords'}
 assert len(pins) == 3, f'pin_count:{len(pins)}'
-required = {'PIN_ID','PARENT_CONTENT_ID','TITLE','DESCRIPTION','ALT_TEXT','DESTINATION_URL','BOARD','SOURCE_CONTEXT','TERRITORY','ASSET_PATH','FORMAT','PUBLICATION_STATE'}
-assert required.issubset(pins[0]), 'missing_pin_columns'
-assert {row['PARENT_CONTENT_ID'] for row in pins} == EXPECTED, 'pin_parent_ids'
-assert len({row['PIN_ID'] for row in pins}) == len(pins), 'duplicate_pin_id'
-assert len({row['DESTINATION_URL'] for row in pins}) == len(pins), 'duplicate_destination'
-assert len({row['ASSET_PATH'] for row in pins}) == len(pins), 'duplicate_asset'
+assert set(pins[0]) == pinterest_fields, f'unexpected_pin_columns:{set(pins[0])}'
+assert len({row['Media URL'] for row in pins}) == len(pins), 'duplicate_media_url'
+
 for row in pins:
-    assert all(row[field].strip() for field in required), f'empty_field:{row["PIN_ID"]}'
-    assert row['PUBLICATION_STATE'] == 'READY_FOR_BULK_UPLOAD', f'bad_publication_state:{row["PIN_ID"]}'
-    assert row['FORMAT'] == '1000x1500 2:3', f'bad_format:{row["PIN_ID"]}'
-    assert 'HOLD_SOURCE' not in row.values(), f'hold_source:{row["PIN_ID"]}'
-    asset = ROOT / row['ASSET_PATH']
+    assert row['Title'].strip() and len(row['Title']) <= 100, f'bad_title:{row["Title"]}'
+    assert row['Media URL'].startswith(('https://', 'http://')), f'bad_media_url:{row["Title"]}'
+    assert row['Pinterest board'].strip(), f'empty_board:{row["Title"]}'
+    assert not row['Thumbnail'].strip(), f'image_thumbnail_must_be_empty:{row["Title"]}'
+    assert row['Description'].strip() and len(row['Description']) <= 500, f'bad_description:{row["Title"]}'
+    assert not row['Link'].strip() or row['Link'].startswith(('https://', 'http://')), f'bad_link:{row["Title"]}'
+    assert not row['Publish date'].strip(), f'unexpected_publish_date:{row["Title"]}'
+    assert row['Keywords'].strip(), f'empty_keywords:{row["Title"]}'
+    assert 'HOLD_SOURCE' not in row.values(), f'hold_source:{row["Title"]}'
+    asset_name = row['Media URL'].rsplit('/', 1)[-1]
+    asset = ASSETS / asset_name
     assert asset.exists(), f'missing_asset:{asset}'
     assert png_size(asset) == (1000, 1500), f'bad_asset_size:{asset}'
+    assert_public_media(row['Media URL'])
 
 matrix = read_csv(ROOT / 'cross-channel-matrix.csv')
 assert {row['CONTENT_ID'] for row in matrix} == EXPECTED, 'matrix_content_ids'
 for row in matrix:
-    assert row['CURRENT_COPY_STATE'] == 'READY_FOR_COPY', row['CONTENT_ID']
-    assert row['CURRENT_VISUAL_STATE'] == 'READY_FOR_VISUAL', row['CONTENT_ID']
-    assert row['CURRENT_INTEGRATION_STATE'] == 'PRODUCT_REVIEW_REQUIRED', row['CONTENT_ID']
-    assert row['CURRENT_PUBLICATION_STATE'] == 'NOT_PUBLIC', row['CONTENT_ID']
-    assert row['CLAIM_IDS'] and row['SOURCE_CONTEXT'] and row['TERRITORY_CONTEXT'] and row['QUALIFIER'], row['CONTENT_ID']
+    cid = row['CONTENT_ID']
+    assert row['CURRENT_COPY_STATE'] == 'READY_FOR_COPY', cid
+    assert row['CURRENT_VISUAL_STATE'] == 'READY_FOR_VISUAL', cid
+    assert row['CURRENT_PUBLICATION_STATE'] == 'NOT_PUBLIC', cid
+    assert row['CLAIM_IDS'] and row['SOURCE_CONTEXT'] and row['TERRITORY_CONTEXT'] and row['QUALIFIER'], cid
+    assert row['ALT_TEXT'].strip(), f'empty_alt:{cid}'
+    assert not any(bad in row['ALT_TEXT'] for bad in ('hojas transparentes', 'Tablero editorial', 'Tres objetos de archivo conectados')), f'non_literal_alt:{cid}'
+    assert '/capitulo/deber-profesional' not in row['CANDIDATE_PUBLIC_ROUTE']
+    assert '/concepto/representacion' not in row['CANDIDATE_PUBLIC_ROUTE']
+    if cid == 'LM-PC-013':
+        assert row['CURRENT_INTEGRATION_STATE'] == 'PRODUCT_REVIEW_REQUIRED', cid
+        assert row['CANDIDATE_PUBLIC_ROUTE'] == '/proceso/leer-antes-de-aceptar', cid
+    else:
+        assert row['CURRENT_INTEGRATION_STATE'] == 'SEPARATED_PENDING_BINDING', cid
+        assert not row['CANDIDATE_PUBLIC_ROUTE'], cid
+        assert not row['EXISTING_SERIES'] and not row['EXISTING_CHAPTER'] and not row['EXISTING_CONCEPT'], cid
 
 for cid in sorted(EXPECTED):
     for suffix, size in [('feed_4x5', (1664, 2080)), ('vertical_9x16', (1440, 2560)), ('pinterest_2x3', (1000, 1500))]:
@@ -62,5 +88,7 @@ for cid in sorted(EXPECTED):
 print('wave01a_package_validation=PASS')
 print(f'pin_rows={len(pins)}')
 print(f'matrix_rows={len(matrix)}')
+print('official_pinterest_schema=PASS')
+print('public_media_urls=PASS')
 print('asset_dimensions=PASS')
 print('publication_authorized=NO')

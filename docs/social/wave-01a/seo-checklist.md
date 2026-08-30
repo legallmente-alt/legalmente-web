@@ -1,17 +1,17 @@
 # SEO / Discovery — Wave 01A
 
-**Estado actual:** no se modifica el sitemap ni se crea una taxonomía nueva. Las tres unidades permanecen en `PRODUCT_REVIEW_REQUIRED` y `NOT_PUBLIC`; por tanto, este sprint no añade URLs nuevas al sitemap público.
+**Estado actual:** no se modifica el sitemap ni se crea una taxonomía nueva. `LM-PC-013` conserva una ruta candidata con `PRODUCT_REVIEW_REQUIRED`; `LM-PC-031` y `LM-PC-065` permanecen `SEPARATED_PENDING_BINDING` y `NOT_PUBLIC`. Este sprint no añade URLs nuevas al sitemap público.
 
 | Control | Estado actual | Condición para avanzar |
 |---|---|---|
-| Sitemap existente | `PASS / SIN CAMBIO` | Las rutas candidatas ya pertenecen a familias existentes. |
+| Sitemap existente | `PASS / SIN CAMBIO` | No se agregan URLs nuevas; la única ruta candidata es existente. |
 | Robots | `PASS / SIN CAMBIO` | No se abre ninguna superficie interna. |
-| Canonical | `DEFERRED` | Verificar por ruta solo después de aprobar integración pública. |
+| Canonical | `DEFERRED` | Verificar la ruta de LM-PC-013 solo después de aprobar integración pública. |
 | Open Graph / social preview | `DEFERRED` | Crear metadata por ruta solamente con aprobación de producto. |
 | Structured data | `DEFERRED` | No añadir schema si no existe una correspondencia editorial clara. |
-| 404 | `PASS` | Las tres URLs candidatas responden 200 en el dominio educativo verificado. |
+| 404 | `DEFERRED` | No hay rutas candidatas para LM-PC-031/065; la ruta de LM-PC-013 se valida en QA de integración. |
 | Internal leakage | `PASS` | El build público elimina rutas, assets y chunks internos. |
 
 ## Regla de publicación
 
-No indexar, enlazar desde campañas ni publicar una unidad Wave 01A hasta que exista `PUBLIC_INTEGRATION_APPROVED`, se ejecute QA de integración y se tome una decisión separada de publicación. La preparación social utiliza el dominio educativo canónico verificado, pero el CSV no autoriza carga ni publicación.
+No indexar, enlazar desde campañas ni publicar una unidad Wave 01A hasta que exista `PUBLIC_INTEGRATION_APPROVED`, se ejecute QA de integración y se tome una decisión separada de publicación. `LM-PC-031` y `LM-PC-065` no deben recibir URL, breadcrumbs ni enlaces públicos mientras estén `SEPARATED_PENDING_BINDING`. La preparación social utiliza URLs públicas directas solo para media de Pinterest; el CSV no autoriza carga ni publicación.

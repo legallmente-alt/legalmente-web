@@ -10,6 +10,8 @@ const wave01aReviews = [
     contentId: "LM-PC-013",
     question: "¿Qué tiene que quedar claro sobre lo que las partes se comprometen a hacer o entregar?",
     candidateRoute: "/proceso/leer-antes-de-aceptar",
+    integrationState: "PRODUCT_REVIEW_REQUIRED",
+    stateReason: "Copy aprobado para producción; la ruta aún requiere decisión de producto.",
     sourceLabel: "Código Civil Federal",
     sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
     sourceVersion: "Texto reformado 2025-11-14 · México piloto",
@@ -19,12 +21,14 @@ const wave01aReviews = [
     ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual_4x5.png",
-    alt: "Bodegón editorial con caja, regla y papel para LM-PC-013; no incorpora texto jurídico.",
+    alt: "Bodegón cálido sobre una mesa de madera: una caja de cartón con etiqueta en blanco y una regla metálica; a la derecha hay una estructura de varillas y en primer plano una bandeja con cinta y un recipiente oscuro.",
   },
   {
     contentId: "LM-PC-031",
     question: "¿Qué elementos ayudan a describir una relación de trabajo sin asumir una conclusión sobre mi caso?",
-    candidateRoute: "/mundo/empresa-comercio",
+    candidateRoute: null,
+    integrationState: "SEPARATED_PENDING_BINDING",
+    stateReason: "Copy aprobado para producción; no existe parent laboral seguro en el grafo actual.",
     sourceLabel: "Ley Federal del Trabajo",
     sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
     sourceVersion: "Texto reformado 2026-05-14 · México piloto",
@@ -34,12 +38,14 @@ const wave01aReviews = [
     ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual_4x5.png",
-    alt: "Bodegón editorial con herramientas, delantal y etiqueta en blanco para LM-PC-031; no incorpora texto jurídico.",
+    alt: "Bodegón cálido sobre una mesa de madera: una caja de herramientas con herramientas y un mazo; un delantal de tela cuelga al fondo, junto a una etiqueta de cartón con cordón, un recipiente oscuro y cuadernos con un bolígrafo.",
   },
   {
     contentId: "LM-PC-065",
     question: "¿Qué documentos y datos conviene ordenar para entender una sociedad mercantil?",
-    candidateRoute: "/mundo/empresa-comercio",
+    candidateRoute: null,
+    integrationState: "SEPARATED_PENDING_BINDING",
+    stateReason: "Copy aprobado para producción; no existe parent societario seguro y representación requiere binding propio.",
     sourceLabel: "Ley General de Sociedades Mercantiles",
     sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/LGSM.pdf",
     sourceVersion: "Texto reformado 2023-10-20 · México piloto",
@@ -49,7 +55,7 @@ const wave01aReviews = [
     ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual_4x5.png",
-    alt: "Bodegón editorial con muestras, carpeta y placa en blanco para LM-PC-065; no incorpora texto jurídico.",
+    alt: "Bodegón cálido sobre una mesa de madera: tres soportes de madera con piezas de distintas texturas, una carpeta de cartón cerrada, una placa metálica, un recipiente oscuro sobre una base de piedra y una bandeja con cinta.",
   },
 ] as const;
 
@@ -121,11 +127,11 @@ export default function InternalProductLabPage() {
         <div className="max-w-3xl space-y-3">
           <p className="text-sm uppercase tracking-[0.08em] text-tinta/55">Wave 01A · revisión de integración</p>
           <h2 id="wave-01a-title" className="font-serif text-3xl">Visuales preparados, claims todavía bajo revisión humana.</h2>
-          <p className="text-base leading-7 text-tinta/70">Esta bandeja interna comprueba la presencia binaria y la relación candidata con rutas existentes. No muestra el claim jurídico, no abre publicación y no convierte una fuente en aprobación. El territorio de los tres expedientes es México — PILOT_RESEARCH_TERRITORY.</p>
+          <p className="text-base leading-7 text-tinta/70">Esta bandeja interna muestra claims con su fuente, territorio, qualifier y asset real, y distingue copy/visual de integración y publicación. No abre publicación ni convierte una fuente en aprobación. LM-PC-031 y LM-PC-065 permanecen separados hasta cerrar un parent semántico seguro. El territorio de los tres expedientes es México — PILOT_RESEARCH_TERRITORY.</p>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
           {wave01aReviews.map((item) => (
-            <article key={item.contentId} data-content-id={item.contentId} data-review-state="HUMAN_REVIEW_REQUIRED" className="overflow-hidden border border-tinta/15 bg-white shadow-sm">
+            <article key={item.contentId} data-content-id={item.contentId} data-review-state={item.integrationState} className="overflow-hidden border border-tinta/15 bg-white shadow-sm">
               <picture>
                 <source media="(min-width: 768px)" srcSet={item.vertical} />
                 <img src={item.feed} alt={item.alt} className="aspect-[4/5] w-full object-cover lg:aspect-[9/16]" loading="lazy" decoding="async" />
@@ -136,12 +142,12 @@ export default function InternalProductLabPage() {
                     <p className="text-xs font-semibold uppercase tracking-[0.12em] text-tinta/50">{item.contentId}</p>
                     <h3 className="mt-2 font-serif text-2xl">Unidad visual</h3>
                   </div>
-                  <LegalStateBadge state="reviewRequired" symbol="source" reason="Claim y binding pendientes." />
+                  <LegalStateBadge state="reviewRequired" symbol="source" reason={item.stateReason} />
                 </div>
                 <p className="text-sm leading-6 text-tinta/75">{item.question}</p>
                 <dl className="grid gap-2 border-t border-tinta/10 pt-4 text-xs leading-5 text-tinta/65">
                   <div className="flex justify-between gap-4"><dt className="font-semibold">Territorio</dt><dd className="text-right">México · piloto</dd></div>
-                  <div className="flex justify-between gap-4"><dt className="font-semibold">Ruta candidata</dt><dd className="text-right">{item.candidateRoute}</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="font-semibold">Ruta candidata</dt><dd className="text-right">{item.candidateRoute ?? "Sin ruta: binding pendiente"}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="font-semibold">Formatos</dt><dd className="text-right">9:16 · 4:5</dd></div>
                 </dl>
                 <div className="space-y-3 border-t border-tinta/10 pt-4">
@@ -159,7 +165,7 @@ export default function InternalProductLabPage() {
                     ))}
                   </ul>
                 </div>
-                <p className="border-l-2 border-oro pl-3 text-xs leading-5 text-tinta/60">Solo revisión interna de asset/procedencia. La relación de ruta requiere decisión de producto y el claim requiere revisión humana.</p>
+                <p className="border-l-2 border-oro pl-3 text-xs leading-5 text-tinta/60">Solo revisión interna. Los claims cuentan con decisión Founder para `READY_FOR_COPY`; la relación de ruta, la integración y la publicación conservan gates independientes.</p>
               </div>
             </article>
           ))}
