@@ -98,3 +98,7 @@ La nueva batería a ejecutar es `npm run test:engine` además del conjunto exist
 ## Siguiente movimiento único
 
 Ejecutar y revisar `npm run test:engine` junto con typecheck, legal-core, knowledge-safety, lint, build público y rutas públicas; después presentar una única decisión de secuencia para #18/#21/#22, sin fusionar ni desplegar automáticamente.
+
+## Entrega GitHub
+
+La capacidad quedó implementada en branch `feat/knowledge-engine-dictionary-v1`, commit `f68a20b`, con PR abierto hacia `main`: https://github.com/legallmente-alt/legalmente-web/pull/23. El PR no fue fusionado ni desplegado. La validación local completa terminó en PASS: motor nuevo, typecheck, legal-core 13/13, knowledge-safety 3/3, lint, build público sanitizado y public-route proof con 10 rutas, 55 HTML, 52 URLs y sin superficie interna pública.
