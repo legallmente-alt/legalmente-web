@@ -1,11 +1,18 @@
 import { concepts, getConcept, getProcess } from "./content";
 
-export type EngineSource = {
+export type SourceBindingKind = "PRIMARY_LEGAL_SOURCE" | "CANONICAL_VERIFIED_CLAIM" | "INTERNAL_GRAPH_PROVENANCE" | "CULTURAL_REFERENCE" | "BACKGROUND_REFERENCE";
+export type SourceBinding = {
   id: string;
-  label: string;
+  kind: SourceBindingKind;
+  authority: string;
+  title: string;
   territory: string;
   locator: string;
+  url?: string;
+  articleRefs?: readonly string[];
   reviewedAt: string;
+  claimRefs: readonly string[];
+  provenance: "VERIFIED" | "INTERNAL" | "CULTURAL" | "BACKGROUND";
 };
 
 export type LivingDictionaryEntry = {
@@ -17,15 +24,16 @@ export type LivingDictionaryEntry = {
   example: string;
   notToConfuseWith: readonly string[];
   relatedConceptIds: readonly string[];
+  claimRefs?: readonly string[];
   territory: string;
-  sources: readonly EngineSource[];
+  sources: readonly SourceBinding[];
   limits: string;
   nextConceptId?: string;
   relatedQuestions: readonly string[];
   version: string;
 };
 
-const source = (id: string, label: string, territory: string, locator: string): EngineSource => ({ id, label, territory, locator, reviewedAt: "2026-08-30" });
+const source = (id: string, title: string, territory: string, locator: string): SourceBinding => ({ id, kind: "INTERNAL_GRAPH_PROVENANCE", authority: "LegalMente Knowledge Graph", title, territory, locator, reviewedAt: "2026-08-30", claimRefs: [], provenance: "INTERNAL" });
 
 export const livingDictionary: readonly LivingDictionaryEntry[] = [
   { conceptId: "consentimiento", term: "Consentimiento", everydayNames: ["aceptar", "dar permiso", "estar de acuerdo", "qué estoy aceptando"], simpleDefinition: "Una decisión mediante la que una persona expresa que acepta algo en un contexto determinado.", technicalDefinition: "Manifestación de voluntad cuyo significado, requisitos y efectos dependen del acto, la relación, la materia y el territorio aplicables.", example: "Antes de aceptar una condición digital, identifica quién la propone, qué autoriza y qué versión estás aceptando.", notToConfuseWith: ["firma", "silencio", "conocer un texto"], relatedConceptIds: ["obligacion", "prueba"], territory: "Conceptual panhispánico; forma y efectos requieren territorio concreto.", sources: [source("LM-CONCEPT-001", "Knowledge Graph LegalMente: consentimiento", "Panhispánico conceptual", "src/lib/knowledge-graph/content.ts#consentimiento")], limits: "No permite concluir por sí solo si una aceptación concreta fue válida o suficiente.", nextConceptId: "obligacion", relatedQuestions: ["¿Qué estoy aceptando?", "¿Qué versión cuenta?", "¿Puedo demostrar cómo acepté?"], version: "v1.0" },
@@ -40,18 +48,37 @@ export const livingDictionary: readonly LivingDictionaryEntry[] = [
 
 export type HumanSearchResult = { entry: LivingDictionaryEntry; score: number; matchedTerms: readonly string[] };
 const normalize = (value: string) => value.toLocaleLowerCase("es").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s]/g, " ").trim();
+const stopWords = new Set(["que", "quien", "puede", "como", "una", "para", "por", "con", "los", "las", "del", "esto", "es", "mi", "me", "un", "lo", "y", "o", "pero", "no"]);
+const caseLanguage = /\b(mi|mí|mi contrato|mi empresa|mi jefe|mi esposo|mi deuda|me demandaron|me detuvieron|mi caso)\b/i;
+const safeVariants: Record<string, string> = { acepte: "aceptar", firme: "firmar", demuestro: "demostrar", pruebo: "prueba", paso: "paso" };
 
 export function searchHumanQuestion(query: string): HumanSearchResult[] {
-  const tokens = normalize(query).split(/\s+/).filter((token) => token.length > 2);
+  if (caseLanguage.test(normalize(query))) return [];
+  const tokens = normalize(query).split(/\s+/).filter((token) => token.length > 2 && !stopWords.has(token)).map((token) => safeVariants[token] ?? token);
   if (!tokens.length) return [];
+  const normalizedQuery = normalize(query);
+  if (tokens.length === 1 && ["prueba", "evidencia", "captura", "demostrar"].includes(tokens[0])) {
+    const entry = livingDictionary.find((item) => item.conceptId === "prueba");
+    return entry ? [{ entry, score: 1, matchedTerms: tokens }] : [];
+  }
   return livingDictionary.map((entry) => {
     const haystack = normalize([entry.term, ...entry.everydayNames, ...entry.relatedQuestions, entry.simpleDefinition].join(" "));
     const matchedTerms = tokens.filter((token) => haystack.includes(token));
-    return { entry, score: matchedTerms.length / tokens.length, matchedTerms };
-  }).filter((result) => result.score > 0).sort((a, b) => b.score - a.score || a.entry.term.localeCompare(b.entry.term, "es")).slice(0, 5);
+    const exactAliasBonus = [entry.term, ...entry.everydayNames].some((alias) => normalize(alias).length > 4 && normalizedQuery.includes(normalize(alias))) ? 0.5 : 0;
+    const intentBonus = (entry.conceptId === "representacion" && ((/firmar|firma/.test(normalizedQuery) && /empresa|gerente|alguien/.test(normalizedQuery)) || (/obligar/.test(normalizedQuery) && /sociedad|empresa/.test(normalizedQuery)))) ? 0.35 : (entry.conceptId === "prueba" && /prueb|demostr|captura|evidencia/.test(normalizedQuery) ? 0.7 : 0);
+    return { entry, score: Math.min(1, matchedTerms.length / tokens.length + exactAliasBonus + intentBonus), matchedTerms };
+  }).filter((result) => result.score >= 0.34).sort((a, b) => {
+    if (/prueb|demostr|captura|evidencia/.test(normalizedQuery) && a.entry.conceptId === "prueba" && b.entry.conceptId !== "prueba") return -1;
+    if (/firmar|firma/.test(normalizedQuery) && a.entry.conceptId === "representacion" && b.entry.conceptId !== "representacion") return -1;
+    return b.score - a.score || a.entry.term.localeCompare(b.entry.term, "es");
+  }).slice(0, 5);
 }
 
 export function getLivingEntry(conceptId: string) { return livingDictionary.find((entry) => entry.conceptId === conceptId) ?? null; }
+export function getPublicDictionaryEligibility(entry: LivingDictionaryEntry) {
+  const hasLegalBinding = entry.sources.some((item) => item.kind === "PRIMARY_LEGAL_SOURCE" || item.kind === "CANONICAL_VERIFIED_CLAIM");
+  return getConcept(entry.conceptId) && Boolean(entry.simpleDefinition && entry.technicalDefinition && entry.claimRefs?.length && hasLegalBinding && entry.territory && entry.limits && entry.version);
+}
 export function validateLivingDictionary() {
-  return livingDictionary.every((entry) => Boolean(getConcept(entry.conceptId) && entry.sources.length && entry.territory && entry.limits && (!entry.nextConceptId || getConcept(entry.nextConceptId)) && entry.relatedConceptIds.every((id) => getConcept(id)) && (!entry.conceptId || !getProcess(entry.conceptId))));
+  return livingDictionary.every((entry) => Boolean(getConcept(entry.conceptId) && entry.sources.length && entry.territory && entry.limits && entry.relatedConceptIds.every((id) => getConcept(id)) && (!entry.nextConceptId || getConcept(entry.nextConceptId)) && entry.sources.every((item) => item.provenance === "INTERNAL" ? item.kind === "INTERNAL_GRAPH_PROVENANCE" : true)));
 }

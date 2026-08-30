@@ -13,6 +13,7 @@
     "test:legal-core": "tsx --test src/lib/legal-core/legal-core.test.ts",
     "test:knowledge-safety": "tsx --test src/lib/knowledge-graph/safety.test.ts",
     "test:engine": "tsx --test src/lib/knowledge-graph/engine.test.ts",
+    "test:ephemeral-search-privacy": "node scripts/ephemeral-search-privacy.mjs",
     "test:public-routes": "node scripts/public-route-proof.mjs"
   },
   "dependencies": {

@@ -87,6 +87,16 @@ La fórmula implementable es `obra cultural → tensión humana → concepto del
 
 La representación sirve para aprendizaje, checklist, preflight y revisión profesional posterior. No produce contratos firmables, no recibe documentos reales y no concluye sobre operaciones concretas.
 
+## Corrección del CI de PR #23
+
+El primer CI remoto de PR #23 falló en `Privacy surface smoke` porque la búsqueda introdujo un `<input>` libre no registrado. La corrección no desactiva el gate: formaliza `EPHEMERAL_LOCAL_SEARCH_V1`, marca exactamente una superficie `data-privacy-surface="ephemeral-local-search"`, usa `type="search"`, `autocomplete="off"` y `maxLength={160}`, y muestra una advertencia visible contra nombres, datos personales e información de casos reales. La búsqueda sólo opera con estado local en el navegador, sin request, submit, backend, analytics, storage, cookies, beacon, persistencia ni historial.
+
+Se añadió `npm run test:ephemeral-search-privacy`, que declara únicamente `NO_COLLECTION_TECHNICAL_PASS`, y el privacy smoke global ahora permite sólo esa entrada marcada. También se añadió `npm run test:engine` al workflow CI en el orden posterior a legal-core y knowledge-safety.
+
+El motor ahora separa `SourceBinding` en `PRIMARY_LEGAL_SOURCE`, `CANONICAL_VERIFIED_CLAIM`, `INTERNAL_GRAPH_PROVENANCE`, `CULTURAL_REFERENCE` y `BACKGROUND_REFERENCE`. Las ocho fichas actuales tienen únicamente provenance interna, por lo que su elegibilidad pública queda bloqueada como `SOURCE_BINDING_REQUIRED` hasta revisión jurídica y binding primario.
+
+El golden set tiene 36 consultas: coloquiales, técnicas, errores, sinónimos, ambiguas y casos que deben devolver cero. Se añadieron stopwords, variantes seguras, aliases exactos, señales de intención y umbral de confianza; la prioridad es precisión y no impresión de inteligencia.
+
 ## Deuda reducida o cerrada
 
 Se incorporó un test específico para el motor y el contrato de producción. Se eliminó la ambigüedad de una ruta sin búsqueda cotidiana al exponer el Diccionario Vivo. Se detectó y documentó el apilamiento #22 sobre #21. Se evitó mantener los PRs antiguos #1–#4 como ruta activa porque están conflictivos/superados. Se dejó explícito que el deploy de #20 sólo valida y salta el deploy por gate. Se evitó duplicar el inventario de assets y los Content IDs.

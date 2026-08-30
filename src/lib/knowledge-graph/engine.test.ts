@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { livingDictionary, searchHumanQuestion, validateLivingDictionary } from "./engine";
+import { humanQueryGoldenSet } from "./golden-set";
 import { channelFormats, validateProductionUnit } from "../production/operating-contract";
 
 test("living dictionary is sourced, related and territorially bounded", () => {
@@ -11,8 +12,17 @@ test("living dictionary is sourced, related and territorially bounded", () => {
 
 test("human questions resolve to existing concepts deterministically", () => {
   assert.equal(searchHumanQuestion("quién puede firmar por la empresa")[0]?.entry.conceptId, "representacion");
-  assert.equal(searchHumanQuestion("esto es mío").length > 0, true);
+  assert.equal(searchHumanQuestion("esto es mío").length, 0);
   assert.equal(searchHumanQuestion("qué estoy aceptando")[0]?.entry.conceptId, "consentimiento");
+});
+
+test("golden query set preserves precision and safe no-result cases", () => {
+  assert.equal(humanQueryGoldenSet.length, 36);
+  for (const [query, expected] of humanQueryGoldenSet) {
+    const result = searchHumanQuestion(query);
+    if (expected) assert.equal(result[0]?.entry.conceptId, expected, query);
+    else assert.equal(result.length, 0, query);
+  }
 });
 
 test("production contract catches broken derivatives and enforces formats", () => {

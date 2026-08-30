@@ -50,6 +50,8 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npm run test:legal-core
       - run: npm run test:knowledge-safety
+      - run: npm run test:engine
+      - run: npm run test:ephemeral-search-privacy
       - run: npm run typecheck
       - run: npm run lint
       - name: Privacy surface smoke
