@@ -1,4 +1,11 @@
-# LM-PC-013 — HUMAN DECISION RECEIPT
+# UNVERIFIED AGENT-PREPARED DRAFT — RETAINED FOR AUDIT
+
+> **STATUS CORRECTION — UNVERIFIED AGENT-PREPARED DRAFT**
+>
+> This file is retained as an agent-prepared decision template/history artifact. It is **not evidence of a Founder decision** and has no effect on visual provenance, semantic binding, integration, merge, deploy, analytics, media upload or publication. The verified Founder receipt is `FOUNDER_DECISION_WAVE_01A_READY_FOR_COPY_2026-08-29`; it authorizes only `READY_FOR_COPY` for six exact claims. Until a separate Founder decision is independently verifiable, all later gates remain fail-closed.
+
+---
+
 
 **Decision ID:** `HUMAN_DECISION_LM-PC-013_APPROVE_INTEGRATION_2026-08-29`
 
