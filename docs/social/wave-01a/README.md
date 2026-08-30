@@ -7,10 +7,10 @@ Este paquete prepara cuatro carriles sin ejecutar gates humanos: integración ca
 | Unidad | Copy | Asset visual | QA visual | Provenance visual | Composición social | Integración | Publicación |
 |---|---|---|---|---|---|---|---|
 | `LM-PC-013` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `PUBLIC_INTEGRATION_APPROVED` | `NOT_PUBLIC` |
-| `LM-PC-031` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED` | `NOT_PUBLIC` |
+| `LM-PC-031` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS` | `NOT_PUBLIC` |
 | `LM-PC-065` | `READY_FOR_COPY` | `EXISTS` | `PASS` | `VALID_HUMAN_PROVENANCE` | `REVIEW_REQUIRED` | `SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED` | `NOT_PUBLIC` |
 
-`PINTEREST_BULK_UPLOAD_AUTHORIZED = NO`. La aprobación Founder del 29 de agosto avanzó los seis claims exactos a `READY_FOR_COPY`; el receipt visual registra producción, QA y provenance humana válida; no autoriza `READY_FOR_VISUAL`. No se inventa esa autorización ni se abre publicación, merge o deploy. La provenance no autoriza integración adicional. LM-PC-031 no se fuerza bajo el capítulo sanitario `deber-profesional`; LM-PC-065 conserva los claims de LGSM, pero la representación aparece únicamente como pregunta relacionada y no como claim soportado por los arts. 1 y 6.
+`PINTEREST_BULK_UPLOAD_AUTHORIZED = NO`. La aprobación Founder del 29 de agosto avanzó los seis claims exactos a `READY_FOR_COPY`; el receipt visual registra producción, QA y provenance humana válida; no autoriza `READY_FOR_VISUAL`. Los receipts posteriores autorizan únicamente la integración educativa existente de LM-PC-013 y LM-PC-031, sin abrir publicación, merge o deploy. LM-PC-031 conserva el proceso transversal `organizar-hechos-y-prueba` sin convertirlo en fuente laboral ni en capítulo; LM-PC-065 conserva los claims de LGSM, pero la representación aparece únicamente como pregunta relacionada y no como claim soportado por los arts. 1 y 6.
 
 ## Entregables
 

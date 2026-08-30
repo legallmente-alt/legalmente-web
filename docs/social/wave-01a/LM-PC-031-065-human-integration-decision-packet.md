@@ -137,20 +137,21 @@ No se incluye `APPROVE_INTEGRATION` para LM-PC-065 porque no se encontró una ru
 
 Ninguna opción autoriza publicación ni decisión de publicación; deploy; merge; Pinterest bulk upload; durable media hosting; activación de analítica; promoción pública; modificación de claims, fuentes, qualifiers, territorios, assets/hashes, receipts humanos, parents aprobados o relaciones `RELATED_ONLY`.
 
-## Decisión humana pendiente
+## Decisión humana registrada
 
 ### LM-PC-031
 
-- `APPROVE_INTEGRATION:/proceso/organizar-hechos-y-prueba`
-- `RETURN_INTEGRATION`
-- `KEEP_NOT_INTEGRATED`
+**Decisión registrada:** `APPROVE_INTEGRATION:/proceso/organizar-hechos-y-prueba`.
+
+El cambio derivado autorizado es únicamente `CURRENT_INTEGRATION_STATE=EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS`; queda pendiente QA de integración y no se autoriza publicación.
 
 ### LM-PC-065
 
-- `KEEP_RELATED_ONLY_NO_PUBLIC_INTEGRATION`
-- `RETURN_FOR_INTEGRATION_DESIGN`
+**Decisión registrada:** `KEEP_RELATED_ONLY_NO_PUBLIC_INTEGRATION`.
 
-**No se ha ejecutado ninguna de estas decisiones.**
+El cambio derivado conserva `RELATED_ONLY_NO_CLAIM_PARENT` y ausencia de integración pública.
+
+**Decisiones registradas el 2026-08-30:** LM-PC-031 — `APPROVE_INTEGRATION:/proceso/organizar-hechos-y-prueba`; LM-PC-065 — `KEEP_RELATED_ONLY_NO_PUBLIC_INTEGRATION`.
 
 ## Referencias internas
 

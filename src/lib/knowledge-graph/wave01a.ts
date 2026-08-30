@@ -30,7 +30,7 @@ export type Wave01aIntegrationUnit = {
   copyChannelQa: "PASS";
   artBaseState: "READY";
   socialCompositionState: "REVIEW_REQUIRED";
-  integrationState: "PUBLIC_INTEGRATION_APPROVED" | "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED";
+  integrationState: "PUBLIC_INTEGRATION_APPROVED" | "EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS" | "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED";
   publicationState: "NOT_PUBLIC";
 };
 
@@ -83,7 +83,7 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     chapter: null,
     concept: null,
     process: "Organizar hechos y prueba",
-    candidateRoute: null,
+    candidateRoute: "/proceso/organizar-hechos-y-prueba",
     previousLearning: "Describir los hechos: quién trabaja, bajo qué organización y qué está documentado.",
     nextLearning: "Ordenar funciones, lugar, jornada, salario, pagos y vacaciones sin convertir la lista en una conclusión individual.",
     sourceContext: "Ley Federal del Trabajo, arts. 20–21 y 25",
@@ -104,7 +104,7 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     copyChannelQa: "PASS",
     artBaseState: "READY",
     socialCompositionState: "REVIEW_REQUIRED",
-    integrationState: "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED",
+    integrationState: "EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS",
     publicationState: "NOT_PUBLIC",
   },
   {

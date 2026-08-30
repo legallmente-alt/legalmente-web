@@ -22,8 +22,14 @@ for cid in EXPECTED:
     assert unit['visual_gate_authorization'] == 'HUMAN_VISUAL_GATE_APPROVED', cid
     assert unit['current_publication_state'] == 'NOT_PUBLIC', cid
 assert state['LM-PC-013']['current_integration_state'] == 'PUBLIC_INTEGRATION_APPROVED'
+assert state['LM-PC-031']['current_integration_state'] == 'EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS'
+assert state['LM-PC-031']['candidate_public_route'] == '/proceso/organizar-hechos-y-prueba'
+assert state['LM-PC-031']['integration_decision'] == 'APPROVE_INTEGRATION:/proceso/organizar-hechos-y-prueba'
+assert state['LM-PC-031']['integration_receipt'] == 'LM-PC-031-065-human-integration-decision-receipt-2026-08-30.md'
+assert state['LM-PC-065']['current_integration_state'] == 'SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED'
+assert state['LM-PC-065']['integration_decision'] == 'KEEP_RELATED_ONLY_NO_PUBLIC_INTEGRATION'
+assert state['LM-PC-065']['integration_receipt'] == 'LM-PC-031-065-human-integration-decision-receipt-2026-08-30.md'
 for cid in ('LM-PC-031', 'LM-PC-065'):
-    assert state[cid]['current_integration_state'] == 'SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED', cid
     assert state[cid]['semantic_binding_receipt'] == semantic_receipt.name, cid
 
 
@@ -98,6 +104,9 @@ for row in matrix:
     if cid == 'LM-PC-013':
         assert row['CURRENT_INTEGRATION_STATE'] == 'PUBLIC_INTEGRATION_APPROVED', cid
         assert row['CANDIDATE_PUBLIC_ROUTE'] == '/proceso/leer-antes-de-aceptar', cid
+    elif cid == 'LM-PC-031':
+        assert row['CURRENT_INTEGRATION_STATE'] == 'EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS', cid
+        assert row['CANDIDATE_PUBLIC_ROUTE'] == '/proceso/organizar-hechos-y-prueba', cid
     else:
         assert row['CURRENT_INTEGRATION_STATE'] == 'SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED', cid
         assert not row['CANDIDATE_PUBLIC_ROUTE'], cid
