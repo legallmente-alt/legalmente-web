@@ -14,7 +14,7 @@ Este paquete prepara cuatro carriles sin ejecutar gates humanos: integración ca
 
 ## Entregables
 
-`integration-map.md` y `cross-channel-matrix.csv` documentan el destino y la continuidad sobre el Knowledge Graph existente. `current-state.json` es la capa viva de estado; los bindings históricos no se reescriben. `linkedin-package.md` contiene la cola separada para LegalMente y Founder. `instagram-package.md` contiene feed 4:5, story/reel cover 9:16 y copy vinculado. `pinterest-package.md` y `pinterest_bulk_upload.csv` contienen la preparación masiva base 2:3, incluyendo el estado separado de las filas que aún carecen de un parent semántico seguro. `asset-registry.json` y `assets/` contienen los derivados reales con hashes.
+`integration-map.md` y `cross-channel-matrix.csv` documentan el destino y la continuidad sobre el Knowledge Graph existente. `current-state.json` es la capa viva de estado; los bindings históricos no se reescriben. `linkedin-package.md` contiene la cola separada para LegalMente y Founder. `instagram-package.md` contiene feed 4:5, story/reel cover 9:16 y copy vinculado. `pinterest-package.md` y `pinterest_bulk_upload.csv` contienen la preparación masiva base 2:3, incluyendo el estado separado de las filas que aún carecen de un parent semántico seguro. `measurement-plan.md` contiene la instrumentación y nomenclatura UTM propuestas, sin activar eventos ni campañas. `asset-registry.json` y `assets/` contienen los derivados reales con hashes.
 
 ## Regla de integración
 
