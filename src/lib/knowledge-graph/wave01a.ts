@@ -18,25 +18,25 @@ export type Wave01aIntegrationUnit = {
   visualAsset: string;
   altText: string;
   copyState: "READY_FOR_COPY";
-  visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN";
+  visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED";
   visualAssetState: "EXISTS";
   visualQaState: "PASS";
-  visualGateProvenance: "VALID_HUMAN_PROVENANCE";
+  visualGateProvenance: "UNRESOLVED";
   visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md";
-  visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md";
-  visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED";
+  visualGateDecisionReceipt: null;
+  visualGateAuthorization: "NOT_RECORDED";
   semanticBindingDecision?: string;
-  semanticBindingState?: "BOUND_TO_EXISTING_PROCESS_LEARNING_NAVIGATION_ONLY" | "RELATED_ONLY_NO_CLAIM_PARENT";
+  semanticBindingState?: "CANDIDATE_EXISTING_PROCESS_REVIEW_REQUIRED" | "RELATED_ONLY_NO_CLAIM_PARENT";
   copyChannelQa: "PASS";
   artBaseState: "READY";
   socialCompositionState: "REVIEW_REQUIRED";
-  integrationState: "PUBLIC_INTEGRATION_APPROVED" | "EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS" | "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED";
+  integrationState: "PRODUCT_REVIEW_REQUIRED" | "RELATED_ONLY_NO_PUBLIC_INTEGRATION";
   publicationState: "NOT_PUBLIC";
 };
 
 /**
  * Live operational state for Wave 01A. Historical source bindings remain
- * untouched; this layer records the later human decision and current gates.
+ * untouched. Only the Founder READY_FOR_COPY receipt is verified; visual provenance and integration fail closed pending an independently verified human decision.
  */
 export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
   {
@@ -59,23 +59,23 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     visualAsset: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual_4x5.png",
     altText: "Bodegón cálido sobre una mesa de madera: una caja de cartón con etiqueta en blanco y una regla metálica, junto a una estructura de varillas, una bandeja con cinta y un recipiente oscuro.",
     copyState: "READY_FOR_COPY",
-    visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN",
+    visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED",
     visualAssetState: "EXISTS",
     visualQaState: "PASS",
-    visualGateProvenance: "VALID_HUMAN_PROVENANCE",
+    visualGateProvenance: "UNRESOLVED",
     visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md",
-    visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md",
-    visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED",
+    visualGateDecisionReceipt: null,
+    visualGateAuthorization: "NOT_RECORDED",
     copyChannelQa: "PASS",
     artBaseState: "READY",
     socialCompositionState: "REVIEW_REQUIRED",
-    integrationState: "PUBLIC_INTEGRATION_APPROVED",
+    integrationState: "PRODUCT_REVIEW_REQUIRED",
     publicationState: "NOT_PUBLIC",
   },
   {
     contentId: "LM-PC-031",
-    semanticBindingDecision: "BIND_TO_EXISTING_PARENT:organizar-hechos-y-prueba",
-    semanticBindingState: "BOUND_TO_EXISTING_PROCESS_LEARNING_NAVIGATION_ONLY",
+    semanticBindingDecision: "CANDIDATE_EXISTING_PROCESS:organizar-hechos-y-prueba",
+    semanticBindingState: "CANDIDATE_EXISTING_PROCESS_REVIEW_REQUIRED",
     claimIds: ["LM-PC-031-CL-01", "LM-PC-031-CL-02"],
     userJob: "¿Qué elementos ayudan a describir una relación de trabajo sin asumir una conclusión sobre mi caso?",
     world: "Empresa y comercio",
@@ -94,17 +94,17 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     visualAsset: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual_4x5.png",
     altText: "Bodegón cálido sobre una mesa de madera: una caja de herramientas con herramientas y un mazo, un delantal de tela colgado, una etiqueta de cartón con cordón, un recipiente oscuro y cuadernos con un bolígrafo.",
     copyState: "READY_FOR_COPY",
-    visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN",
+    visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED",
     visualAssetState: "EXISTS",
     visualQaState: "PASS",
-    visualGateProvenance: "VALID_HUMAN_PROVENANCE",
+    visualGateProvenance: "UNRESOLVED",
     visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md",
-    visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md",
-    visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED",
+    visualGateDecisionReceipt: null,
+    visualGateAuthorization: "NOT_RECORDED",
     copyChannelQa: "PASS",
     artBaseState: "READY",
     socialCompositionState: "REVIEW_REQUIRED",
-    integrationState: "EDUCATIONAL_INTEGRATION_APPROVED_EXISTING_PROCESS",
+    integrationState: "PRODUCT_REVIEW_REQUIRED",
     publicationState: "NOT_PUBLIC",
   },
   {
@@ -129,17 +129,17 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     visualAsset: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual_4x5.png",
     altText: "Bodegón cálido sobre una mesa de madera: tres soportes de madera con piezas de distintas texturas, una carpeta de cartón cerrada, una placa metálica, un recipiente oscuro sobre una base de piedra y una bandeja con cinta.",
     copyState: "READY_FOR_COPY",
-    visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN",
+    visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED",
     visualAssetState: "EXISTS",
     visualQaState: "PASS",
-    visualGateProvenance: "VALID_HUMAN_PROVENANCE",
+    visualGateProvenance: "UNRESOLVED",
     visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md",
-    visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md",
-    visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED",
+    visualGateDecisionReceipt: null,
+    visualGateAuthorization: "NOT_RECORDED",
     copyChannelQa: "PASS",
     artBaseState: "READY",
     socialCompositionState: "REVIEW_REQUIRED",
-    integrationState: "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED",
+    integrationState: "RELATED_ONLY_NO_PUBLIC_INTEGRATION",
     publicationState: "NOT_PUBLIC",
   },
 ];
