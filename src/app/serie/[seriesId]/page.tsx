@@ -7,8 +7,9 @@ export function generateStaticParams() {
   return series.map((item) => ({ seriesId: item.id }));
 }
 
-export default function SeriesPage({ params }: { params: { seriesId: string } }) {
-  const item = getSeries(params.seriesId);
+export default async function SeriesPage({ params }: { params: Promise<{ seriesId: string }> }) {
+  const { seriesId } = await params;
+  const item = getSeries(seriesId);
   if (!item) notFound();
   const world = getWorld(item.worldId);
   if (!world) notFound();

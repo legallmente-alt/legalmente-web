@@ -7,8 +7,9 @@ export function generateStaticParams() {
   return worlds.map((world) => ({ worldId: world.id }));
 }
 
-export default function WorldPage({ params }: { params: { worldId: string } }) {
-  const world = getWorld(params.worldId);
+export default async function WorldPage({ params }: { params: Promise<{ worldId: string }> }) {
+  const { worldId } = await params;
+  const world = getWorld(worldId);
   if (!world) notFound();
 
   const worldSeries = world.seriesIds.map(getSeries).filter(Boolean);

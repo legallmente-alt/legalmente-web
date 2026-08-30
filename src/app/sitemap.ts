@@ -3,6 +3,8 @@ import { chapters, concepts, processes, series, worlds } from "@/lib/knowledge-g
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ef9882a7.legalmente-educativo.pages.dev";
 
+export const dynamic = "force-static";
+
 const publicPaths = [
   "/",
   "/explorar",

@@ -7,8 +7,9 @@ export function generateStaticParams() {
   return processes.map((item) => ({ processId: item.id }));
 }
 
-export default function ProcessPage({ params }: { params: { processId: string } }) {
-  const process = getProcess(params.processId);
+export default async function ProcessPage({ params }: { params: Promise<{ processId: string }> }) {
+  const { processId } = await params;
+  const process = getProcess(processId);
   if (!process) notFound();
 
   const concepts = process.relatedConceptIds.map(getConcept).filter(Boolean);

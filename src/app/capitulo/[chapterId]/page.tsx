@@ -7,8 +7,9 @@ export function generateStaticParams() {
   return chapters.map((item) => ({ chapterId: item.id }));
 }
 
-export default function ChapterPage({ params }: { params: { chapterId: string } }) {
-  const chapter = getChapter(params.chapterId);
+export default async function ChapterPage({ params }: { params: Promise<{ chapterId: string }> }) {
+  const { chapterId } = await params;
+  const chapter = getChapter(chapterId);
   if (!chapter) notFound();
   const parent = getSeries(chapter.seriesId);
   if (!parent) notFound();

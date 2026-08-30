@@ -7,8 +7,9 @@ export function generateStaticParams() {
   return concepts.map((item) => ({ conceptId: item.id }));
 }
 
-export default function ConceptPage({ params }: { params: { conceptId: string } }) {
-  const concept = getConcept(params.conceptId);
+export default async function ConceptPage({ params }: { params: Promise<{ conceptId: string }> }) {
+  const { conceptId } = await params;
+  const concept = getConcept(conceptId);
   if (!concept) notFound();
 
   const relatedConcepts = concept.relatedConceptIds.map(getConcept).filter(Boolean);
