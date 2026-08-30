@@ -18,16 +18,19 @@ export type Wave01aIntegrationUnit = {
   visualAsset: string;
   altText: string;
   copyState: "READY_FOR_COPY";
-  visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED";
+  visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN";
   visualAssetState: "EXISTS";
   visualQaState: "PASS";
-  visualGateProvenance: "UNRESOLVED";
+  visualGateProvenance: "VALID_HUMAN_PROVENANCE";
   visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md";
-  visualGateAuthorization: "NOT_RECORDED";
+  visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md";
+  visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED";
+  semanticBindingDecision?: string;
+  semanticBindingState?: "BOUND_TO_EXISTING_PROCESS_LEARNING_NAVIGATION_ONLY" | "RELATED_ONLY_NO_CLAIM_PARENT";
   copyChannelQa: "PASS";
   artBaseState: "READY";
   socialCompositionState: "REVIEW_REQUIRED";
-  integrationState: "PRODUCT_REVIEW_REQUIRED" | "SEPARATED_PENDING_BINDING";
+  integrationState: "PUBLIC_INTEGRATION_APPROVED" | "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED";
   publicationState: "NOT_PUBLIC";
 };
 
@@ -56,20 +59,23 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     visualAsset: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual_4x5.png",
     altText: "Bodegón cálido sobre una mesa de madera: una caja de cartón con etiqueta en blanco y una regla metálica, junto a una estructura de varillas, una bandeja con cinta y un recipiente oscuro.",
     copyState: "READY_FOR_COPY",
-    visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED",
+    visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN",
     visualAssetState: "EXISTS",
     visualQaState: "PASS",
-    visualGateProvenance: "UNRESOLVED",
+    visualGateProvenance: "VALID_HUMAN_PROVENANCE",
     visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md",
-    visualGateAuthorization: "NOT_RECORDED",
+    visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md",
+    visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED",
     copyChannelQa: "PASS",
     artBaseState: "READY",
     socialCompositionState: "REVIEW_REQUIRED",
-    integrationState: "PRODUCT_REVIEW_REQUIRED",
+    integrationState: "PUBLIC_INTEGRATION_APPROVED",
     publicationState: "NOT_PUBLIC",
   },
   {
     contentId: "LM-PC-031",
+    semanticBindingDecision: "BIND_TO_EXISTING_PARENT:organizar-hechos-y-prueba",
+    semanticBindingState: "BOUND_TO_EXISTING_PROCESS_LEARNING_NAVIGATION_ONLY",
     claimIds: ["LM-PC-031-CL-01", "LM-PC-031-CL-02"],
     userJob: "¿Qué elementos ayudan a describir una relación de trabajo sin asumir una conclusión sobre mi caso?",
     world: "Empresa y comercio",
@@ -88,20 +94,23 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     visualAsset: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual_4x5.png",
     altText: "Bodegón cálido sobre una mesa de madera: una caja de herramientas con herramientas y un mazo, un delantal de tela colgado, una etiqueta de cartón con cordón, un recipiente oscuro y cuadernos con un bolígrafo.",
     copyState: "READY_FOR_COPY",
-    visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED",
+    visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN",
     visualAssetState: "EXISTS",
     visualQaState: "PASS",
-    visualGateProvenance: "UNRESOLVED",
+    visualGateProvenance: "VALID_HUMAN_PROVENANCE",
     visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md",
-    visualGateAuthorization: "NOT_RECORDED",
+    visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md",
+    visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED",
     copyChannelQa: "PASS",
     artBaseState: "READY",
     socialCompositionState: "REVIEW_REQUIRED",
-    integrationState: "SEPARATED_PENDING_BINDING",
+    integrationState: "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED",
     publicationState: "NOT_PUBLIC",
   },
   {
     contentId: "LM-PC-065",
+    semanticBindingDecision: "RELATED_ONLY",
+    semanticBindingState: "RELATED_ONLY_NO_CLAIM_PARENT",
     claimIds: ["LM-PC-065-CL-01", "LM-PC-065-CL-02"],
     userJob: "¿Qué documentos y datos conviene ordenar para entender una sociedad mercantil?",
     world: "Empresa y comercio",
@@ -120,16 +129,17 @@ export const wave01aIntegrationUnits: readonly Wave01aIntegrationUnit[] = [
     visualAsset: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual_4x5.png",
     altText: "Bodegón cálido sobre una mesa de madera: tres soportes de madera con piezas de distintas texturas, una carpeta de cartón cerrada, una placa metálica, un recipiente oscuro sobre una base de piedra y una bandeja con cinta.",
     copyState: "READY_FOR_COPY",
-    visualState: "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED",
+    visualState: "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN",
     visualAssetState: "EXISTS",
     visualQaState: "PASS",
-    visualGateProvenance: "UNRESOLVED",
+    visualGateProvenance: "VALID_HUMAN_PROVENANCE",
     visualQaReceipt: "99_VISUAL_PRODUCTION_RECEIPT.md",
-    visualGateAuthorization: "NOT_RECORDED",
+    visualGateDecisionReceipt: "LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md",
+    visualGateAuthorization: "HUMAN_VISUAL_GATE_APPROVED",
     copyChannelQa: "PASS",
     artBaseState: "READY",
     socialCompositionState: "REVIEW_REQUIRED",
-    integrationState: "SEPARATED_PENDING_BINDING",
+    integrationState: "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED",
     publicationState: "NOT_PUBLIC",
   },
 ];

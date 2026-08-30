@@ -28,9 +28,11 @@ test("only LM-PC-013 has a candidate route in the existing graph", () => {
   assert.equal(wave01aIntegrationUnits.find((unit) => unit.contentId === "LM-PC-065")?.candidateRoute, null);
 });
 
-test("unmapped units remain separated and do not turn representation into a supported claim", () => {
-  const separated = wave01aIntegrationUnits.filter((unit) => unit.integrationState === "SEPARATED_PENDING_BINDING");
+test("resolved semantic bindings remain non-public and do not create false claim parents", () => {
+  const separated = wave01aIntegrationUnits.filter((unit) => unit.integrationState === "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED");
   assert.deepEqual(separated.map((unit) => unit.contentId), ["LM-PC-031", "LM-PC-065"]);
+  assert.equal(separated.find((unit) => unit.contentId === "LM-PC-031")?.semanticBindingDecision, "BIND_TO_EXISTING_PARENT:organizar-hechos-y-prueba");
+  assert.equal(separated.find((unit) => unit.contentId === "LM-PC-065")?.semanticBindingDecision, "RELATED_ONLY");
   const societaria = separated.find((unit) => unit.contentId === "LM-PC-065");
   assert.ok(societaria);
   assert.match(societaria.copy, /representación queda separada/);
@@ -44,14 +46,30 @@ test("all Wave 01A alt text strings describe the real scenes instead of invented
   }
 });
 
-test("visual existence and QA remain separate from unresolved gate provenance", () => {
+test("visual QA, human provenance and authorization remain separate", () => {
   for (const unit of wave01aIntegrationUnits) {
     assert.equal(unit.visualAssetState, "EXISTS");
     assert.equal(unit.visualQaState, "PASS");
-    assert.equal(unit.visualGateProvenance, "UNRESOLVED");
-    assert.equal(unit.visualState, "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED");
+    assert.equal(unit.visualGateProvenance, "VALID_HUMAN_PROVENANCE");
+    assert.equal(unit.visualState, "VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN");
+    assert.equal(unit.visualGateAuthorization, "HUMAN_VISUAL_GATE_APPROVED");
     assert.equal(unit.copyChannelQa, "PASS");
     assert.equal(unit.artBaseState, "READY");
     assert.equal(unit.socialCompositionState, "REVIEW_REQUIRED");
   }
+});
+
+test("live-state reconciliation invariants fail closed", () => {
+  for (const unit of wave01aIntegrationUnits) {
+    assert.notEqual(unit.visualGateProvenance, "UNRESOLVED");
+    assert.notEqual(unit.visualState, "VISUAL_QA_PASS_PROVENANCE_UNRESOLVED");
+    assert.notEqual(unit.visualGateAuthorization, "NOT_RECORDED");
+    assert.equal(unit.publicationState, "NOT_PUBLIC");
+  }
+  const lm031 = wave01aIntegrationUnits.find((unit) => unit.contentId === "LM-PC-031");
+  const lm065 = wave01aIntegrationUnits.find((unit) => unit.contentId === "LM-PC-065");
+  assert.equal(lm031?.integrationState, "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED");
+  assert.equal(lm065?.integrationState, "SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED");
+  assert.notEqual(lm031?.semanticBindingState, undefined);
+  assert.notEqual(lm065?.semanticBindingState, undefined);
 });

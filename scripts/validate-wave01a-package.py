@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import json
 import struct
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -8,6 +9,22 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1] / 'docs/social/wave-01a'
 ASSETS = ROOT / 'assets'
 EXPECTED = {'LM-PC-013', 'LM-PC-031', 'LM-PC-065'}
+
+state = json.loads((ROOT / 'current-state.json').read_text(encoding='utf-8'))
+visual_receipt = ROOT / 'LM-PC-013-031-065-human-visual-gate-decision-receipt-2026-08-29.md'
+semantic_receipt = ROOT / 'LM-PC-031-065-human-semantic-binding-decision-receipt-2026-08-29.md'
+assert visual_receipt.exists(), 'missing_visual_gate_receipt'
+assert semantic_receipt.exists(), 'missing_semantic_binding_receipt'
+for cid in EXPECTED:
+    unit = state[cid]
+    assert unit['visual_gate_provenance'] == 'VALID_HUMAN_PROVENANCE', cid
+    assert unit['current_visual_state'] == 'VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN', cid
+    assert unit['visual_gate_authorization'] == 'HUMAN_VISUAL_GATE_APPROVED', cid
+    assert unit['current_publication_state'] == 'NOT_PUBLIC', cid
+assert state['LM-PC-013']['current_integration_state'] == 'PUBLIC_INTEGRATION_APPROVED'
+for cid in ('LM-PC-031', 'LM-PC-065'):
+    assert state[cid]['current_integration_state'] == 'SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED', cid
+    assert state[cid]['semantic_binding_receipt'] == semantic_receipt.name, cid
 
 
 def png_size(path: Path) -> tuple[int, int]:
@@ -64,7 +81,7 @@ assert {row['CONTENT_ID'] for row in matrix} == EXPECTED, 'matrix_content_ids'
 for row in matrix:
     cid = row['CONTENT_ID']
     assert row['CURRENT_COPY_STATE'] == 'READY_FOR_COPY', cid
-    assert row['CURRENT_VISUAL_STATE'] == 'VISUAL_QA_PASS_PROVENANCE_UNRESOLVED', cid
+    assert row['CURRENT_VISUAL_STATE'] == 'VISUAL_QA_PASS_PROVENANCE_VALID_HUMAN', cid
     assert row['VISUAL_ASSET_STATE'] == 'EXISTS', cid
     assert row['VISUAL_QA_STATE'] == 'PASS', cid
     assert row['VISUAL_GATE_PROVENANCE'] == 'VALID_HUMAN_PROVENANCE', cid
@@ -82,7 +99,7 @@ for row in matrix:
         assert row['CURRENT_INTEGRATION_STATE'] == 'PUBLIC_INTEGRATION_APPROVED', cid
         assert row['CANDIDATE_PUBLIC_ROUTE'] == '/proceso/leer-antes-de-aceptar', cid
     else:
-        assert row['CURRENT_INTEGRATION_STATE'] == 'SEPARATED_PENDING_BINDING', cid
+        assert row['CURRENT_INTEGRATION_STATE'] == 'SEMANTIC_BINDING_RESOLVED_INTEGRATION_NOT_APPROVED', cid
         assert not row['CANDIDATE_PUBLIC_ROUTE'], cid
         assert not row['EXISTING_SERIES'] and not row['EXISTING_CHAPTER'] and not row['EXISTING_CONCEPT'], cid
 
