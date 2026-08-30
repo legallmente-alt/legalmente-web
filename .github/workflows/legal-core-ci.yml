@@ -66,6 +66,8 @@ jobs:
         run: npm run test:public-routes
       - name: Internal review surface proof
         run: npm run test:internal-review-surface
+      - name: Before Signing copy proof
+        run: npm run test:before-signing-copy
       - name: Upload sanitized public artifact
         if: always()
         uses: actions/upload-artifact@v4
