@@ -1,6 +1,6 @@
 # LinkedIn — LegalMente + Founder
 
-**Estado:** `CHANNEL_ADAPTED` / `COPY_CHANNEL_QA=PASS` / `ART_BASE_STATE=READY` / `SOCIAL_COMPOSITION_STATE=REVIEW_REQUIRED` / `PUBLICATION_STATE=NOT_PUBLIC`. La composición final aún no existe; no publicado.
+**Estado:** `CHANNEL_ADAPTED` / `COPY_CHANNEL_QA=PASS` / `ART_BASE_STATE=READY` / `VISUAL_GATE_PROVENANCE=UNRESOLVED` / `SOCIAL_COMPOSITION_STATE=REVIEW_REQUIRED` / `PUBLICATION_STATE=NOT_PUBLIC`. La composición final aún no existe; no publicado.
 
 ## Cuenta institucional: LinkedIn LegalMente
 
