@@ -66,7 +66,7 @@ El principal riesgo es presentar un proceso o capítulo transversal como si fuer
 | `KEEP_SEPARATED` | Conserva `SEPARATED_PENDING_BINDING` sin parent ni ruta. |
 | `RETURN_BINDING` | Devuelve el binding para corrección; conserva `SEPARATED_PENDING_BINDING`. |
 
-**Decisión humana para LM-PC-031:** ____________________________________
+**Decisión humana para LM-PC-031:** `BIND_TO_EXISTING_PARENT:organizar-hechos-y-prueba` — aprobada el 2026-08-29 por el usuario solicitante; alcance exclusivo de aprendizaje y navegación.
 
 ## LM-PC-065
 
@@ -116,11 +116,11 @@ El riesgo principal es atribuir a los arts. 1 y 6 de la LGSM una conclusión sob
 | `KEEP_SEPARATED` | Conserva `SEPARATED_PENDING_BINDING` sin parent ni ruta. |
 | `RETURN_BINDING` | Devuelve el binding para corrección; conserva `SEPARATED_PENDING_BINDING`. |
 
-**Decisión humana para LM-PC-065:** ____________________________________
+**Decisión humana para LM-PC-065:** `RELATED_ONLY` — aprobada el 2026-08-29 por el usuario solicitante; relación editorial/navegacional sin parent claim→source.
 
 ## Condiciones que no cambian
 
-LM-PC-031 y LM-PC-065 permanecen `SEPARATED_PENDING_BINDING` hasta recibir una decisión humana explícita por unidad. No se inventan parents, rutas, breadcrumbs ni relaciones de fuente. No se autoriza publicación, Pinterest bulk upload, durable media hosting, deploy, merge, analítica ni promoción pública.
+LM-PC-031 y LM-PC-065 conservan su integración pública cerrada; el binding derivado de LM-PC-031 es exclusivamente de aprendizaje/navegación y LM-PC-065 sigue sin parent claim→source. No se inventan parents, rutas, breadcrumbs ni relaciones de fuente. No se autoriza publicación, Pinterest bulk upload, durable media hosting, deploy, merge, analítica ni promoción pública.
 
 ## Referencias
 
