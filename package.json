@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "test:legal-core": "tsx --test src/lib/legal-core/legal-core.test.ts",
     "test:knowledge-safety": "tsx --test src/lib/knowledge-graph/safety.test.ts",
+    "test:knowledge-integrity": "tsx --test src/lib/knowledge-graph/integrity.test.ts",
     "test:public-routes": "node scripts/public-route-proof.mjs"
   },
   "dependencies": {
