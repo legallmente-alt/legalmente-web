@@ -13,6 +13,7 @@
     "test:legal-core": "tsx --test src/lib/legal-core/legal-core.test.ts",
     "test:knowledge-safety": "tsx --test src/lib/knowledge-graph/safety.test.ts",
     "test:review-registry": "tsx --test src/lib/review/registry.test.ts",
+    "test:internal-review-surface": "node scripts/internal-review-surface-proof.mjs",
     "test:public-routes": "node scripts/public-route-proof.mjs"
   },
   "dependencies": {
