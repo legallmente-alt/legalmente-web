@@ -51,6 +51,7 @@ jobs:
       - run: npm run test:legal-core
       - run: npm run test:knowledge-safety
       - run: npm run test:knowledge-integrity
+      - run: npm run test:ecosystem-kernel
       - run: npm run typecheck
       - run: npm run lint
       - name: Privacy surface smoke
