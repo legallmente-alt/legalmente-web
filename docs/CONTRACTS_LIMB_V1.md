@@ -41,6 +41,12 @@ La extremidad no recibe PII, texto libre, contratos reales ni documentos. No gen
 
 La decisión pendiente es humana: qué contenido y fuentes deben investigarse para cada tipo contractual, cómo distinguir fundamentos de contrato concreto y qué relaciones deben pasar de preparación a una etapa posterior. La implementación deja esas decisiones visibles en lugar de rellenarlas con claims inventados.
 
+## Mejora de experiencia aplicada
+
+La superficie `Antes de firmar` ya no muestra una salida que pueda leerse como aprobación cuando el motor técnico devuelve `PASS`. En su lugar presenta `Puntos de atención encontrados` cuando hay hallazgos y `Guía preliminar disponible` cuando no los hay. El resultado hace visibles cuatro capas: territorio México, versión de regla y cálculo, qué revisó y qué no revisó. También conserva la instrucción de escalar a revisión profesional cuando la pregunta supera la herramienta.
+
+Esta es una traducción de producto de un estado técnico; no cambia el contrato determinista del núcleo ni convierte una guía en dictamen.
+
 ## Evidencia
 
 La prueba `src/lib/contracts/contract-limb.test.ts` comprueba que todos los paths tienen conceptos y proceso existentes, que las unidades visuales existen y siguen en `HUMAN_REVIEW_REQUIRED`, que promesa de compraventa y compraventa son selecciones distintas y que el recorrido inverso identifica consumidores sin cambiar estado. La batería general del repositorio debe ejecutarse después de cualquier cambio adicional.

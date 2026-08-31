@@ -59,6 +59,7 @@ jobs:
       - run: npm run test:review-registry-files
       - run: npm run test:contract-limb
       - run: npm run test:internal-review-surface
+      - run: npm run test:before-signing-surface
       - run: npm run typecheck
       - run: npm run lint
       - name: Privacy surface smoke

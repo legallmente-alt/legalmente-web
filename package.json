@@ -17,6 +17,7 @@
     "test:review-registry-files": "tsx scripts/review-registry-file-proof.mjs",
     "test:contract-limb": "tsx --test src/lib/contracts/contract-limb.test.ts",
     "test:internal-review-surface": "node scripts/internal-review-surface-proof.mjs",
+    "test:before-signing-surface": "node scripts/before-signing-surface-proof.mjs",
     "test:public-routes": "node scripts/public-route-proof.mjs"
   },
   "dependencies": {
