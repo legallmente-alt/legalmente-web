@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { extname, join } from "node:path";
 
 const outputRoot = join(process.cwd(), "out");
 const requiredRoutes = [
@@ -34,6 +34,27 @@ const publicFiles = readdirSync(outputRoot, { recursive: true, withFileTypes: tr
 const internalLeaks = publicFiles.filter((file) => /[\\/]internal([\\/]|[-_]|$)|product-lab|wave01a/i.test(file));
 if (internalLeaks.length > 0) {
   throw new Error(`Public artifact exposes internal files:\n${internalLeaks.join("\n")}`);
+}
+
+const publicTextExtensions = new Set([".html", ".js", ".css", ".json", ".txt", ".xml"]);
+const forbiddenInternalMarkers = [
+  "/internal-assets/legalmente/wave-01a",
+  "public/internal-assets/legalmente/wave-01a/manifest.json",
+  "wave-01a-review-registry-v2",
+  "DRIVE_IDS_FROM_MANIFEST",
+  "HUMAN_REVIEW_REQUIRED",
+  "PENDING_MAPPING",
+];
+const internalContentLeaks = [];
+for (const file of publicFiles) {
+  if (!publicTextExtensions.has(extname(file))) continue;
+  const content = readFileSync(file, "utf8");
+  for (const marker of forbiddenInternalMarkers) {
+    if (content.includes(marker)) internalContentLeaks.push(`${file.replace(`${outputRoot}/`, "")}: ${marker}`);
+  }
+}
+if (internalContentLeaks.length > 0) {
+  throw new Error(`Public artifact exposes internal review markers:\n${internalContentLeaks.join("\n")}`);
 }
 
 const robotsPath = join(outputRoot, "robots.txt");
