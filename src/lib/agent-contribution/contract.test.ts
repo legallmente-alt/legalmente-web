@@ -94,10 +94,15 @@ test("unknown domain, upstream state and lifecycle state fail closed", () => {
   assert.equal(unknownLifecycle.ok, false);
 });
 
-test("legally dependent work requires claim and source IDs", () => {
-  const result = validateAgentContribution({ ...validContribution, input: { ...validContribution.input, claimIds: [], sourceIds: [] } });
+test("REQUIRED binding rejects missing claim IDs", () => {
+  const result = validateAgentContribution({ ...validContribution, input: { ...validContribution.input, claimIds: [] } });
   assert.equal(result.ok, false);
   assert.ok(result.issues.some((item) => item.path === "input.claimIds"));
+});
+
+test("REQUIRED binding rejects missing source IDs", () => {
+  const result = validateAgentContribution({ ...validContribution, input: { ...validContribution.input, sourceIds: [] } });
+  assert.equal(result.ok, false);
   assert.ok(result.issues.some((item) => item.path === "input.sourceIds"));
 });
 
@@ -136,11 +141,11 @@ test("relation remains contextual and does not create a claim", () => {
 test("bindingRequirement replaces requestedWork keyword inference", () => {
   const optional = validateAgentContribution({
     ...validContribution,
-    input: { ...validContribution.input, claimIds: [], sourceIds: [], bindingRequirement: "OPTIONAL", requestedWork: "Create a neutral visual orientation only." },
+    input: { ...validContribution.input, claimIds: [], sourceIds: [], bindingRequirement: "OPTIONAL", requestedWork: "Analizar una obligación contractual y su consecuencia jurídica." },
   });
   const notApplicable = validateAgentContribution({
     ...validContribution,
-    input: { ...validContribution.input, claimIds: [], sourceIds: [], bindingRequirement: "NOT_APPLICABLE", requestedWork: "Create a non-legal operational handoff." },
+    input: { ...validContribution.input, claimIds: [], sourceIds: [], bindingRequirement: "NOT_APPLICABLE", requestedWork: "Revisar una regla legal solo para orientar el flujo." },
   });
   assert.equal(optional.ok, true);
   assert.equal(notApplicable.ok, true);
@@ -161,9 +166,13 @@ test("closed schema rejects unknown nested keys", () => {
   const unknownAsset = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, assets: [{ ...validContribution.output.assets[0], arbitrary: true }] } } as unknown);
   const unknownProvenance = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, provenance: { ...validContribution.output.provenance, legalRule: "new rule" } } } as unknown);
   const unknownQA = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, qa: [{ ...validContribution.output.qa[0], publicationDecision: true }] } } as unknown);
+  const unknownRelation = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, relations: [{ ...validContribution.output.relations[0], arbitrary: true }] } } as unknown);
+  const unknownVisualSemantics = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, visualSemantics: [{ ...validContribution.output.visualSemantics[0], arbitrary: true }] } } as unknown);
   assert.equal(unknownAsset.ok, false);
   assert.equal(unknownProvenance.ok, false);
   assert.equal(unknownQA.ok, false);
+  assert.equal(unknownRelation.ok, false);
+  assert.equal(unknownVisualSemantics.ok, false);
 });
 
 test("BLOCKED and REJECTED require real blockers", () => {
