@@ -89,6 +89,7 @@ export default function InternalProductLabPage() {
           <EditorialCard family="tool" title="Aguinaldo MX" meta="Las ausencias genéricas deben clasificarse antes de descontarse." symbol="labor" state="requireInput" />
           <EditorialCard family="tool" title="Finiquito MX" meta="Solo componentes devengados dentro del alcance V1." symbol="compare" state="hold" />
           <EditorialCard family="tool" title="Radar de incompatibilidades" meta="Relaciones humanas, exclusiones y preguntas de continuidad." symbol="territory" state="reviewRequired" href="/internal/product-lab/radar-de-temas" />
+          <EditorialCard family="tool" title="Wave 1 · graduación" meta="Tres rutas listas para revisión de literalidad antes de LIVE." symbol="prepare" state="reviewRequired" href="/internal/product-lab/graduation-wave-1" />
         </div>
       </section>
 
