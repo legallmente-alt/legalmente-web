@@ -1,7 +1,7 @@
 import type { ToolResult } from "./types";
 
 export type BeforeSigningInput = {
-  contractType: "ARRENDAMIENTO" | "PRESTACION_SERVICIOS" | "LABORAL" | "COMPRAVENTA" | "CONFIDENCIALIDAD" | "GENERICO";
+  contractType: "ARRENDAMIENTO" | "PRESTACION_SERVICIOS" | "LABORAL" | "PROMESA_COMPRAVENTA" | "COMPRAVENTA" | "CONFIDENCIALIDAD" | "GENERICO";
   partiesIdentified: boolean;
   clearConsideration: boolean;
   termAndTermination: boolean;

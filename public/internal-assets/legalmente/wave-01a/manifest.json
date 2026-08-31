@@ -12,13 +12,15 @@
         "driveFileId": "11CuPIof-4JlsWD95XbiFxMFv3Lv9jwK6",
         "sourceName": "LM-PC-013_visual.png",
         "width": 1440,
-        "height": 2560
+        "height": 2560,
+        "sha256": "5bf4fc4d3af0dbb6521d9c195c8340d44d3435a42d13b6b9d3a80e633e2fb09a"
       },
       "feed": {
-        "driveFileId": "1k91uereIAwG8oTIBN2nJWs0OoQqfsdHD",
+        "driveFileId": "1k91uereIAWg8oTIBN2nJWs0OoQqfsdHD",
         "sourceName": "LM-PC-013_visual_4x5.png",
         "width": 1664,
-        "height": 2080
+        "height": 2080,
+        "sha256": "95032d0a1dde2172a43f8721e6906983981fd5d1b27dde197fdf849310e9b6b4"
       }
     },
     {
@@ -31,13 +33,15 @@
         "driveFileId": "1uaKSDh2JgPXJ6p4Zl3Su9hJzM-DNXiTz",
         "sourceName": "LM-PC-031_visual.png",
         "width": 1440,
-        "height": 2560
+        "height": 2560,
+        "sha256": "87a58ab030280ad5e40652da3835d0f02871a259812cac324181ec177434f3e4"
       },
       "feed": {
         "driveFileId": "1pXrwi60WQkdgF8lhyVd1I0gWnbDzhVF-",
         "sourceName": "LM-PC-031_visual_4x5.png",
         "width": 1664,
-        "height": 2080
+        "height": 2080,
+        "sha256": "c1f2ad11d8f7e501663d3909e380966fbe77675e9425222dbb2d10440ec3cc8f"
       }
     },
     {
@@ -50,13 +54,15 @@
         "driveFileId": "1U3ucv9Ti2Y4PB6cJpquNmJfnsOd3_CKc",
         "sourceName": "LM-PC-065_visual.png",
         "width": 1440,
-        "height": 2560
+        "height": 2560,
+        "sha256": "c7ee7186e35df7f34458968ceaad075c50d427fdfe180585fc680a5da962ca80"
       },
       "feed": {
         "driveFileId": "178BiETI3t3SNMhfFgzVNQDS_czIkWD4Q",
         "sourceName": "LM-PC-065_visual_4x5.png",
         "width": 1664,
-        "height": 2080
+        "height": 2080,
+        "sha256": "5fc7b65e648a0eea8010da2aba1d4dc6d36770bde9c7778ab04e5172374d6c4e"
       }
     }
   ]

@@ -7,9 +7,11 @@ on:
       - 'src/lib/legal-core/**'
       - 'src/lib/visual-system/**'
       - 'src/lib/knowledge-graph/**'
+      - 'src/lib/review/**'
       - 'src/lib/contracts/**'
       - 'src/components/**'
       - 'public/assets/legalmente/**'
+      - 'public/internal-assets/legalmente/wave-01a/**'
       - 'public/_headers'
       - 'public/robots.txt'
       - 'scripts/**'
@@ -24,9 +26,11 @@ on:
       - 'src/lib/legal-core/**'
       - 'src/lib/visual-system/**'
       - 'src/lib/knowledge-graph/**'
+      - 'src/lib/review/**'
       - 'src/lib/contracts/**'
       - 'src/components/**'
       - 'public/assets/legalmente/**'
+      - 'public/internal-assets/legalmente/wave-01a/**'
       - 'public/_headers'
       - 'public/robots.txt'
       - 'scripts/**'
@@ -50,6 +54,14 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npm run test:legal-core
       - run: npm run test:knowledge-safety
+      - run: npm run test:knowledge-integrity
+      - run: npm run test:pilot-content
+      - run: npm run test:review-registry
+      - run: npm run test:review-registry-files
+      - run: npm run test:production-assets
+      - run: npm run test:contract-limb
+      - run: npm run test:internal-review-surface
+      - run: npm run test:before-signing-surface
       - run: npm run typecheck
       - run: npm run lint
       - name: Privacy surface smoke

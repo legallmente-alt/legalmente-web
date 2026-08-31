@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { evaluateBeforeSigning, type BeforeSigningInput, type BeforeSigningFinding } from "@/lib/legal-core/before-signing";
+import { getConcept, getProcess } from "@/lib/knowledge-graph/content";
+import { getContractLimbPath } from "@/lib/contracts/contract-limb";
+import { getInternalReviewUnit } from "@/lib/review/registry";
 
 type CheckKey = "partiesIdentified" | "clearConsideration" | "termAndTermination" | "blanksFilled" | "jurisdictionClause";
 
@@ -63,6 +66,15 @@ export default function BeforeSigningPage() {
   }
 
   const findings = result?.data?.findings ?? [];
+  const contractPath = getContractLimbPath(contractType);
+  const relatedConcepts = contractPath.conceptIds.map((id) => getConcept(id)).filter((item): item is NonNullable<typeof item> => item !== null);
+  const relatedProcess = getProcess(contractPath.processId);
+  const relatedReviewUnits = contractPath.reviewContentIds.map((id) => getInternalReviewUnit(id)).filter((item): item is NonNullable<typeof item> => item !== null);
+  const resultHeading = result?.state === "REVIEW_REQUIRED"
+    ? "Revisión requerida."
+    : findings.length > 0
+      ? "Puntos de atención encontrados."
+      : "Guía preliminar disponible.";
 
   return (
     <main className="bg-[#F5F0E8] text-[#102A43]">
@@ -96,6 +108,7 @@ export default function BeforeSigningPage() {
               <option value="ARRENDAMIENTO">Arrendamiento</option>
               <option value="PRESTACION_SERVICIOS">Prestación de servicios</option>
               <option value="LABORAL">Laboral</option>
+              <option value="PROMESA_COMPRAVENTA">Promesa de compraventa</option>
               <option value="COMPRAVENTA">Compraventa</option>
               <option value="CONFIDENCIALIDAD">Confidencialidad</option>
             </select>
@@ -142,9 +155,22 @@ export default function BeforeSigningPage() {
             <div className="mt-6">
               <div className="border border-[#102A43]/15 bg-white/30 p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/50">Estado educativo</p>
-                <h2 className="mt-3 font-serif text-3xl leading-tight">{result.state === "PASS" ? "Orientación estructural disponible." : "Puntos de atención para aclarar."}</h2>
+                <h2 className="mt-3 font-serif text-3xl leading-tight">{resultHeading}</h2>
                 <p className="mt-4 text-sm leading-7 text-[#102A43]/65">{result.data?.disclaimer ?? result.reviewReasons?.join(" ")}</p>
                 <p className="mt-4 border-l-2 border-[#D97745] pl-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#102A43]/55">Territorio: México · no determina validez ni conveniencia</p>
+                <div className="mt-6 grid gap-5 border-t border-[#102A43]/12 pt-5 text-sm leading-6 text-[#102A43]/65 sm:grid-cols-2">
+                  <div>
+                    <p className="font-semibold text-[#102A43]">Qué revisó</p>
+                    <ul className="mt-2 list-disc space-y-1 pl-5">
+                      {checks.map((check) => <li key={check.key}>{check.title}</li>)}
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-[#102A43]">Qué no revisó</p>
+                    <p className="mt-2">No leyó un documento, no determinó validez, no aplicó todos los hechos de una situación ni recomendó firmar.</p>
+                  </div>
+                </div>
+                <p className="mt-5 text-xs leading-5 text-[#102A43]/55">Regla {result.provenance.ruleVersion} · cálculo {result.provenance.calculationVersion} · vigencia observada {result.provenance.effectiveDate}</p>
               </div>
               {findings.length > 0 ? (
                 <div className="mt-6 space-y-3">
@@ -163,6 +189,26 @@ export default function BeforeSigningPage() {
               </div>
             </div>
           )}
+
+          <section data-contract-limb={contractType} className="mt-10 border-t border-[#102A43]/12 pt-7">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/50">Circulación de Contratos</p>
+            <h2 className="mt-3 font-serif text-2xl leading-tight">De la pregunta al contenido relacionado.</h2>
+            <p className="mt-3 text-sm leading-6 text-[#102A43]/65">{contractPath.focus}</p>
+            <div className="mt-5 flex flex-wrap gap-3 text-sm font-semibold">
+              {relatedConcepts.map((concept) => (
+                <Link key={concept.id} href={`/concepto/${concept.id}`} className="border-b border-[#102A43]/60 pb-1 hover:border-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43]">Concepto: {concept.title}</Link>
+              ))}
+              {relatedProcess ? <Link href={`/proceso/${relatedProcess.id}`} className="border-b border-[#102A43]/60 pb-1 hover:border-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43]">Proceso: {relatedProcess.title}</Link> : null}
+            </div>
+            <div className="mt-5 border-l-2 border-[#D97745] pl-3 text-xs leading-5 text-[#102A43]/60">
+              {relatedReviewUnits.length > 0 ? (
+                <p>Contenido relacionado en revisión interna: {relatedReviewUnits.map((unit) => `${unit.contentId} · ${unit.state}`).join("; ")}.</p>
+              ) : (
+                <p>Esta selección todavía no tiene contenido visual relacionado en el registro de revisión; no se infiere aprobación ni mapping.</p>
+              )}
+              <p className="mt-2">La relación conecta aprendizaje, preparación y revisión; no convierte una orientación en dictamen ni en contrato generado.</p>
+            </div>
+          </section>
 
           <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold">
             <Link href="/proceso/leer-antes-de-aceptar" className="border-b border-[#102A43]/60 pb-1 hover:border-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43]">Ver proceso relacionado</Link>

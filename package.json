@@ -12,6 +12,14 @@
     "typecheck": "tsc --noEmit",
     "test:legal-core": "tsx --test src/lib/legal-core/legal-core.test.ts",
     "test:knowledge-safety": "tsx --test src/lib/knowledge-graph/safety.test.ts",
+    "test:knowledge-integrity": "tsx --test src/lib/knowledge-graph/integrity.test.ts",
+    "test:pilot-content": "tsx --test src/lib/content/pilot-briefs.test.ts",
+    "test:review-registry": "tsx --test src/lib/review/registry.test.ts",
+    "test:review-registry-files": "tsx scripts/review-registry-file-proof.mjs",
+    "test:production-assets": "node scripts/production-asset-file-proof.mjs",
+    "test:contract-limb": "tsx --test src/lib/contracts/contract-limb.test.ts",
+    "test:internal-review-surface": "node scripts/internal-review-surface-proof.mjs",
+    "test:before-signing-surface": "node scripts/before-signing-surface-proof.mjs",
     "test:public-routes": "node scripts/public-route-proof.mjs"
   },
   "dependencies": {
