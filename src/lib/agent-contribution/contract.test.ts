@@ -38,6 +38,7 @@ const validContribution: AgentContribution = {
     requestedWork: "Proponer una relación contextual CONTRACTS ↔ TAX y una dirección visual.",
     priorAssetFingerprints: ["sha256:prior-001"],
     upstreamState: "ACTIVE",
+    bindingRequirement: "REQUIRED",
   },
   output: {
     outputId: "output-001",
@@ -106,8 +107,8 @@ test("HOLD_SOURCE and UNKNOWN upstream states require BLOCKED output", () => {
   assert.ok(result.issues.some((item) => item.path === "output.state"));
 });
 
-test("publication, deploy, merge and legal approval intent is rejected", () => {
-  const withIntent = { ...validContribution, output: { ...validContribution.output, decisions: ["PUBLISHED and MERGED after legal approval"] } };
+test("publication, deploy, merge and legal approval fields are rejected structurally", () => {
+  const withIntent = { ...validContribution, output: { ...validContribution.output, publicationDecision: "PUBLISHED", deployDecision: false, mergeDecision: false, legalApproval: true } };
   const result = validateAgentContribution(withIntent);
   assert.equal(result.ok, false);
 });
@@ -130,6 +131,55 @@ test("relation remains contextual and does not create a claim", () => {
   assert.equal(result.ok, true);
   assert.deepEqual(validContribution.input.claimIds, ["claim-opaque-001"]);
   assert.equal(validContribution.output.relations[0].whyRelated.includes("claim"), false);
+});
+
+test("bindingRequirement replaces requestedWork keyword inference", () => {
+  const optional = validateAgentContribution({
+    ...validContribution,
+    input: { ...validContribution.input, claimIds: [], sourceIds: [], bindingRequirement: "OPTIONAL", requestedWork: "Create a neutral visual orientation only." },
+  });
+  const notApplicable = validateAgentContribution({
+    ...validContribution,
+    input: { ...validContribution.input, claimIds: [], sourceIds: [], bindingRequirement: "NOT_APPLICABLE", requestedWork: "Create a non-legal operational handoff." },
+  });
+  assert.equal(optional.ok, true);
+  assert.equal(notApplicable.ok, true);
+});
+
+test("closed schema rejects unknown root and output authority keys", () => {
+  const unknownRoot = validateAgentContribution({ ...validContribution, extra: true } as unknown);
+  const unknownOutput = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, claims: ["new-claim"] } } as unknown);
+  const unknownSources = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, sources: ["new-source"] } } as unknown);
+  const unknownTerritoryDecision = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, territoryDecision: "MX" } } as unknown);
+  assert.equal(unknownRoot.ok, false);
+  assert.equal(unknownOutput.ok, false);
+  assert.equal(unknownSources.ok, false);
+  assert.equal(unknownTerritoryDecision.ok, false);
+});
+
+test("closed schema rejects unknown nested keys", () => {
+  const unknownAsset = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, assets: [{ ...validContribution.output.assets[0], arbitrary: true }] } } as unknown);
+  const unknownProvenance = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, provenance: { ...validContribution.output.provenance, legalRule: "new rule" } } } as unknown);
+  const unknownQA = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, qa: [{ ...validContribution.output.qa[0], publicationDecision: true }] } } as unknown);
+  assert.equal(unknownAsset.ok, false);
+  assert.equal(unknownProvenance.ok, false);
+  assert.equal(unknownQA.ok, false);
+});
+
+test("BLOCKED and REJECTED require real blockers", () => {
+  const blockedEmpty = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, state: "BLOCKED", blockers: [], nextAction: "Resolve source hold." } });
+  const rejectedEmpty = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, state: "REJECTED", blockers: [], nextAction: undefined } });
+  const blockedReal = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, state: "BLOCKED", blockers: ["Awaiting upstream source."], nextAction: "Resume after source validation." } });
+  assert.equal(blockedEmpty.ok, false);
+  assert.equal(rejectedEmpty.ok, false);
+  assert.equal(blockedReal.ok, true);
+});
+
+test("lifecycle requires nextAction except REJECTED and handoff at READY_FOR_REVIEW", () => {
+  const rejected = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, state: "REJECTED", blockers: ["Out of scope"], nextAction: undefined, handoff: undefined } });
+  const readyWithoutHandoff = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, state: "READY_FOR_REVIEW", handoff: undefined } });
+  assert.equal(rejected.ok, true);
+  assert.equal(readyWithoutHandoff.ok, false);
 });
 
 test("public runtime has zero imports of agent-contribution and ecosystem-kernel", () => {
