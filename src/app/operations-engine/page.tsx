@@ -1,4 +1,7 @@
 import { operationsEngineV12 as engine } from "@/data/operations-engine-v1-2";
+import { validateClaimManifest } from "@/lib/operations-engine/validate";
+
+const failClosedProbe = validateClaimManifest({});
 
 const statusRows = [
   ["Publicación", engine.gates.publication],
@@ -41,6 +44,14 @@ export default function OperationsEnginePage() {
               <code className="rounded bg-[#E8E2D5] px-2 py-1 text-xs font-semibold">{value}</code>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="probe-heading" className="mt-12">
+        <h2 id="probe-heading" className="mb-4 text-2xl font-semibold">Prueba de procedencia</h2>
+        <div className="rounded-xl border border-[#C77C4D]/40 bg-[#C77C4D]/10 p-5 text-sm leading-6">
+          <p><strong>Probe fail-closed:</strong> {failClosedProbe.ok ? "UNEXPECTED_PASS" : "BLOCKED_AS_EXPECTED"}</p>
+          {!failClosedProbe.ok && <p className="mt-2 text-[#102A43]/80">Un manifest vacío no puede entrar en la cadena porque faltan procedencia, fuente primaria, estados y evidencia.</p>}
         </div>
       </section>
 
