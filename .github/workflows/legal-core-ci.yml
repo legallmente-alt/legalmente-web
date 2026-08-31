@@ -54,6 +54,7 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npm run test:legal-core
       - run: npm run test:knowledge-safety
+      - run: npm run test:knowledge-integrity
       - run: npm run test:review-registry
       - run: npm run test:review-registry-files
       - run: npm run test:contract-limb
