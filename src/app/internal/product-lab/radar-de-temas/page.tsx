@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { topicRadar, topicRadarMeta } from "@/lib/legal-core/topic-radar";
+import { topicRadar, topicRadarAudits, topicRadarMeta } from "@/lib/legal-core/topic-radar";
 
 export default function TopicRadarPage() {
   const [selectedId, setSelectedId] = useState(topicRadar[0].id);
   const selected = useMemo(() => topicRadar.find((item) => item.id === selectedId) ?? topicRadar[0], [selectedId]);
+  const audit = topicRadarAudits[selected.id];
 
   return (
     <main className="mx-auto max-w-[1280px] space-y-12 px-5 py-10 text-tinta md:px-8">
@@ -39,7 +40,7 @@ export default function TopicRadarPage() {
           <header className="space-y-4 border-b border-tinta/12 pb-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-xs font-semibold uppercase tracking-[0.12em] text-tinta/50">{selected.axis}</p>
-              <span className="border border-oro px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-tinta/65">{selected.reviewState}</span>
+              <div className="flex flex-wrap gap-2"><span className="border border-oro px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-tinta/65">{audit.status}</span><span className="border border-tinta/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-tinta/55">{selected.reviewState}</span></div>
             </div>
             <h2 className="max-w-[18ch] font-serif text-4xl leading-[1.02] tracking-[-0.03em] md:text-5xl">{selected.title}</h2>
             <p className="max-w-[68ch] text-base leading-7 text-tinta/75">{selected.humanQuestion}</p>
@@ -55,6 +56,8 @@ export default function TopicRadarPage() {
             <h3 className="mt-2 font-serif text-3xl">{selected.resultLabel}</h3>
             <p className="mt-3 max-w-[68ch] text-sm leading-6 text-tinta/72">{selected.resultExplanation}</p>
           </section>
+
+          <section className="border-t border-tinta/12 pt-6"><h3 className="font-serif text-2xl">Auditoría de fuentes</h3><p className="mt-3 text-sm leading-6 text-tinta/75">{audit.sourceBasis}</p><p className="mt-3 text-xs leading-5 text-tinta/60"><strong>Artículos / precedentes declarados:</strong> {audit.sourceArticles.join(" · ")}</p><p className="mt-2 text-xs leading-5 text-tinta/60">{audit.auditNote}</p></section>
 
           <dl className="grid gap-x-8 gap-y-5 text-sm leading-6 md:grid-cols-2">
             <div><dt className="font-semibold text-tinta/55">Relación</dt><dd>{selected.relationship}</dd></div>

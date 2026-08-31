@@ -186,3 +186,64 @@ export const topicRadarMeta = {
   status: "INTERNAL_REVIEW_ONLY",
   sourceNote: "Las entradas proceden del framework adjunto y requieren verificación jurídica y de vigencia antes de exponerse como contenido público.",
 };
+
+
+export type TopicAudit = {
+  status: "READY_FOR_PRODUCT";
+  publicationState: "INTERNAL_REVIEW_ONLY";
+  sourceArticles: string[];
+  sourceBasis: string;
+  auditNote: string;
+};
+
+export const topicRadarAudits: Record<string, TopicAudit> = {
+  "rent-vs-prescription": {
+    status: "READY_FOR_PRODUCT",
+    publicationState: "INTERNAL_REVIEW_ONLY",
+    sourceArticles: ["CCF Arts. 790, 791, 1151 y 1152", "SCJN 1a./J. 82/2014 · Registro 2007985"],
+    sourceBasis: "La fuente declarada distingue posesión derivada, posesión en concepto de propietario y mutación objetiva de la causa de posesión.",
+    auditNote: "Estado de producto derivado del dictamen adjunto; requiere comprobación de vigencia y alcance antes de publicación.",
+  },
+  "blank-signature-vs-resignation": {
+    status: "READY_FOR_PRODUCT",
+    publicationState: "INTERNAL_REVIEW_ONLY",
+    sourceArticles: ["LFT Arts. 33, 784 fraccs. IV y XII, 804", "SCJN 2a./J. 138/2012 · Registro 2002166"],
+    sourceBasis: "La fuente declarada relaciona irrenunciabilidad, carga probatoria y prueba documentoscópica sin convertir una firma aislada en conclusión automática.",
+    auditNote: "Estado de producto derivado del dictamen adjunto; debe revisarse con fuente laboral oficial vigente.",
+  },
+  "fifty-fifty-deadlock": {
+    status: "READY_FOR_PRODUCT",
+    publicationState: "INTERNAL_REVIEW_ONLY",
+    sourceArticles: ["LGSM Arts. 16, 91 y 229 fracc. II", "Código de Comercio Art. 78"],
+    sourceBasis: "La fuente declarada distingue poder de veto, actos de administración y mecanismos contractuales de salida.",
+    auditNote: "Estado de producto derivado del dictamen adjunto; no afirma que todo empate produzca disolución.",
+  },
+  "standing-work-vs-seating-duty": {
+    status: "READY_FOR_PRODUCT",
+    publicationState: "INTERNAL_REVIEW_ONLY",
+    sourceArticles: ["LFT Arts. 132 fracc. V Bis y 133 fraccs. XVII y XVIII", "NOM-036-1-STPS-2018"],
+    sourceBasis: "La fuente declarada vincula asiento con respaldo, organización del puesto y riesgos ergonómicos.",
+    auditNote: "Estado de producto derivado del dictamen adjunto; la aplicación depende de las funciones reales y la norma vigente.",
+  },
+  "inheritance-benefit-vs-personal-debts": {
+    status: "READY_FOR_PRODUCT",
+    publicationState: "INTERNAL_REVIEW_ONLY",
+    sourceArticles: ["CCF Art. 1678", "Código Civil de España Art. 1023", "CCyCN Argentina Art. 2280"],
+    sourceBasis: "La fuente declarada separa masa hereditaria y patrimonio personal para explicar el alcance territorial comparado.",
+    auditNote: "Estado de producto derivado del dictamen adjunto; no sustituye el análisis del expediente sucesorio.",
+  },
+  "verbal-real-estate-contract": {
+    status: "READY_FOR_PRODUCT",
+    publicationState: "INTERNAL_REVIEW_ONLY",
+    sourceArticles: ["CCF Arts. 1796, 2316, 2320 y 2794"],
+    sourceBasis: "La fuente declarada distingue consentimiento, forma legal, escritura pública, registro y fianza expresa.",
+    auditNote: "Estado de producto derivado del dictamen adjunto; la forma y oponibilidad requieren territorio y acto concreto.",
+  },
+  "industrial-secret-vs-generic-nda": {
+    status: "READY_FOR_PRODUCT",
+    publicationState: "INTERNAL_REVIEW_ONLY",
+    sourceArticles: ["LFPPI Arts. 163 a 166", "Código Penal Federal Art. 210"],
+    sourceBasis: "La fuente declarada exige valor económico, identificación y medidas materiales o documentales reales de preservación.",
+    auditNote: "Estado de producto derivado del dictamen adjunto; un NDA genérico no garantiza por sí solo tutela de secreto industrial.",
+  },
+};
