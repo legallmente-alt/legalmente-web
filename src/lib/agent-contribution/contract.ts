@@ -17,8 +17,10 @@ export const CONTRIBUTION_STATES = [
   "REJECTED",
 ] as const;
 
+export const BINDING_REQUIREMENTS = ["REQUIRED", "OPTIONAL", "NOT_APPLICABLE"] as const;
+
 export type ContributionState = (typeof CONTRIBUTION_STATES)[number];
-export type BindingRequirement = (typeof TERRITORY_REQUIREMENTS)[number];
+export type BindingRequirement = (typeof BINDING_REQUIREMENTS)[number];
 
 export type AssetProvenance = {
   provenanceId: string;
@@ -103,6 +105,7 @@ const qaResultSet = new Set<string>(["PASS", "FAIL", "BLOCKED"]);
 const kernelStatusSet = new Set<string>(KERNEL_STATUSES);
 const legalDomainSet = new Set<string>(LEGAL_DOMAIN_IDS);
 const territoryRequirementSet = new Set<string>(TERRITORY_REQUIREMENTS);
+const bindingRequirementSet = new Set<string>(BINDING_REQUIREMENTS);
 const contextRiskSet = new Set<string>(["LOW", "MEDIUM", "HIGH"]);
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 const nonEmpty = (value: unknown): value is string => typeof value === "string" && value.trim().length > 0;
@@ -111,7 +114,8 @@ const nonEmptyList = (value: unknown): value is readonly string[] => stringList(
 const isState = (value: unknown): value is ContributionState => typeof value === "string" && stateSet.has(value);
 const isKernelStatus = (value: unknown): value is KernelStatus => typeof value === "string" && kernelStatusSet.has(value);
 const isLegalDomainId = (value: unknown): value is LegalDomainId => typeof value === "string" && legalDomainSet.has(value);
-const isBindingRequirement = (value: unknown): value is BindingRequirement => typeof value === "string" && territoryRequirementSet.has(value);
+const isBindingRequirement = (value: unknown): value is BindingRequirement => typeof value === "string" && bindingRequirementSet.has(value);
+const isTerritoryRequirement = (value: unknown): boolean => typeof value === "string" && territoryRequirementSet.has(value);
 const isQAResult = (value: unknown): value is AgentQA["result"] => typeof value === "string" && qaResultSet.has(value);
 const issue = (path: string, message: string): ContributionIssue => ({ path, message });
 
@@ -142,7 +146,7 @@ function validateRelation(value: unknown, path: string, issues: ContributionIssu
   if (value.from === value.to) issues.push(issue(path, "self-relations are not allowed"));
   if (!nonEmpty(value.whyRelated)) issues.push(issue(`${path}.whyRelated`, "required"));
   if (!nonEmptyList(value.sharedThemes)) issues.push(issue(`${path}.sharedThemes`, "required"));
-  if (!isBindingRequirement(value.territoryRequirement)) issues.push(issue(`${path}.territoryRequirement`, "unknown territory requirement"));
+  if (!isTerritoryRequirement(value.territoryRequirement)) issues.push(issue(`${path}.territoryRequirement`, "unknown territory requirement"));
   if (typeof value.contextRisk !== "string" || !contextRiskSet.has(value.contextRisk)) issues.push(issue(`${path}.contextRisk`, "unknown contextual risk"));
 }
 

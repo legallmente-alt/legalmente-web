@@ -3,7 +3,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 import { type CrossDomainRelation, type VisualSemantics } from "@/lib/ecosystem-kernel";
-import { type AgentContribution, validateAgentContribution } from "./contract";
+import { BINDING_REQUIREMENTS, type AgentContribution, validateAgentContribution } from "./contract";
 
 const visualSemantics: VisualSemantics = {
   visualGravity: "care, formality and changing obligations",
@@ -136,6 +136,22 @@ test("relation remains contextual and does not create a claim", () => {
   assert.equal(result.ok, true);
   assert.deepEqual(validContribution.input.claimIds, ["claim-opaque-001"]);
   assert.equal(validContribution.output.relations[0].whyRelated.includes("claim"), false);
+});
+
+test("bindingRequirement uses its own semantic enum and accepts all declared values", () => {
+  for (const bindingRequirement of BINDING_REQUIREMENTS) {
+    const result = validateAgentContribution({ ...validContribution, input: { ...validContribution.input, bindingRequirement, claimIds: bindingRequirement === "REQUIRED" ? validContribution.input.claimIds : [], sourceIds: bindingRequirement === "REQUIRED" ? validContribution.input.sourceIds : [] } });
+    assert.equal(result.ok, true);
+  }
+});
+
+test("unknown bindingRequirement fails closed while territorial relation validation remains active", () => {
+  const unknownBinding = validateAgentContribution({ ...validContribution, input: { ...validContribution.input, bindingRequirement: "TERRITORIAL" } } as unknown);
+  const unknownTerritory = validateAgentContribution({ ...validContribution, output: { ...validContribution.output, relations: [{ ...validContribution.output.relations[0], territoryRequirement: "TERRITORIAL" }] } } as unknown);
+  assert.equal(unknownBinding.ok, false);
+  assert.ok(unknownBinding.issues.some((item) => item.path === "input.bindingRequirement"));
+  assert.equal(unknownTerritory.ok, false);
+  assert.ok(unknownTerritory.issues.some((item) => item.path === "output.relations[0].territoryRequirement"));
 });
 
 test("bindingRequirement replaces requestedWork keyword inference", () => {
