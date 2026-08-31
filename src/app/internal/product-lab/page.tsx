@@ -1,15 +1,23 @@
 import { notFound } from "next/navigation";
 
 import { EditorialCard, LegalStateBadge } from "@/components/legalmente/ProductPrimitives";
+import { wave01aReviewRegistry } from "@/lib/review/registry";
 import { productionAssetPack } from "@/lib/visual-system";
 
 export const dynamic = "force-static";
 
-const wave01aReviews = [
-  {
-    contentId: "LM-PC-013",
+type Wave01aCopy = {
+  question: string;
+  sourceLabel: string;
+  sourceUrl: string;
+  sourceVersion: string;
+  claims: readonly { article: string; text: string; qualifier: string }[];
+  alt: string;
+};
+
+const wave01aCopyById: Record<string, Wave01aCopy> = {
+  "LM-PC-013": {
     question: "¿Qué tiene que quedar claro sobre lo que las partes se comprometen a hacer o entregar?",
-    candidateRoute: "/proceso/leer-antes-de-aceptar",
     sourceLabel: "Código Civil Federal",
     sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
     sourceVersion: "Texto reformado 2025-11-14 · México piloto",
@@ -17,14 +25,10 @@ const wave01aReviews = [
       { article: "Art. 1824", text: "El objeto de los contratos es una categoría diferenciable dentro del Código Civil Federal.", qualifier: "No determina el efecto de una cláusula ni la exigibilidad de un documento concreto." },
       { article: "Art. 1794", text: "El consentimiento y el objeto aparecen como elementos de existencia del contrato en el Código Civil Federal.", qualifier: "No prueba que un contrato concreto exista, sea válido o sea exigible." },
     ],
-    vertical: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual.png",
-    feed: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual_4x5.png",
     alt: "Bodegón editorial con caja, regla y papel para LM-PC-013; no incorpora texto jurídico.",
   },
-  {
-    contentId: "LM-PC-031",
+  "LM-PC-031": {
     question: "¿Qué elementos ayudan a describir una relación de trabajo sin asumir una conclusión sobre mi caso?",
-    candidateRoute: "/mundo/empresa-comercio",
     sourceLabel: "Ley Federal del Trabajo",
     sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
     sourceVersion: "Texto reformado 2026-05-14 · México piloto",
@@ -32,14 +36,10 @@ const wave01aReviews = [
       { article: "Arts. 20–21", text: "La Ley Federal del Trabajo define la relación de trabajo con independencia del acto que le dé origen, mediante trabajo personal subordinado y salario.", qualifier: "No decide una controversia individual ni una prestación concreta." },
       { article: "Art. 25", text: "Las condiciones de trabajo pueden incluir servicio, lugar, jornada, salario, pago y vacaciones en el marco escrito laboral.", qualifier: "No prueba los términos de una relación específica ni calcula derechos." },
     ],
-    vertical: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual.png",
-    feed: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual_4x5.png",
     alt: "Bodegón editorial con herramientas, delantal y etiqueta en blanco para LM-PC-031; no incorpora texto jurídico.",
   },
-  {
-    contentId: "LM-PC-065",
+  "LM-PC-065": {
     question: "¿Qué documentos y datos conviene ordenar para entender una sociedad mercantil?",
-    candidateRoute: "/mundo/empresa-comercio",
     sourceLabel: "Ley General de Sociedades Mercantiles",
     sourceUrl: "https://www.diputados.gob.mx/LeyesBiblio/pdf/LGSM.pdf",
     sourceVersion: "Texto reformado 2023-10-20 · México piloto",
@@ -47,11 +47,26 @@ const wave01aReviews = [
       { article: "Art. 1", text: "La Ley General de Sociedades Mercantiles reconoce distintas especies de sociedades mercantiles.", qualifier: "No identifica la entidad de una persona ni valida su constitución." },
       { article: "Art. 6", text: "La escritura o póliza constitutiva debe contener datos previstos por la Ley General de Sociedades Mercantiles.", qualifier: "No prueba que un documento concreto esté completo o sea válido." },
     ],
-    vertical: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual.png",
-    feed: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual_4x5.png",
     alt: "Bodegón editorial con muestras, carpeta y placa en blanco para LM-PC-065; no incorpora texto jurídico.",
   },
-] as const;
+};
+
+const wave01aReviews = wave01aReviewRegistry.map((unit) => {
+  const copy = wave01aCopyById[unit.contentId];
+  const vertical = unit.assets.find((asset) => asset.format === "9:16");
+  const feed = unit.assets.find((asset) => asset.format === "4:5");
+
+  if (!copy || !vertical || !feed) {
+    throw new Error(`Wave 01A review unit is incomplete: ${unit.contentId}`);
+  }
+
+  return {
+    ...unit,
+    ...copy,
+    vertical: vertical.localPath,
+    feed: feed.localPath,
+  };
+});
 
 export default function InternalProductLabPage() {
   if (process.env.LEGALMENTE_PRODUCT_LAB_INTERNAL !== "1") notFound();
