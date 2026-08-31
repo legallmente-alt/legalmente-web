@@ -16,6 +16,7 @@
     "test:pilot-content": "tsx --test src/lib/content/pilot-briefs.test.ts",
     "test:review-registry": "tsx --test src/lib/review/registry.test.ts",
     "test:review-registry-files": "tsx scripts/review-registry-file-proof.mjs",
+    "test:production-assets": "node scripts/production-asset-file-proof.mjs",
     "test:contract-limb": "tsx --test src/lib/contracts/contract-limb.test.ts",
     "test:internal-review-surface": "node scripts/internal-review-surface-proof.mjs",
     "test:before-signing-surface": "node scripts/before-signing-surface-proof.mjs",
