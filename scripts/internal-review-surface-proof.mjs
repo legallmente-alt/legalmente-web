@@ -2,6 +2,8 @@ import fs from "node:fs";
 
 const pagePath = "src/app/internal/product-lab/page.tsx";
 const source = fs.readFileSync(pagePath, "utf8");
+const publicBeforeSigningPath = "src/app/antes-de-firmar/page.tsx";
+const publicBeforeSigningSource = fs.readFileSync(publicBeforeSigningPath, "utf8");
 const requiredMarkers = [
   "wave01aReviewRegistry",
   "wave01aReviewSnapshot",
@@ -32,4 +34,17 @@ for (const marker of forbiddenMarkers) {
     throw new Error(`Forbidden juridical surface found in Product Lab: ${marker}`);
   }
 }
-console.log("Internal review surface proof passed: registry-backed review-only fields present; juridical claims and source bindings absent.");
+
+const publicForbiddenMarkers = [
+  "@/lib/review/registry",
+  "getInternalReviewUnit",
+  "HUMAN_REVIEW_REQUIRED",
+  "Contenido relacionado en revisión interna",
+  "reviewContentIds",
+];
+for (const marker of publicForbiddenMarkers) {
+  if (publicBeforeSigningSource.includes(marker)) {
+    throw new Error(`Public Before Signing surface imports internal review state: ${marker}`);
+  }
+}
+console.log("Internal review surface proof passed: registry stays review-only and public Before Signing does not import internal state.");

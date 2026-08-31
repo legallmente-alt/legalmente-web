@@ -5,7 +5,6 @@ import { useState } from "react";
 import { evaluateBeforeSigning, type BeforeSigningInput, type BeforeSigningFinding } from "@/lib/legal-core/before-signing";
 import { getConcept, getProcess } from "@/lib/knowledge-graph/content";
 import { getContractLimbPath } from "@/lib/contracts/contract-limb";
-import { getInternalReviewUnit } from "@/lib/review/registry";
 
 type CheckKey = "partiesIdentified" | "clearConsideration" | "termAndTermination" | "blanksFilled" | "jurisdictionClause";
 
@@ -69,7 +68,6 @@ export default function BeforeSigningPage() {
   const contractPath = getContractLimbPath(contractType);
   const relatedConcepts = contractPath.conceptIds.map((id) => getConcept(id)).filter((item): item is NonNullable<typeof item> => item !== null);
   const relatedProcess = getProcess(contractPath.processId);
-  const relatedReviewUnits = contractPath.reviewContentIds.map((id) => getInternalReviewUnit(id)).filter((item): item is NonNullable<typeof item> => item !== null);
 
   return (
     <main className="bg-[#F5F0E8] text-[#102A43]">
@@ -183,12 +181,8 @@ export default function BeforeSigningPage() {
               {relatedProcess ? <Link href={`/proceso/${relatedProcess.id}`} className="border-b border-[#102A43]/60 pb-1 hover:border-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43]">Proceso: {relatedProcess.title}</Link> : null}
             </div>
             <div className="mt-5 border-l-2 border-[#D97745] pl-3 text-xs leading-5 text-[#102A43]/60">
-              {relatedReviewUnits.length > 0 ? (
-                <p>Contenido relacionado en revisión interna: {relatedReviewUnits.map((unit) => `${unit.contentId} · ${unit.state}`).join("; ")}.</p>
-              ) : (
-                <p>Esta selección todavía no tiene contenido visual relacionado en el registro de revisión; no se infiere aprobación ni mapping.</p>
-              )}
-              <p className="mt-2">La relación conecta aprendizaje, preparación y revisión; no convierte una orientación en dictamen ni en contrato generado.</p>
+              <p>Esta ruta conecta conceptos y un proceso educativo. Los materiales en revisión interna no se muestran ni se usan para inferir una aprobación.</p>
+              <p className="mt-2">La relación conecta aprendizaje y preparación; no convierte una orientación en dictamen ni en contrato generado.</p>
             </div>
           </section>
 
