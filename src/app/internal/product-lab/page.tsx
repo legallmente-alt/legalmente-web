@@ -90,6 +90,7 @@ export default function InternalProductLabPage() {
           <EditorialCard family="tool" title="Finiquito MX" meta="Solo componentes devengados dentro del alcance V1." symbol="compare" state="hold" />
           <EditorialCard family="tool" title="Radar de incompatibilidades" meta="Relaciones humanas, exclusiones y preguntas de continuidad." symbol="territory" state="reviewRequired" href="/internal/product-lab/radar-de-temas" />
           <EditorialCard family="tool" title="Wave 1 · graduación" meta="Tres rutas listas para revisión de literalidad antes de LIVE." symbol="prepare" state="reviewRequired" href="/internal/product-lab/graduation-wave-1" />
+          <EditorialCard family="series" title="Atlas cultural-jurídico" meta="Cine, literatura, filosofía, tecnología y vida contemporánea conectadas al Derecho." symbol="learn" state="reviewRequired" href="/internal/product-lab/atlas-cultural" />
         </div>
       </section>
 
