@@ -8,13 +8,12 @@ export type ContractLimbPath = {
   readonly focus: string;
   readonly conceptIds: readonly string[];
   readonly processId: "leer-antes-de-aceptar";
-  readonly reviewContentIds: readonly string[];
 };
 
 /**
  * Relationship layer for the Contracts limb.
- * IDs point to existing Knowledge Engine and Review Registry records; this
- * table does not contain legal conclusions, source claims, or approval state.
+ * IDs point only to existing public-safe Knowledge Engine records; the
+ * internal review registry stays isolated from this public preparation route.
  */
 export const contractLimbPaths: readonly ContractLimbPath[] = [
   {
@@ -23,7 +22,6 @@ export const contractLimbPaths: readonly ContractLimbPath[] = [
     focus: "Ordenar consentimiento, obligaciones y evidencia antes de decidir qué necesita revisión.",
     conceptIds: ["consentimiento", "obligacion", "prueba"],
     processId: "leer-antes-de-aceptar",
-    reviewContentIds: [],
   },
   {
     contractType: "ARRENDAMIENTO",
@@ -31,7 +29,6 @@ export const contractLimbPaths: readonly ContractLimbPath[] = [
     focus: "Preparar la lectura de partes, objeto, contraprestación, vigencia y terminación.",
     conceptIds: ["consentimiento", "obligacion", "prueba"],
     processId: "leer-antes-de-aceptar",
-    reviewContentIds: ["LM-PC-013"],
   },
   {
     contractType: "PRESTACION_SERVICIOS",
@@ -39,7 +36,6 @@ export const contractLimbPaths: readonly ContractLimbPath[] = [
     focus: "Separar quién se compromete, qué debe entregar y qué información conviene conservar.",
     conceptIds: ["consentimiento", "obligacion", "representacion", "prueba"],
     processId: "leer-antes-de-aceptar",
-    reviewContentIds: ["LM-PC-013"],
   },
   {
     contractType: "LABORAL",
@@ -47,7 +43,6 @@ export const contractLimbPaths: readonly ContractLimbPath[] = [
     focus: "Organizar la relación de trabajo como preparación educativa, sin concluir derechos del caso.",
     conceptIds: ["consentimiento", "obligacion", "deber-profesional", "prueba"],
     processId: "leer-antes-de-aceptar",
-    reviewContentIds: ["LM-PC-031"],
   },
   {
     contractType: "PROMESA_COMPRAVENTA",
@@ -55,7 +50,6 @@ export const contractLimbPaths: readonly ContractLimbPath[] = [
     focus: "Distinguir la operación que se prepara, sus partes, objeto, condiciones y evidencia disponible.",
     conceptIds: ["consentimiento", "obligacion", "prueba"],
     processId: "leer-antes-de-aceptar",
-    reviewContentIds: ["LM-PC-013"],
   },
   {
     contractType: "COMPRAVENTA",
@@ -63,7 +57,6 @@ export const contractLimbPaths: readonly ContractLimbPath[] = [
     focus: "Preparar la lectura de lo que se entrega, recibe, paga y debe conservarse como evidencia.",
     conceptIds: ["consentimiento", "obligacion", "prueba"],
     processId: "leer-antes-de-aceptar",
-    reviewContentIds: ["LM-PC-013"],
   },
   {
     contractType: "CONFIDENCIALIDAD",
@@ -71,7 +64,6 @@ export const contractLimbPaths: readonly ContractLimbPath[] = [
     focus: "Ordenar personas, alcance, información y vigencia sin evaluar la suficiencia del acuerdo concreto.",
     conceptIds: ["consentimiento", "obligacion", "prueba"],
     processId: "leer-antes-de-aceptar",
-    reviewContentIds: ["LM-PC-013"],
   },
 ] as const;
 
@@ -85,8 +77,7 @@ export function getContractLimbPath(contractType: ContractType): ContractLimbPat
 
 export type ContractDependencyChange =
   | { readonly kind: "CONCEPT"; readonly id: string }
-  | { readonly kind: "PROCESS"; readonly id: string }
-  | { readonly kind: "REVIEW_CONTENT"; readonly id: string };
+  | { readonly kind: "PROCESS"; readonly id: string };
 
 /**
  * Reverse circulation index. It reports affected consumers only; it never
@@ -96,8 +87,7 @@ export function getAffectedContractConsumers(change: ContractDependencyChange): 
   return contractLimbPaths
     .filter((path) => {
       if (change.kind === "CONCEPT") return path.conceptIds.includes(change.id);
-      if (change.kind === "PROCESS") return path.processId === change.id;
-      return path.reviewContentIds.includes(change.id);
+      return path.processId === change.id;
     })
     .map((path) => path.contractType);
 }
