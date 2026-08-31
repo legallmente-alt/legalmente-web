@@ -55,6 +55,8 @@ jobs:
       - run: npm run test:legal-core
       - run: npm run test:knowledge-safety
       - run: npm run test:review-registry
+      - run: npm run test:review-registry-files
+      - run: npm run test:contract-limb
       - run: npm run test:internal-review-surface
       - run: npm run typecheck
       - run: npm run lint

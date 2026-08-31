@@ -26,11 +26,13 @@ A reused asset can be legitimate in a future version if the model explicitly def
 
 The current path is:
 
-`manifest → getLocalAssetAvailability() → validateReviewRegistry() → wave01aReviewSnapshot → wave01aReviewRegistry → Product Lab → internal review surface proof`.
+`manifest → getManifestAssetAvailability() → validateReviewRegistry() → wave01aReviewSnapshot → wave01aReviewRegistry → Product Lab → internal review surface proof`; la comprobación real de archivos ocurre en `scripts/review-registry-file-proof.mjs`.
 
 The actual consumer is `src/app/internal/product-lab/page.tsx`. It reads candidate routes, territory, state and local asset paths from the registry. The page remains internal-only and the separate copy layer is no longer used by the claim-free Product Lab variant from PR #21. The new `test:internal-review-surface` proof prevents claims, source labels, source URLs, source versions and “Fuente oficial” markers from returning to that surface.
 
 The registry can report structural issues, but it does not yet transmit an issue to Drive, a human inbox, or a continuity service. That absence is intentional in V2: no second Command Center, no parallel source of truth, and no unverified persistence mechanism was justified by the evidence.
+
+The browser-safe registry consumes the manifest-declared SHA-256 values only. `scripts/review-registry-file-proof.mjs` is the Node-side proof that reads the six local binaries, computes their actual digests, and supplies that availability to the same validator. This separation is required because filesystem and cryptography APIs must not enter the client bundle.
 
 ## Gates preserved
 
@@ -50,4 +52,4 @@ The PR #21 compatibility work is deliberately limited to the claim-free internal
 
 ## Verification
 
-The regression suite covers the healthy manifest, all defects listed above, runtime freezing, and unknown lookup. CI runs the registry test, claim-free Product Lab proof, legal-core, knowledge-safety, typecheck, lint, privacy, sanitized public build, public route proof and browser evidence checks. The internal route and six assets remain removed from the public artifact.
+The regression suite covers the healthy manifest, all defects listed above, runtime freezing, and unknown lookup. CI runs the registry test, the real-file SHA-256 proof, the Contract limb relation tests, claim-free Product Lab proof, legal-core, knowledge-safety, typecheck, lint, privacy, sanitized public build, public route proof and browser evidence checks. The internal route and six assets remain removed from the public artifact. The Contract limb details are documented in `docs/CONTRACTS_LIMB_V1.md`.

@@ -6,7 +6,7 @@ import wave01aManifest from "../../../public/internal-assets/legalmente/wave-01a
 import {
   getInternalReviewUnit,
   validateReviewRegistry,
-  wave01aLocalAssetAvailability,
+  wave01aManifestAvailability,
   wave01aReviewRegistry,
   wave01aReviewSnapshot,
 } from "./registry";
@@ -21,7 +21,7 @@ function assertInvalid(result: ReturnType<typeof validateReviewRegistry>, messag
 }
 
 test("adapts the existing Wave 01A manifest only after local SHA-256 verification", () => {
-  const result = validateReviewRegistry(wave01aManifest, wave01aLocalAssetAvailability);
+  const result = validateReviewRegistry(wave01aManifest, wave01aManifestAvailability);
 
   assert.equal(result.ok, true);
   if (!result.ok) return;
@@ -32,13 +32,13 @@ test("adapts the existing Wave 01A manifest only after local SHA-256 verificatio
   assert.equal(result.registry.every((unit) => unit.relatedContent === "PENDING_MAPPING"), true);
   assert.equal(result.registry.every((unit) => unit.assets.some((asset) => asset.format === "9:16")), true);
   assert.equal(result.registry.every((unit) => unit.assets.some((asset) => asset.format === "4:5")), true);
-  assert.equal(wave01aLocalAssetAvailability.length, 6);
+  assert.equal(wave01aManifestAvailability.length, 6);
 });
 
 test("makes evidence semantics explicit instead of implying history, transport, or approval", () => {
   assert.deepEqual(wave01aReviewSnapshot.evidence, {
     provenance: "DRIVE_IDS_FROM_MANIFEST",
-    fileVerification: "LOCAL_PATH_AND_SHA256_MATCH",
+    fileVerification: "MANIFEST_SHA256_DECLARED",
     changeHistory: "NOT_IMPLEMENTED",
     signalTransport: "NOT_IMPLEMENTED",
     approvalEvidence: "NOT_PRESENT",
@@ -47,19 +47,19 @@ test("makes evidence semantics explicit instead of implying history, transport, 
 
 test("fails closed when availability is omitted or incomplete", () => {
   assertInvalid(validateReviewRegistry(wave01aManifest), /availability and SHA-256 must be verified/);
-  assertInvalid(validateReviewRegistry(wave01aManifest, [wave01aLocalAssetAvailability[0]]), /unavailable or was not checked/);
+  assertInvalid(validateReviewRegistry(wave01aManifest, [wave01aManifestAvailability[0]]), /unavailable or was not checked/);
 });
 
 test("rejects protocol-like, traversal, relative, spaced, and malformed candidate routes", () => {
   for (const candidateRoute of ["//dominio.example", "/../escape", "/ruta//doble", "../relative", "not/a/route", "/ruta con espacios", "/ruta?redirect=otro", "/ruta#fragment"]) {
     const fixture = manifestFixture();
     fixture.contentUnits[0].candidateRoute = candidateRoute;
-    assertInvalid(validateReviewRegistry(fixture, wave01aLocalAssetAvailability), /single internal route path/);
+    assertInvalid(validateReviewRegistry(fixture, wave01aManifestAvailability), /single internal route path/);
   }
 
   const validFixture = manifestFixture();
   validFixture.contentUnits[0].candidateRoute = "/proceso/ruta-valida_v1";
-  const valid = validateReviewRegistry(validFixture, wave01aLocalAssetAvailability);
+  const valid = validateReviewRegistry(validFixture, wave01aManifestAvailability);
   assert.equal(valid.ok, true);
 });
 
@@ -73,18 +73,18 @@ test("binds source names to their Content ID and rejects traversal or wrong-form
   ]) {
     const fixture = manifestFixture();
     (fixture.contentUnits[0].vertical as Record<string, unknown>).sourceName = sourceName;
-    assertInvalid(validateReviewRegistry(fixture, wave01aLocalAssetAvailability), /sourceName must|without traversal|dimensions do not match/);
+    assertInvalid(validateReviewRegistry(fixture, wave01aManifestAvailability), /sourceName must|without traversal|dimensions do not match/);
   }
 });
 
 test("rejects reused Drive IDs and duplicate local associations in Wave 01A", () => {
   const driveFixture = manifestFixture();
   (driveFixture.contentUnits[1].vertical as Record<string, unknown>).driveFileId = (driveFixture.contentUnits[0].vertical as Record<string, unknown>).driveFileId;
-  assertInvalid(validateReviewRegistry(driveFixture, wave01aLocalAssetAvailability), /Drive ID already used/);
+  assertInvalid(validateReviewRegistry(driveFixture, wave01aManifestAvailability), /Drive ID already used/);
 
   const duplicateFixture = manifestFixture();
   duplicateFixture.contentUnits[1] = structuredClone(duplicateFixture.contentUnits[0]);
-  assertInvalid(validateReviewRegistry(duplicateFixture, wave01aLocalAssetAvailability), /local asset already used|Drive ID already used|duplicate contentId/);
+  assertInvalid(validateReviewRegistry(duplicateFixture, wave01aManifestAvailability), /local asset already used|Drive ID already used|duplicate contentId/);
 });
 
 test("rejects contradictory assets and legacy vertical/feed representations", () => {
@@ -92,31 +92,31 @@ test("rejects contradictory assets and legacy vertical/feed representations", ()
   fixture.contentUnits[0].assets = structuredClone([fixture.contentUnits[0].vertical, fixture.contentUnits[0].feed]);
   (fixture.contentUnits[0].vertical as Record<string, unknown>).driveFileId = "CONTRADICTORY_UNUSED_VERTICAL";
 
-  assertInvalid(validateReviewRegistry(fixture, wave01aLocalAssetAvailability), /contradict the legacy/);
+  assertInvalid(validateReviewRegistry(fixture, wave01aManifestAvailability), /contradict the legacy/);
 });
 
 test("rejects empty, public, and malformed manifests", () => {
   const empty = manifestFixture();
   empty.contentUnits = [];
-  assertInvalid(validateReviewRegistry(empty, wave01aLocalAssetAvailability), /manifest cannot be empty/);
+  assertInvalid(validateReviewRegistry(empty, wave01aManifestAvailability), /manifest cannot be empty/);
 
   const publicManifest = manifestFixture();
   publicManifest.visibility = "public";
-  assertInvalid(validateReviewRegistry(publicManifest, wave01aLocalAssetAvailability), /visibility must remain internal-review-only/);
+  assertInvalid(validateReviewRegistry(publicManifest, wave01aManifestAvailability), /visibility must remain internal-review-only/);
 
   const malformed = manifestFixture();
   malformed.contentUnits[1] = null as unknown as Record<string, unknown>;
-  assertInvalid(validateReviewRegistry(malformed, wave01aLocalAssetAvailability), /content unit must be an object/);
+  assertInvalid(validateReviewRegistry(malformed, wave01aManifestAvailability), /content unit must be an object/);
 });
 
 test("rejects changed dimensions and changed file content", () => {
   const dimensionsFixture = manifestFixture();
   (dimensionsFixture.contentUnits[0].vertical as Record<string, unknown>).width = 1441;
-  assertInvalid(validateReviewRegistry(dimensionsFixture, wave01aLocalAssetAvailability), /dimensions do not match/);
+  assertInvalid(validateReviewRegistry(dimensionsFixture, wave01aManifestAvailability), /dimensions do not match/);
 
   const hashFixture = manifestFixture();
   (hashFixture.contentUnits[0].vertical as Record<string, unknown>).sha256 = "0000000000000000000000000000000000000000000000000000000000000000";
-  assertInvalid(validateReviewRegistry(hashFixture, wave01aLocalAssetAvailability), /local asset hash does not match/);
+  assertInvalid(validateReviewRegistry(hashFixture, wave01aManifestAvailability), /local asset hash does not match/);
 });
 
 test("deep-freezes the runtime snapshot; TypeScript readonly is not the only protection", () => {

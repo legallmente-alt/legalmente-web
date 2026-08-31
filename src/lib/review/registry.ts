@@ -1,7 +1,3 @@
-import { createHash } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
-
 import wave01aManifest from "../../../public/internal-assets/legalmente/wave-01a/manifest.json";
 
 export const reviewRegistryVersion = "wave-01a-review-registry-v2" as const;
@@ -43,7 +39,7 @@ export type ReviewRegistryIssue = {
 
 export type ReviewRegistryEvidence = {
   readonly provenance: "DRIVE_IDS_FROM_MANIFEST";
-  readonly fileVerification: "LOCAL_PATH_AND_SHA256_MATCH";
+  readonly fileVerification: "MANIFEST_SHA256_DECLARED" | "LOCAL_PATH_AND_SHA256_MATCH";
   readonly changeHistory: "NOT_IMPLEMENTED";
   readonly signalTransport: "NOT_IMPLEMENTED";
   readonly approvalEvidence: "NOT_PRESENT";
@@ -230,18 +226,16 @@ function sourceNamesFromManifest(raw: unknown): readonly string[] {
   return [...new Set(names)];
 }
 
-function sha256ForFile(path: string) {
-  return createHash("sha256").update(readFileSync(path)).digest("hex");
-}
-
-export function getLocalAssetAvailability(raw: unknown): readonly InternalReviewAssetAvailability[] {
-  return sourceNamesFromManifest(raw).flatMap((sourceName) => {
-    if (!isSafeSourceName(sourceName, sourceName.split("_visual")[0])) return [];
-    const localPath = localPathFor(sourceName);
-    const absolutePath = resolve(process.cwd(), "public", localPath.slice(1));
-    const expectedRoot = resolve(process.cwd(), "public", internalReviewAssetRoot.slice(1));
-    if (!absolutePath.startsWith(`${expectedRoot}/`)) return [];
-    return existsSync(absolutePath) ? [{ localPath, sha256: sha256ForFile(absolutePath) }] : [];
+export function getManifestAssetAvailability(raw: unknown): readonly InternalReviewAssetAvailability[] {
+  if (!isRecord(raw) || !Array.isArray(raw.contentUnits)) return [];
+  return raw.contentUnits.flatMap((unit) => {
+    if (!isRecord(unit)) return [];
+    const contentId = isNonEmptyString(unit.contentId) ? unit.contentId : "";
+    const assets = Array.isArray(unit.assets) ? unit.assets : [unit.vertical, unit.feed];
+    return assets.flatMap((asset) => {
+      if (!isRecord(asset) || !isNonEmptyString(asset.sourceName) || !isSafeSourceName(asset.sourceName, contentId) || !isSha256(asset.sha256)) return [];
+      return [{ localPath: localPathFor(asset.sourceName), sha256: asset.sha256 }];
+    });
   });
 }
 
@@ -312,16 +306,16 @@ export function assertReviewRegistry(raw: unknown, availableAssets?: readonly In
   return deepFreeze(result.registry);
 }
 
-export const wave01aLocalAssetAvailability = deepFreeze(getLocalAssetAvailability(wave01aManifest));
+export const wave01aManifestAvailability = deepFreeze(getManifestAssetAvailability(wave01aManifest));
 
 export const wave01aReviewSnapshot: ReviewRegistrySnapshot = deepFreeze({
   version: reviewRegistryVersion,
   sourceManifest: internalReviewManifestPath,
   visibility: "internal-review-only",
-  units: assertReviewRegistry(wave01aManifest, wave01aLocalAssetAvailability),
+  units: assertReviewRegistry(wave01aManifest, wave01aManifestAvailability),
   evidence: {
     provenance: "DRIVE_IDS_FROM_MANIFEST",
-    fileVerification: "LOCAL_PATH_AND_SHA256_MATCH",
+    fileVerification: "MANIFEST_SHA256_DECLARED",
     changeHistory: "NOT_IMPLEMENTED",
     signalTransport: "NOT_IMPLEMENTED",
     approvalEvidence: "NOT_PRESENT",
