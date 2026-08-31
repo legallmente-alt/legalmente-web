@@ -2,8 +2,6 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { getConcept, getProcess } from "@/lib/knowledge-graph/content";
-import { getInternalReviewUnit } from "@/lib/review/registry";
-
 import { contractLimbPaths, getAffectedContractConsumers, getContractLimbPath } from "./contract-limb";
 
 test("every Contracts limb path reuses existing Knowledge Engine and process IDs", () => {
@@ -16,11 +14,6 @@ test("every Contracts limb path reuses existing Knowledge Engine and process IDs
     assert.ok(getProcess(path.processId), `missing process: ${path.processId}`);
     assert.ok(path.conceptIds.length > 0);
     for (const conceptId of path.conceptIds) assert.ok(getConcept(conceptId), `missing concept: ${conceptId}`);
-    for (const contentId of path.reviewContentIds) {
-      const reviewUnit = getInternalReviewUnit(contentId);
-      assert.ok(reviewUnit, `missing review unit: ${contentId}`);
-      assert.equal(reviewUnit?.state, "HUMAN_REVIEW_REQUIRED");
-    }
   }
 });
 
@@ -38,9 +31,11 @@ test("supports promise of sale and sale as distinct educational selections", () 
 test("reverse circulation identifies affected consumers without changing their state", () => {
   assert.deepEqual(getAffectedContractConsumers({ kind: "CONCEPT", id: "consentimiento" }), contractLimbPaths.map((path) => path.contractType));
   assert.deepEqual(getAffectedContractConsumers({ kind: "PROCESS", id: "leer-antes-de-aceptar" }), contractLimbPaths.map((path) => path.contractType));
-  assert.deepEqual(getAffectedContractConsumers({ kind: "REVIEW_CONTENT", id: "LM-PC-031" }), ["LABORAL"]);
-  assert.deepEqual(getAffectedContractConsumers({ kind: "REVIEW_CONTENT", id: "UNKNOWN" }), []);
   assert.equal(getContractLimbPath("LABORAL").contractType, "LABORAL");
+});
+
+test("keeps internal review records out of public contract paths", () => {
+  for (const path of contractLimbPaths) assert.equal("reviewContentIds" in path, false);
 });
 
 test("returns the same path by type and fails for an unknown type", () => {
