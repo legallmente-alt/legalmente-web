@@ -52,6 +52,12 @@ Si Psyche-creation no responde, falta el digest, cambia la versión del contrato
 
 El contrato mínimo permite un test entre repositorios: Psyche-creation produce un fixture de envelope con `sourceRevision` y `provenanceDigest`; legalmente-web valida únicamente la forma del envelope y verifica que cualquier cambio de versión, digest, referencia o campo extra falle cerrado. El test no debe reimplementar la semántica de claims ni el cálculo de jurisdicción.
 
+## Provenance y contract fixture
+
+Los agregados de `operations-engine-v1-2.ts` exponen `kind: SNAPSHOT`, `source`, `derivation`, `observedAt`, `owner`, `freshness` y `confidence`; por tanto, no se presentan como estado vivo. El fixture `canonical-envelope-v1.fixture.ts` representa la salida mínima del producer canónico para contract tests; no es un claim packet ni una fuente jurídica alternativa.
+
+Los seis casos contractuales usan ese fixture: envelope vacío falla, envelope válido pasa, `LIVE` y `APPROVED` permanecen opacos, los campos extra fallan por drift y `NO_APLICA` se transporta sin forzar `law + article`.
+
 ## Resultado
 
 Después de la reparación, Operations Engine es inequívocamente una superficie de producto/QA que consume una frontera canónica, no un segundo sistema jurídico paralelo.

@@ -21,6 +21,12 @@ export default function OperationsEnginePage() {
         </p>
       </div>
 
+      <section aria-labelledby="provenance-heading" className="mb-10 rounded-xl border border-[#102A43]/10 bg-white p-5 text-sm leading-6">
+        <h2 id="provenance-heading" className="font-semibold">Provenance del paquete</h2>
+        <p className="mt-2">Clase: <code>{engine.provenance.kind}</code> · observado: <code>{engine.provenance.observedAt}</code> · freshness: <code>{engine.provenance.freshness}</code></p>
+        <p className="mt-2 text-[#102A43]/70">Fuente: {engine.provenance.source}. Estos conteos son derivados históricos del paquete, no estado vivo ni autoridad jurídica.</p>
+      </section>
+
       <section aria-labelledby="counts-heading">
         <h2 id="counts-heading" className="mb-4 text-2xl font-semibold">Paquete de trabajo</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

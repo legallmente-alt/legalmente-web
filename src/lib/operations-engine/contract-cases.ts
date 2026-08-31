@@ -1,14 +1,7 @@
+import { canonicalEnvelopeV1Fixture } from "@/data/canonical-envelope-v1.fixture";
 import { validateCanonicalEnvelope } from "./validate";
 
-const baseEnvelope = {
-  contractVersion: "canonical-envelope.v1",
-  sourceSystem: "Psyche-creation" as const,
-  sourceRevision: "3dd358b72a79b3aa26e46c9a1844a682dcb7e09a",
-  provenanceDigest: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-  canonicalPayloadRef: "psyche://claim-packet/example",
-  canonicalStatus: "PENDIENTE",
-  receivedAt: "2026-08-31T03:00:00.000Z",
-};
+const baseEnvelope = canonicalEnvelopeV1Fixture;
 
 export const contractCases = [
   { name: "empty envelope", input: {}, expected: false },
