@@ -88,6 +88,7 @@ export default function InternalProductLabPage() {
           <EditorialCard family="tool" title="Vacaciones MX" meta="Cálculo interno con revisión separada para adeudos históricos." symbol="labor" state="reviewRequired" />
           <EditorialCard family="tool" title="Aguinaldo MX" meta="Las ausencias genéricas deben clasificarse antes de descontarse." symbol="labor" state="requireInput" />
           <EditorialCard family="tool" title="Finiquito MX" meta="Solo componentes devengados dentro del alcance V1." symbol="compare" state="hold" />
+          <EditorialCard family="tool" title="Radar de incompatibilidades" meta="Relaciones humanas, exclusiones y preguntas de continuidad." symbol="territory" state="reviewRequired" href="/internal/product-lab/radar-de-temas" />
         </div>
       </section>
 
