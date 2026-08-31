@@ -14,6 +14,7 @@
     "test:knowledge-safety": "tsx --test src/lib/knowledge-graph/safety.test.ts",
     "test:knowledge-integrity": "tsx --test src/lib/knowledge-graph/integrity.test.ts",
     "test:ecosystem-kernel": "tsx --test src/lib/ecosystem-kernel/index.test.ts",
+    "test:agent-contribution": "tsx --test src/lib/agent-contribution/contract.test.ts",
     "test:public-routes": "node scripts/public-route-proof.mjs"
   },
   "dependencies": {
