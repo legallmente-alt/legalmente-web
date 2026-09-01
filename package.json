@@ -17,7 +17,8 @@
     "test:agent-contribution": "tsx --test src/lib/agent-contribution/contract.test.ts",
     "test:public-routes": "node scripts/public-route-proof.mjs",
     "test:before-signing-safe": "node scripts/before-signing-privacy-proof.mjs",
-    "test:visual-rotation": "node --test scripts/visual-rotation-engine.test.mjs"
+    "test:visual-rotation": "node --test scripts/visual-rotation-engine.test.mjs",
+    "test:rule-master": "node scripts/rule-master-proof.mjs"
   },
   "dependencies": {
     "next": "14.2.35",
