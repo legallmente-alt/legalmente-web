@@ -43,3 +43,37 @@ a {
     animation-iteration-count: 1 !important;
   }
 }
+
+@media print {
+  nav,
+  header,
+  footer,
+  .print-hide,
+  button,
+  a[href] {
+    display: none !important;
+  }
+
+  body,
+  main {
+    background: #ffffff !important;
+    color: #0E1A24 !important;
+  }
+
+  .print-summary {
+    display: block !important;
+    border: 0 !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+
+  @page {
+    margin: 1.5cm;
+  }
+}
+
+@media screen {
+  .print-summary {
+    display: block;
+  }
+}
