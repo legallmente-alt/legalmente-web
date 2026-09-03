@@ -223,9 +223,12 @@ export function scoreCandidateForLane(candidate: EditorialPlanningCandidate, lan
 
 export function validatePlanningCandidate(candidate: EditorialPlanningCandidate): CandidateValidation {
   const errors: string[] = [];
+  const foundationCanBeDomainNeutral = candidate.depth === "FOUNDATIONS" || candidate.depth === "PERSON_AND_DIGNITY";
 
   if (candidate.bindings.worldIds.length === 0) errors.push("At least one existing world binding is required.");
-  if (candidate.bindings.legalDomainIds.length === 0) errors.push("At least one existing legal-domain binding is required.");
+  if (!foundationCanBeDomainNeutral && candidate.bindings.legalDomainIds.length === 0) {
+    errors.push("At least one existing legal-domain binding is required outside foundational depth.");
+  }
   if (candidate.bindings.conceptIds.length === 0) errors.push("At least one existing concept binding is required.");
   if (candidate.normativeSourceKinds.length === 0) errors.push("At least one normative source kind or NOT_APPLICABLE is required.");
 
@@ -308,6 +311,7 @@ export const MULTI_AXIS_EDITORIAL_RULES = Object.freeze({
   normativePrecedenceRequiresJurisdictionAdapter: true,
   publicLaneIsBasicFirst: true,
   founderLinkedInMayBeSpecialized: true,
+  foundationsMayBeDomainNeutral: true,
   oneKnowledgeRecordMayHaveMultipleDistributionAdaptations: true,
   adaptationsDoNotResetAntiRepetitionHistory: true,
   currentContentNeedsStrongSourceSignal: true,
