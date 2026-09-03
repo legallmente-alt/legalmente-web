@@ -4,7 +4,7 @@ const nonEmpty = z.string().trim().min(1);
 const route = z.string().trim().regex(/^\/[a-z0-9-]+(?:\/[a-z0-9-]+)*\/?$/, "Debe ser una ruta interna real, sin query string.");
 const questionList = z.array(nonEmpty).length(3);
 const source = z.object({
-  authority: z.enum(["DOF", "BOE", "SCJN", "OFFICIAL_OTHER"]),
+  authority: z.enum(["DOF", "BOE", "SCJN", "AEPD", "INAI", "SIC", "OIT", "OFFICIAL_OTHER"]),
   article: nonEmpty,
   territory: z.enum(["MX-FED", "MX-CDMX", "ES", "AR", "CO"]),
   verifiedAt: z.string().datetime({ offset: true }),

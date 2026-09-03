@@ -39,6 +39,23 @@ test("rechaza CTA externa", () => {
   assert.throws(() => ContentPacketSchema.parse({ ...packet, payload: { ...packet.payload, webCtaRoute: "https://example.com" } }));
 });
 
+test("acepta autoridades oficiales adicionales con territorio y fecha verificables", () => {
+  for (const [authority, territory, url] of [
+    ["AEPD", "ES", "https://www.aepd.es/"],
+    ["INAI", "MX-FED", "https://home.inai.org.mx/"],
+    ["SIC", "CO", "https://www.sic.gov.co/"],
+    ["OIT", "MX-FED", "https://www.ilo.org/"],
+  ] as const) {
+    const officialSource = { authority, article: "Fuente oficial por verificar en contexto", territory, verifiedAt: "2026-09-03T12:00:00Z", url };
+    assert.doesNotThrow(() => ContentPacketSchema.parse({
+      ...packet,
+      territory,
+      sourceClaims: [officialSource],
+      payload: { ...packet.payload, positiveLawArticle: officialSource },
+    }));
+  }
+});
+
 test("las salidas del generador son deterministas y no incluyen PII", async () => {
   const dir = await mkdtemp(path.join(os.tmpdir(), "legalmente-factory-"));
   const input = path.join(dir, "packet.json");
