@@ -17,6 +17,7 @@
     "test:agent-contribution": "tsx --test src/lib/agent-contribution/contract.test.ts",
     "test:editorial-engine": "tsx --test src/lib/editorial-engine/*.test.ts",
     "test:knowledge-pilot": "tsx --test src/lib/knowledge-pilot/*.test.ts",
+    "test:opportunity-engine": "tsx --test src/lib/opportunity-engine/*.test.ts",
     "test:public-routes": "node scripts/public-route-proof.mjs"
   },
   "dependencies": {
