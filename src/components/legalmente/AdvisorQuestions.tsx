@@ -27,7 +27,7 @@ export function PrintSummaryButton() {
 export function PrintSummarySheet({ title, body, questions }: { title: string; body: string; questions: [string, string, string] }) {
   return (
     <div className="lm-print-sheet" aria-hidden="true">
-      <h1 className="font-serif text-4xl">{title}</h1>
+      <h2 className="font-serif text-4xl">{title}</h2>
       <p className="mt-5 text-base leading-7">{body}</p>
       <h2 className="mt-8 font-serif text-2xl">3 Preguntas para tu Abogado</h2>
       <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm leading-6">
