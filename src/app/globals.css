@@ -43,3 +43,14 @@ a {
     animation-iteration-count: 1 !important;
   }
 }
+
+@media print {
+  body { background: white; color: #102A43; }
+  nav, footer, button, a[href] { display: none !important; }
+  .lm-print-sheet { display: block !important; width: 100%; max-width: none; padding: 0; }
+  .lm-print-avoid-break { break-inside: avoid; page-break-inside: avoid; }
+}
+
+@media screen {
+  .lm-print-sheet { display: none; }
+}
