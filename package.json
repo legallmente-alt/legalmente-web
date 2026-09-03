@@ -15,12 +15,14 @@
     "test:knowledge-integrity": "tsx --test src/lib/knowledge-graph/integrity.test.ts",
     "test:ecosystem-kernel": "tsx --test src/lib/ecosystem-kernel/index.test.ts",
     "test:agent-contribution": "tsx --test src/lib/agent-contribution/contract.test.ts",
-    "test:public-routes": "node scripts/public-route-proof.mjs"
+    "test:public-routes": "node scripts/public-route-proof.mjs",
+    "content:build": "tsx scripts/generate-content-pack.ts"
   },
   "dependencies": {
     "next": "14.2.35",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",

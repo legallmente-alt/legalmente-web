@@ -45,3 +45,7 @@ Do not promote any scaffold to public UI until art/UX review explicitly passes d
 ### Engineering rule
 
 Keep legal logic, source data, territory, copy, graph relationships and image assets separate. The graph can organize learning and navigation but cannot manufacture legal rules. Feature flags remain fail-closed. The public artifact excludes `/internal/`, uses no PII/document/payment surfaces, and must pass the legal-core, knowledge-safety, privacy, typecheck and static-build gates before each publication.
+
+## Content Factory Engine
+
+The deterministic, provider-neutral content factory is documented in [`docs/CONTENT_FACTORY_ENGINE_V1.md`](docs/CONTENT_FACTORY_ENGINE_V1.md). It validates strict Zod packets for four editorial archetypes and writes `copy_social.md`, `visual_prompt.json` and `handshake_web.json` without elevating legal or publication authority.

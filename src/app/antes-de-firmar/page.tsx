@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { evaluateBeforeSigning, type BeforeSigningInput, type BeforeSigningFinding } from "@/lib/legal-core/before-signing";
+import { AdvisorQuestions, PrintSummaryButton, PrintSummarySheet } from "@/components/legalmente/AdvisorQuestions";
 
 type CheckKey = "partiesIdentified" | "clearConsideration" | "termAndTermination" | "blanksFilled" | "jurisdictionClause";
 
@@ -169,6 +170,15 @@ export default function BeforeSigningPage() {
             <Link href="/explorar" className="border-b border-[#102A43]/60 pb-1 hover:border-[#102A43] focus:outline-none focus:ring-2 focus:ring-[#102A43]">Explorar conceptos</Link>
           </div>
         </aside>
+      </section>
+      <section className="mx-auto max-w-[1320px] px-5 pb-16 md:px-8">
+        <AdvisorQuestions questions={["¿Qué punto del documento debo aclarar antes de firmar?", "¿Qué ley y territorio deben regir esta revisión?", "¿Qué evidencia debo llevar a la consulta?"]} />
+        <PrintSummaryButton />
+        <PrintSummarySheet
+          title="Resumen de revisión antes de firmar"
+          body="Herramienta educativa de revisión estructural. No determina validez, conveniencia ni una conclusión jurídica."
+          questions={["¿Qué punto del documento debo aclarar antes de firmar?", "¿Qué ley y territorio deben regir esta revisión?", "¿Qué evidencia debo llevar a la consulta?"]}
+        />
       </section>
     </main>
   );
