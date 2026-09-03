@@ -89,7 +89,10 @@ const STOPWORDS = new Set([
 ]);
 
 function tokenSet(value: string): Set<string> {
-  return new Set(normalize(value).split(" ").filter((token) => token.length > 2 && !STOPWORDS.has(token)));
+  return new Set(normalize(value).split(" ").filter((token) => {
+    if (!token || STOPWORDS.has(token)) return false;
+    return token.length >= 2 || /^\d+$/.test(token);
+  }));
 }
 
 function jaccard(left: Set<string>, right: Set<string>): number {
