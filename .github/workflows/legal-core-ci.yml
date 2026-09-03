@@ -8,6 +8,7 @@ on:
       - 'src/lib/visual-system/**'
       - 'src/lib/knowledge-graph/**'
       - 'src/lib/editorial-engine/**'
+      - 'src/lib/knowledge-pilot/**'
       - 'src/lib/contracts/**'
       - 'src/components/**'
       - 'public/assets/legalmente/**'
@@ -26,6 +27,7 @@ on:
       - 'src/lib/visual-system/**'
       - 'src/lib/knowledge-graph/**'
       - 'src/lib/editorial-engine/**'
+      - 'src/lib/knowledge-pilot/**'
       - 'src/lib/contracts/**'
       - 'src/components/**'
       - 'public/assets/legalmente/**'
@@ -56,6 +58,7 @@ jobs:
       - run: npm run test:ecosystem-kernel
       - run: npm run test:agent-contribution
       - run: npm run test:editorial-engine
+      - run: npm run test:knowledge-pilot
       - run: npm run typecheck
       - run: npm run lint
       - name: Privacy surface smoke
