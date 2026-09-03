@@ -8,9 +8,8 @@ import {
 } from "./index";
 
 /**
- * Distribution is intentionally separate from legal taxonomy.
- * The same knowledge node may support multiple surfaces without becoming a
- * duplicate topic or creating a parallel classification system.
+ * Lanes are internal orchestration queues. They answer WHY/WHAT path should
+ * handle the idea; they are not necessarily the final publication channel.
  */
 export const EDITORIAL_LANES = [
   "PUBLIC_GENERAL",
@@ -20,6 +19,19 @@ export const EDITORIAL_LANES = [
 ] as const;
 
 export type EditorialLane = (typeof EDITORIAL_LANES)[number];
+
+/**
+ * Surfaces are actual destinations. Keeping them separate from lanes prevents
+ * an editorial mission (for example Radar) from being confused with a channel.
+ */
+export const DISTRIBUTION_SURFACES = [
+  "LEGALMENTE_PUBLIC",
+  "FOUNDER_LINKEDIN",
+  "WEB_KNOWLEDGE",
+  "PRODUCT_TOOL",
+] as const;
+
+export type DistributionSurface = (typeof DISTRIBUTION_SURFACES)[number];
 
 export const DEMAND_CLASSES = ["MASS", "PROFESSIONAL", "NICHE"] as const;
 export type DemandClass = (typeof DEMAND_CLASSES)[number];
@@ -98,6 +110,7 @@ export type CandidateValidation = {
 export type EditorialRoute = {
   primary: EditorialLane;
   secondary: readonly EditorialLane[];
+  surfaces: readonly DistributionSurface[];
   scores: Readonly<Record<EditorialLane, number>>;
 };
 
@@ -267,10 +280,37 @@ export function validatePlanningCandidate(candidate: EditorialPlanningCandidate)
   return { ok: errors.length === 0, errors };
 }
 
+export function suggestDistributionSurfaces(
+  candidate: EditorialPlanningCandidate,
+  primaryLane: EditorialLane,
+): readonly DistributionSurface[] {
+  const surfaces = new Set<DistributionSurface>(["WEB_KNOWLEDGE"]);
+
+  switch (primaryLane) {
+    case "PUBLIC_GENERAL":
+      surfaces.add("LEGALMENTE_PUBLIC");
+      break;
+    case "FOUNDER_LINKEDIN":
+      surfaces.add("FOUNDER_LINKEDIN");
+      break;
+    case "RADAR_CURRENT":
+      if (candidate.signals.professionalValue > candidate.signals.massAppeal) surfaces.add("FOUNDER_LINKEDIN");
+      else surfaces.add("LEGALMENTE_PUBLIC");
+      break;
+    case "PRODUCT_PREPARATION":
+      surfaces.add("PRODUCT_TOOL");
+      if (candidate.signals.massAppeal >= 8) surfaces.add("LEGALMENTE_PUBLIC");
+      if (candidate.signals.professionalValue >= 8) surfaces.add("FOUNDER_LINKEDIN");
+      break;
+  }
+
+  return [...surfaces];
+}
+
 /**
- * Route one knowledge-backed idea to its best surface. A concept may have a
- * secondary surface, but the underlying concept/angle remains one record so
- * adaptations do not masquerade as new topics.
+ * Route one knowledge-backed idea to its best orchestration lane and actual
+ * destinations. A concept may have secondary surfaces, but its underlying
+ * knowledge/angle remains one record so adaptations do not masquerade as new topics.
  */
 export function routeEditorialCandidate(candidate: EditorialPlanningCandidate): EditorialRoute {
   const scores = Object.fromEntries(
@@ -283,8 +323,9 @@ export function routeEditorialCandidate(candidate: EditorialPlanningCandidate): 
   const secondary = ranked
     .filter((lane) => lane !== primary && scores[lane] >= 6.5 && primaryScore - scores[lane] <= 1.25)
     .slice(0, 2);
+  const surfaces = suggestDistributionSurfaces(candidate, primary);
 
-  return { primary, secondary, scores };
+  return { primary, secondary, surfaces, scores };
 }
 
 /** Score + depth preference for an explicitly selected lane. */
@@ -307,6 +348,8 @@ export function prioritizeForLane(
 export const MULTI_AXIS_EDITORIAL_RULES = Object.freeze({
   pyramidRole: "KNOWLEDGE_DEPTH_SPINE",
   graphRole: "RELATIONSHIP_AND_REUSE_MEMORY",
+  lanesAreInternalOrchestration: true,
+  surfacesAreActualDestinations: true,
   universalNormativeRankingForbidden: true,
   normativePrecedenceRequiresJurisdictionAdapter: true,
   publicLaneIsBasicFirst: true,
