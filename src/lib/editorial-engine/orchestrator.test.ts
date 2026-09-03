@@ -54,12 +54,13 @@ function planningCandidate(overrides: Partial<EditorialPlanningCandidate> = {}):
   };
 }
 
-test("a mass evergreen concept routes to the public lane", () => {
+test("a mass evergreen concept routes to the public lane and public/web surfaces", () => {
   const route = routeEditorialCandidate(planningCandidate());
   assert.equal(route.primary, "PUBLIC_GENERAL");
+  assert.deepEqual(new Set(route.surfaces), new Set(["WEB_KNOWLEDGE", "LEGALMENTE_PUBLIC"]));
 });
 
-test("specialized corporate knowledge routes to founder LinkedIn", () => {
+test("specialized corporate knowledge routes to founder LinkedIn surface", () => {
   const candidate = planningCandidate({
     id: "LM-PLAN-CORP",
     topic: "Facultades de representación en una operación corporativa",
@@ -83,9 +84,10 @@ test("specialized corporate knowledge routes to founder LinkedIn", () => {
   const route = routeEditorialCandidate(candidate);
   assert.equal(route.primary, "FOUNDER_LINKEDIN");
   assert.ok(route.scores.FOUNDER_LINKEDIN > route.scores.PUBLIC_GENERAL);
+  assert.deepEqual(new Set(route.surfaces), new Set(["WEB_KNOWLEDGE", "FOUNDER_LINKEDIN"]));
 });
 
-test("current mass-interest content routes to Radar when sources are robust", () => {
+test("current mass-interest content routes through Radar to public distribution", () => {
   const candidate = planningCandidate({
     id: "LM-PLAN-RADAR",
     temporalClass: "CURRENT",
@@ -100,7 +102,59 @@ test("current mass-interest content routes to Radar when sources are robust", ()
   });
 
   assert.equal(validatePlanningCandidate(candidate).ok, true);
-  assert.equal(routeEditorialCandidate(candidate).primary, "RADAR_CURRENT");
+  const route = routeEditorialCandidate(candidate);
+  assert.equal(route.primary, "RADAR_CURRENT");
+  assert.ok(route.surfaces.includes("LEGALMENTE_PUBLIC"));
+  assert.ok(route.surfaces.includes("WEB_KNOWLEDGE"));
+});
+
+test("professional current content can use Radar while distributing to founder LinkedIn", () => {
+  const candidate = planningCandidate({
+    id: "LM-RADAR-PRO",
+    temporalClass: "CURRENT",
+    depth: "JURISDICTION_AND_PROCEDURE",
+    jurisdiction: "MX",
+    bindings: {
+      worldIds: ["empresa-comercio"],
+      legalDomainIds: ["CORPORATE", "TAX"],
+      conceptIds: ["representacion"],
+    },
+    signals: {
+      massAppeal: 3,
+      professionalValue: 9,
+      currentRelevance: 10,
+      productPotential: 5,
+      sourceRobustness: 10,
+    },
+  });
+
+  const route = routeEditorialCandidate(candidate);
+  assert.equal(route.primary, "RADAR_CURRENT");
+  assert.ok(route.surfaces.includes("FOUNDER_LINKEDIN"));
+  assert.ok(!route.surfaces.includes("LEGALMENTE_PUBLIC"));
+});
+
+test("product preparation is an internal lane and PRODUCT_TOOL is the destination", () => {
+  const candidate = planningCandidate({
+    id: "LM-PRODUCT",
+    lane: "PRODUCT_PREPARATION",
+    depth: "CORE_INSTITUTIONS",
+    practicalUtility: 10,
+    signals: {
+      massAppeal: 8,
+      professionalValue: 8,
+      currentRelevance: 2,
+      productPotential: 10,
+      sourceRobustness: 9,
+    },
+  });
+
+  assert.equal(validatePlanningCandidate(candidate).ok, true);
+  const route = routeEditorialCandidate(candidate);
+  assert.equal(route.primary, "PRODUCT_PREPARATION");
+  assert.ok(route.surfaces.includes("PRODUCT_TOOL"));
+  assert.ok(route.surfaces.includes("LEGALMENTE_PUBLIC"));
+  assert.ok(route.surfaces.includes("FOUNDER_LINKEDIN"));
 });
 
 test("time-sensitive content with weak sourcing fails before routing", () => {
@@ -144,4 +198,6 @@ test("founder LinkedIn may intentionally prioritize specialized content", () => 
 test("normative hierarchy remains jurisdiction-aware rather than universally ranked", () => {
   assert.equal(MULTI_AXIS_EDITORIAL_RULES.universalNormativeRankingForbidden, true);
   assert.equal(MULTI_AXIS_EDITORIAL_RULES.normativePrecedenceRequiresJurisdictionAdapter, true);
+  assert.equal(MULTI_AXIS_EDITORIAL_RULES.lanesAreInternalOrchestration, true);
+  assert.equal(MULTI_AXIS_EDITORIAL_RULES.surfacesAreActualDestinations, true);
 });
