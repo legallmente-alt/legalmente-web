@@ -56,30 +56,15 @@ test("base art must remain character-free while final asset may contain composed
 });
 
 test("provider-generated letters are blocked", () => {
-  const candidate = plan({
-    baseArt: {
-      generatedByVisualProvider: true,
-      characterPolicy: BASE_ART_CHARACTER_POLICY,
-      containsLetters: true as false,
-      containsNumbers: false,
-      containsPseudoText: false,
-      reservedBrandSurface: "PLAQUE",
-    },
-  });
+  const candidate = plan();
+  (candidate.baseArt as unknown as { containsLetters: boolean }).containsLetters = true;
   assert.ok(validateVisualCompositionPlan(candidate).includes("BASE_ART_CONTAINS_LETTERS"));
 });
 
 test("brand spelling and physical integration are fail-closed", () => {
-  const candidate = plan({
-    deterministicComposition: {
-      required: true,
-      brandText: "LEGALMENTE" as "LegalMente",
-      brandPhysicallyIntegrated: false,
-      arbitraryOverlayForbidden: true,
-      watermarkForbidden: true,
-      editorialText: [],
-    },
-  });
+  const candidate = plan();
+  (candidate.deterministicComposition as unknown as { brandText: string; brandPhysicallyIntegrated: boolean }).brandText = "LEGALMENTE";
+  (candidate.deterministicComposition as unknown as { brandText: string; brandPhysicallyIntegrated: boolean }).brandPhysicallyIntegrated = false;
   const errors = validateVisualCompositionPlan(candidate);
   assert.ok(errors.includes("BRAND_TEXT_MUST_BE_EXACT_LEGALMENTE"));
   assert.ok(errors.includes("BRAND_MUST_BE_PHYSICALLY_INTEGRATED"));
