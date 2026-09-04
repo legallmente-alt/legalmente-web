@@ -2,97 +2,89 @@
 
 ## Estado
 
-`FOUNDER_DIRECTIVE_RECONCILED / READY_FOR_REVIEW / NOT_PUBLISHED / NO_DEPLOY`
+`CROSS_REPO_RECONCILED / READY_FOR_REVIEW / NOT_PUBLISHED / NO_DEPLOY`
 
-Esta reconciliación extiende la arquitectura existente. No crea un segundo canon jurídico ni mueve autoridad legal al frontend/product layer.
+## Corrección de trazabilidad
 
-## Dirección consolidada
+La revisión anterior mezcló dos repositorios distintos. Queda corregido:
 
-LegalMente debe operar como un motor vivo de conocimiento, aprendizaje y aplicación. La persona puede entrar por necesidad, pregunta, error común, mito, concepto, requisitos, pasos, situación humana, prevención, historia/cultura o profundidad profesional. La clasificación jurídica por materia sigue existiendo, pero ya no es la única puerta de entrada.
+- `contratoslegales848-design/Psyche-creation`: autoridad jurídica, gates, política visual, compositor y cadena gobernada.
+- `legallmente-alt/legalmente-web`: superficie de producto/UX y consumidor de estado canónico.
+- `Psyche-creation` tiene la rama `claude/convergencia-superset` y el PR #34.
+- `legalmente-web` tiene el PR #42 (`feat/founder-directive-2026-09-04`).
 
-El orden conceptual es progresivo: fundamentos → materias → necesidades/procesos → comparado explícito → especialización territorial. La metáfora de una pirámide es pedagógica, no una taxonomía rígida.
+Por tanto, decir solamente “PR #42 de LegalMente” era ambiguo. Todo reporte futuro debe indicar repositorio + PR + SHA.
 
-La capa general permanece panhispánica. Cuando la respuesta cambia por territorio, el sistema debe bloquear, cualificar o pasar a una capa territorial explícita. Comparado y actualidad requieren territorios/fecha/fuentes adecuadas; la prioridad de mercado nunca abre un gate jurídico.
+## Autoridad visual real
 
-## Motor de oportunidad y amplitud
+En `Psyche-creation/main` existe `docs/adr/0002-marca-composicion-determinista.md` con estado **APROBADO por el fundador (2026-08-31)**. El mismo archivo está presente en la rama de convergencia.
 
-Las necesidades, materias y relaciones deben rotar para impedir que contratos, inmobiliario o cualquier otro cluster capture todo el roadmap. El sistema ya dispone de rutas semilla no canónicas para compra de vehículo usado, terreno, pre-firma, consumidor, proceso penal, familia, representación, sociedad, uso de suelo/desarrollo y evidencia digital.
+Regla canónica:
 
-Estas rutas son hipótesis de investigación y producto. No son listas de requisitos aprobadas ni asesoría.
+> El proveedor visual no escribe caracteres. La marca `LegalMente` y el copy editorial exacto, cuando corresponda, se incorporan después mediante composición determinista.
 
-Las señales de utilidad, interés, viralidad, retención, monetización y búsqueda pueden modificar la prioridad editorial/producto. No pueden modificar claims, fuente, territorio, vigencia ni estado de gate.
+La política ejecutable de `Psyche-creation/main` ya prohíbe watermark, logo flotante, overlay arbitrario y texto de marca escrito por el generador, y exige integración física de la marca.
 
-## LinkedIn
+Además, el estado actual ya superó la fase `CONTRACT_ONLY`: el ADR 0003 aprueba Pillow y `visual/compositor.py` implementa rasterización real determinista de copy y marca, con hashes y QA. La V1 sólo compone marca sobre una superficie reservada declarada plana o casi plana; si la geometría excede ese alcance devuelve revisión humana en vez de fingir perspectiva.
 
-La salida Founder LinkedIn permanece separada de LegalMente general. Toda proyección profesional debe tener provenance verificable y utilizar experiencia real/anónima; no inventar cargos, clientes, casos ni resultados.
+### Decisión de arquitectura cross-repo
 
-## Visual — corrección operativa consolidada
+`legalmente-web` no debe duplicar este ADR ni implementar un segundo compositor/gate visual. Se eliminaron de PR #42:
 
-La separación correcta es entre arte base generado y asset final.
+- `docs/adr/0002-character-free-base-art-deterministic-typography.md`;
+- `src/lib/product-directive/visual-composition.ts`;
+- `src/lib/product-directive/visual-composition.test.ts`.
 
-> **El proveedor visual genera arte sin caracteres. Toda tipografía de LegalMente —la marca y, cuando el formato lo exija, el copy editorial— se incorpora después mediante composición determinista y se valida contra el contenido aprobado.**
+Web conserva únicamente clasificación, rutas, prioridad y presentación de producto. Los adapters deben transportar estado sin elevar autoridad.
 
-### Arte base
+## Estado real del piloto
 
-- cero letras;
-- cero números;
-- cero pseudotexto;
-- metáfora visual comprensible;
-- una sola escena;
-- superficie física reservada para la marca cuando aplique;
-- muestras aprobadas consultadas;
-- no collage/grid/storyboard.
+La lectura anterior del receipt histórico quedó obsoleta frente al estado canónico actual de Psyche.
 
-### Composición determinista
+El claim packet vigente de `PIEZA-01-REALES` declara para claims 1, 2 y 4:
 
-- `LegalMente` exacto;
-- integrado físicamente en placa, sello, lomo, cuaderno, carpeta, vidrio, metal, madera, piedra u otra superficie coherente;
-- nunca watermark ni overlay arbitrario;
-- título, pregunta, frase, pasos, comparación o copy editorial sólo si el formato lo requiere y desde Content Pack aprobado;
-- autor, cita y fuente sólo con binding aprobado;
-- tipografía, escala, perspectiva, material, luz y safe area controlados.
+- `estado = APTO_PARA_NARRATIVA`;
+- `revision_humana.estado = APROBADO`;
+- revisor: Raymundo Acevedo;
+- `gate_arte = ABIERTO`.
 
-### QA
+El paquete agrega:
 
-- exactitud textual contra Content Pack;
-- marca integrada;
-- legibilidad móvil;
-- perspectiva/material/luz coherentes;
-- no collage;
-- no repetición indebida;
-- revisión humana obligatoria.
+- `estado_agregado = APTO_PARA_NARRATIVA`;
+- `revisiones_pendientes = []`;
+- `gate_global_arte = ABIERTO`.
 
-El contrato ejecutable vive en `src/lib/product-directive/visual-composition.ts` y sus pruebas en `visual-composition.test.ts`.
+Existe además el `ProductionHandoff` `HO-PIEZA-01-REALES-001`. El documento de handoff registra ejecución autorizada para producir, no publicar, y `content/pieza-01-reales.json` declara `production_status = APROBADO_QA`.
 
-## ADR 0002 y trazabilidad
+Por tanto, es incorrecto afirmar ahora que LegalMente carece de una pieza real apta para arte. Sí existe una cadena gobernada ya habilitada y probada para `PIEZA-01-REALES`.
 
-Antes de esta reconciliación no se pudo demostrar en el remoto accesible una rama `claude/convergencia-superset` ni un ADR 0002 remoto. Para cerrar esa ambigüedad sin fingir historia, PR #42 crea `docs/adr/0002-character-free-base-art-deterministic-typography.md` con estado `PROPOSED_FOR_CANONICAL_REVIEW`.
+### Límite que sigue cerrado
 
-No debe describirse como canon de `main` hasta aprobación/merge conforme a la gobernanza vigente.
+No existe autorización automática de publicación. `publicable: true` en el artefacto de contenido clasifica una pieza de producción real; no sustituye la `PublicationDecision` humana exigida por la cadena.
 
-## Piloto visual end-to-end
+El Content Pack `legalmente-01-consentimiento` del repositorio web sigue siendo `DRAFT_CONTENT`; simplemente no es la fuente del piloto canónico.
 
-No se debe volver a validar el motor con un lote de diez. El siguiente gate visual correcto es una sola pieza real:
+## Motor de producto
 
-`CONTENT PACK APTO → METÁFORA → ARTE BASE SIN CARACTERES → COMPOSICIÓN DETERMINISTA → QA → REVISIÓN HUMANA → ASSET FINAL`.
+La directiva de producto se mantiene:
 
-Durante esta reconciliación se revisó `docs/content/legalmente-01-consentimiento/content-pack.md`; su estado declarado es `DRAFT_CONTENT`, por lo que no cumple el gate de pieza real aprobada para este piloto.
-
-También se revisó `docs/FOUNDER_DECISION_RECEIPT_CLAIMS_1_2_4_V1.md`: registra aprobación humana externa, pero declara `CANONICAL_INGESTION_REQUIRED` y mantiene cerrado el gate de arte/publicación. No debe utilizarse para simular que ya existe un Content Pack apto.
-
-Por tanto el motor visual queda implementado y testeable, pero el primer asset end-to-end permanece correctamente bloqueado hasta localizar o producir mediante el flujo canónico un Content Pack con estado jurídico/editorial que permita arte.
+- necesidad además de concepto/situación/proceso/materia;
+- panhispánico por defecto y territorio explícito cuando corresponda;
+- fuentes proporcionales al nivel;
+- amplitud de materias y anti-monopolio temático;
+- anti-repetición;
+- prioridad de mercado sin alterar verdad/gates;
+- LinkedIn profesional separado y con provenance;
+- web/app/game como superficies del mismo conocimiento.
 
 ## Gemini
 
-La capacidad de imagen debe distinguir:
+La capacidad de proveedor sigue verificándose por separado: SDK/integración, CLI, credenciales/configuración y generación real. Ninguna afirmación de disponibilidad se hace sin evidencia del entorno concreto.
 
-1. SDK/integración declarada en repositorio;
-2. CLI disponible en el entorno que se está inspeccionando;
-3. credencial/configuración presente sin revelar valores;
-4. generación real autorizada y comprobada.
+## Regla de reporte a partir de ahora
 
-Ninguna de las tres primeras por sí sola prueba capacidad real de imagen. La preflight existente debe permanecer fail-closed.
+Todo estado técnico relevante debe identificar al menos:
 
-## Decisión final de esta reconciliación
+`REPOSITORIO → RAMA/MAIN → SHA → PR (si existe) → ESTADO DEL GATE → AUTORIDAD`.
 
-Se acepta y ejecuta la corrección de arquitectura visual. Se preservan los gates de legalidad, fuente, territorio, publicación y revisión humana. El objetivo no es producir volumen antes de tiempo; es conseguir que LegalMente pueda repetir el ciclo correctamente y después escalar.
+Esto evita volver a confundir trabajo de web con canon jurídico/visual de Psyche.
