@@ -4,6 +4,7 @@ const links = [
   { href: "/explorar", label: "Explorar" },
   { href: "/preparar/contrato", label: "Preparar" },
   { href: "/explorar#mundos", label: "Mundos" },
+  { href: "/catalogo", label: "Biblioteca" },
   { href: "/sobre", label: "Sobre" },
 ];
 

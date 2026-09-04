@@ -13,6 +13,8 @@ export default function Footer() {
           </p>
         </div>
         <div className="flex flex-wrap items-start gap-x-5 gap-y-3 md:justify-end">
+          <Link className={linkClass} href="/catalogo">Biblioteca</Link>
+          <Link className={linkClass} href="/preparar/contrato">Preparar un contrato</Link>
           <Link className={linkClass} href="/confianza">Fuentes y límites</Link>
           <Link className={linkClass} href="/sobre">Sobre LegalMente</Link>
         </div>

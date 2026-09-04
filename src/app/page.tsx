@@ -159,6 +159,35 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-t border-[#102A43]/10 bg-white/35">
+        <div className="mx-auto max-w-[1320px] px-5 py-14 md:px-8 md:py-20">
+          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/45">Un producto sostenible</p>
+              <h2 className="mt-4 max-w-[12ch] font-serif text-4xl leading-[1.02] tracking-[-0.035em] md:text-5xl">El valor crece con la confianza.</h2>
+            </div>
+            <p className="max-w-[58ch] text-sm leading-7 text-[#102A43]/62">LegalMente puede crecer sin convertir la incertidumbre jurídica en una venta de miedo. Primero demuestra claridad; después, si los gates se cierran, añade capas de valor separadas y comprensibles.</p>
+          </div>
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            <div className="border-t border-[#102A43]/15 pt-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#102A43]/45">01 · Abierto</p>
+              <h3 className="mt-5 font-serif text-2xl">Explorar y aprender</h3>
+              <p className="mt-3 text-sm leading-7 text-[#102A43]/62">Rutas editoriales gratuitas para entender conceptos, contextos, fuentes y límites.</p>
+            </div>
+            <div className="border-t border-[#102A43]/15 pt-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#102A43]/45">02 · De pago, futuro</p>
+              <h3 className="mt-5 font-serif text-2xl">Preparar mejor</h3>
+              <p className="mt-3 text-sm leading-7 text-[#102A43]/62">Guías, checklists, bibliotecas y herramientas estructuradas, solo después de validar demanda y privacidad.</p>
+            </div>
+            <div className="border-t border-[#102A43]/15 pt-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#102A43]/45">03 · Separado</p>
+              <h3 className="mt-5 font-serif text-2xl">Revisión profesional</h3>
+              <p className="mt-3 text-sm leading-7 text-[#102A43]/62">Una posible capa futura, independiente del contenido educativo y sujeta a territorio, seguridad, términos y responsabilidad.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="border-t border-[#102A43]/10 bg-[#102A43] text-[#F5F0E8]">
         <div className="mx-auto max-w-[1320px] px-5 py-16 md:px-8 md:py-24">
           <div className="grid items-end gap-8 md:grid-cols-[1fr_auto]">
