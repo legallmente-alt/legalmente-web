@@ -4,9 +4,23 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "LegalMente — conocimiento jurídico para orientarte mejor",
+  title: "LegalMente — entender el Derecho para decidir mejor",
   description:
-    "LegalMente convierte preguntas jurídicas en rutas de comprensión, preparación, fuentes y siguientes pasos, con límites territoriales visibles.",
+    "LegalMente es una plataforma de educación y preparación jurídica que conecta situaciones, conceptos, procesos, fuentes y territorio con límites visibles.",
+  keywords: [
+    "educación jurídica",
+    "preparación jurídica",
+    "contratos",
+    "hechos y evidencia",
+    "LegalMente",
+  ],
+  openGraph: {
+    title: "LegalMente — entender el Derecho para decidir mejor",
+    description:
+      "Explora conceptos, procesos y herramientas de preparación jurídica con fuentes, contexto y límites territoriales visibles.",
+    type: "website",
+    locale: "es_ES",
+  },
 };
 
 export default function RootLayout({

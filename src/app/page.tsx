@@ -138,6 +138,27 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-t border-[#102A43]/10 bg-[#F5F0E8]">
+        <div className="mx-auto grid max-w-[1320px] gap-10 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/45">Qué es LegalMente</p>
+            <h2 className="mt-4 max-w-[11ch] font-serif text-4xl leading-[1.02] tracking-[-0.04em] md:text-5xl">Una entrada clara al Derecho.</h2>
+          </div>
+          <div className="grid gap-8 md:grid-cols-2">
+            <div className="border-t border-[#102A43]/15 pt-5">
+              <h3 className="font-serif text-2xl">Para entender</h3>
+              <p className="mt-3 text-sm leading-7 text-[#102A43]/64">Conceptos, situaciones y procesos explicados con fuentes, contexto y límites visibles.</p>
+              <Link href="/explorar" className="mt-5 inline-flex min-h-11 items-center border-b border-[#102A43]/50 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#102A43]">Explorar el conocimiento →</Link>
+            </div>
+            <div className="border-t border-[#102A43]/15 pt-5">
+              <h3 className="font-serif text-2xl">Para prepararte</h3>
+              <p className="mt-3 text-sm leading-7 text-[#102A43]/64">Checklists y herramientas que ayudan a ordenar variables antes de una conversación o decisión.</p>
+              <Link href="/preparar/contrato" className="mt-5 inline-flex min-h-11 items-center border-b border-[#102A43]/50 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#102A43]">Preparar un contrato →</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="border-t border-[#102A43]/10 bg-[#102A43] text-[#F5F0E8]">
         <div className="mx-auto max-w-[1320px] px-5 py-16 md:px-8 md:py-24">
           <div className="grid items-end gap-8 md:grid-cols-[1fr_auto]">

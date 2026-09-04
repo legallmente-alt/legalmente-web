@@ -40,6 +40,25 @@ export default function SobrePage() {
         </div>
       </section>
 
+      <section className="border-t border-[#102A43]/10 bg-[#102A43] text-[#F5F0E8]">
+        <div className="mx-auto grid max-w-[1320px] gap-10 px-5 py-14 md:px-8 md:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#63D7B0]">La marca como sistema</p>
+            <h2 className="mt-4 max-w-[11ch] font-serif text-4xl leading-[1.02] tracking-[-0.035em] md:text-5xl">Confianza antes que promesa.</h2>
+          </div>
+          <div className="grid gap-8 md:grid-cols-2">
+            <div className="border-t border-[#F5F0E8]/15 pt-5">
+              <h3 className="font-serif text-2xl">Lo que ofrecemos hoy</h3>
+              <p className="mt-3 text-sm leading-7 text-[#F5F0E8]/66">Conocimiento conectado, preparación, checklists y herramientas educativas con fuentes, límites y territorio visibles.</p>
+            </div>
+            <div className="border-t border-[#F5F0E8]/15 pt-5">
+              <h3 className="font-serif text-2xl">Lo que puede venir después</h3>
+              <p className="mt-3 text-sm leading-7 text-[#F5F0E8]/66">Guías, bibliotecas, talleres y revisiones profesionales separadas, siempre condicionadas a demanda, privacidad, seguridad y responsabilidad claramente definidas.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto flex max-w-[1320px] flex-col gap-5 px-5 py-12 md:px-8 md:py-16 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-[54ch] text-sm leading-7 text-[#102A43]/62">
           Empieza por una pregunta y sigue únicamente las relaciones que te ayuden a entender mejor.
