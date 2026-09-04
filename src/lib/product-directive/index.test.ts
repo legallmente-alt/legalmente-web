@@ -37,6 +37,8 @@ function baseUnit(overrides: Partial<KnowledgeUnitDescriptor> = {}): KnowledgeUn
       communicatesConcept: true,
       physicalBrandIntegration: true,
       approvedSampleReferenceChecked: true,
+      generatedBaseArtHasZeroCharacters: true,
+      deterministicTypographyAfterGeneration: true,
       metaphor: "expediente de compra conectado físicamente al vehículo",
       visualSchool: "editorial cinematic realism",
       recentSimilarity: 0.2,
@@ -74,12 +76,14 @@ test("comparative unit requires explicit territories", () => {
   assert.ok(errors.some((error) => error.includes("Comparative content")));
 });
 
-test("social visual enforces meaning, integrated brand and approved samples", () => {
+test("social visual enforces meaning, integrated brand, approved samples and split visual pipeline", () => {
   const errors = validateKnowledgeUnit(baseUnit({
     visual: {
       communicatesConcept: false,
       physicalBrandIntegration: false,
       approvedSampleReferenceChecked: false,
+      generatedBaseArtHasZeroCharacters: false,
+      deterministicTypographyAfterGeneration: false,
       metaphor: "",
       visualSchool: "",
     },
@@ -87,6 +91,8 @@ test("social visual enforces meaning, integrated brand and approved samples", ()
   assert.ok(errors.some((error) => error.includes("communicate the concept")));
   assert.ok(errors.some((error) => error.includes("physically integrated")));
   assert.ok(errors.some((error) => error.includes("sample images")));
+  assert.ok(errors.some((error) => error.includes("zero letters")));
+  assert.ok(errors.some((error) => error.includes("composed deterministically")));
 });
 
 test("Founder LinkedIn requires documented professional provenance", () => {
