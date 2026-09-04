@@ -68,6 +68,8 @@ export type VisualContract = {
   communicatesConcept: boolean;
   physicalBrandIntegration: boolean;
   approvedSampleReferenceChecked: boolean;
+  generatedBaseArtHasZeroCharacters?: boolean;
+  deterministicTypographyAfterGeneration?: boolean;
   metaphor: string;
   visualSchool: string;
   recentSimilarity?: number;
@@ -152,6 +154,12 @@ export function validateKnowledgeUnit(unit: KnowledgeUnitDescriptor): string[] {
     if (!unit.visual.communicatesConcept) errors.push("Social visual must communicate the concept, not merely decorate it.");
     if (!unit.visual.physicalBrandIntegration) errors.push("LegalMente brand must be physically integrated into the scene/object.");
     if (!unit.visual.approvedSampleReferenceChecked) errors.push("Founder-approved sample images must be checked before visual production.");
+    if (unit.visual.generatedBaseArtHasZeroCharacters !== true) {
+      errors.push("Visual-provider base art must contain zero letters, numbers or pseudotext; typography is post-generation.");
+    }
+    if (unit.visual.deterministicTypographyAfterGeneration !== true) {
+      errors.push("LegalMente brand and approved editorial copy must be composed deterministically after base-art generation.");
+    }
     if (!hasText(unit.visual.metaphor)) errors.push("Visual metaphor is required for social visual production.");
     if (!hasText(unit.visual.visualSchool)) errors.push("Visual school/style must be declared for anti-repetition memory.");
     if (unit.visual.recentSimilarity !== undefined && (unit.visual.recentSimilarity < 0 || unit.visual.recentSimilarity > 1)) {
