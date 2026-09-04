@@ -1,155 +1,192 @@
-# LegalMente — Founder Directive — 2026-09-04
+# LegalMente — Directiva del fundador — 2026-09-04
 
-Status: `FOUNDER_AUTHORIZED / PRODUCT_DIRECTION / NOT_PUBLICATION_AUTHORIZATION`
+## Propósito
 
-This document records product/editorial direction. It does not create legal truth, approve claims, open legal gates, publish content, merge code, deploy, collect PII, activate professional services or authorize payments.
+LegalMente debe funcionar como un sistema vivo de conocimiento, aprendizaje y aplicación jurídica. No es un catálogo de posts, no es un juego como núcleo y no debe quedar atrapado en una sola materia, formato o metáfora.
 
-## 1. Product north
+## 1. Motor por niveles
 
-LegalMente is a living system of **knowledge → learning → application**. It is not a finite post bank and not a game-first product. Web, future app, tools and game mechanics are surfaces of the same knowledge motor.
+La progresión base es:
 
-A person may enter through curiosity, a legal concept, a common error or a concrete human need. The system must be capable of moving from a small question to a connected, deeper and useful learning route.
+`FOUNDATION → MATTER → NEED_PROCESS → COMPARATIVE → TERRITORIAL_SPECIALIZED`.
 
-## 2. Knowledge progression
+La referencia a una “pirámide de Kelsen” es figurativa: partir de fundamentos y cultura jurídica general y avanzar hacia materias, necesidades, procesos, especialización y territorio. No convertirla en una taxonomía rígida.
 
-Default progression:
+## 2. Panhispánico por defecto
 
-1. `FOUNDATION` — broad legal culture and stable cross-territory principles.
-2. `MATTER` — concepts organized by legal domain/matter.
-3. `NEED_PROCESS` — a human need, checklist, process, decision or preparation path.
-4. `COMPARATIVE` — explicit comparison of named legal systems/territories.
-5. `TERRITORIAL_SPECIALIZED` — jurisdiction-specific or professional depth.
+La capa general está dirigida a personas hispanohablantes. No presentar legislación, instituciones, trámites, formalidades o efectos de un país como si fueran universales.
 
-The “pyramid” is figurative. It means general → specific, not rigid adherence to one legal theory.
+Cuando el contenido cambia materialmente por territorio, el sistema debe cualificar, bloquear o pedir territorio antes de una conclusión específica. El derecho comparado siempre debe nombrar los territorios comparados.
 
-## 3. Panhispanic default and territory boundary
+## 3. Estrategia de fuentes
 
-General LegalMente is panhispanic by default. National law, institutions, deadlines, procedures or requirements must never be silently presented as universal.
+- Nivel fundacional: fuentes estables, institucionales e introductorias.
+- Materias y necesidades: doctrina/manuales e institucionales, con fuente primaria cuando la pieza formule reglas concretas actuales.
+- Comparado: territorios explícitos y fuentes adecuadas por sistema.
+- Actualidad/jurisprudencia: fuente primaria, fecha y vigencia.
 
-- General/transversal content may remain territory-neutral only when the proposition can actually sustain that scope.
-- If a result can materially change by jurisdiction, the unit must say that it varies or require territory before a conclusive route.
-- Comparative content must name the compared territories.
-- Current law/jurisprudence and specialized territorial content require version/date and appropriate source evidence.
+Las fuentes construyen el concepto; no son decoración bibliográfica.
 
-## 4. Multiple entry doors and broad subject rotation
+## 4. Entradas múltiples
 
-The motor may start from:
+El motor puede iniciar desde:
 
-`NEED / QUESTION / COMMON_ERROR / MYTH / CONCEPT / REQUIREMENTS / STEPS / HUMAN_SITUATION / PREVENTION / HISTORY_CULTURE / PROFESSIONAL_DEPTH`.
+- necesidad;
+- pregunta;
+- error común;
+- mito;
+- concepto;
+- requisitos;
+- pasos;
+- situación humana;
+- prevención;
+- historia/cultura;
+- profundidad profesional.
 
-It must not become trapped in one legal matter. Coverage can include civil, criminal, labor, family, commercial, corporate, notarial, consumer, administrative, real-estate/property, urban/land-use, evidence/procedure, digital/AI, intellectual property, criminalistics and other legitimate domains as the graph grows.
+La materia jurídica sigue siendo clasificación interna, no la única puerta de entrada.
 
-A topic is a door, not a cage.
+## 5. Amplitud y rotación
 
-## 5. Need-first product paths
+Debe rotar entre civil, penal, laboral, familiar, mercantil, corporativo, notarial, consumidor, administrativo, inmobiliario, urbanismo/uso de suelo, prueba, digital, criminalística y otras materias pertinentes.
 
-LegalMente must support concrete need routes alongside matter-based browsing. Examples are illustrative, not exhaustive:
+Un éxito editorial en contratos, inmobiliario o cualquier otro cluster no autoriza que ese tema monopolice el sistema.
 
-- signing or reviewing an agreement;
-- buying a used vehicle from a private seller;
-- buying land;
-- understanding complaint/querella/process distinctions;
-- consumer problems;
-- land-use or development questions;
-- understanding a company, power or representation issue.
+## 6. Utilidad e impacto
 
-A need route may connect requirements, concepts, documents, risks, questions, evidence, tools and related legal matters. It must stop where territory, facts or professional judgment become necessary.
+Priorizar piezas que respondan a preguntas, errores, supuestos y necesidades reales. Interés, utilidad, retención, viralidad y monetización pueden influir en qué investigar o producir primero, pero nunca alteran verdad jurídica, fuente, territorio ni gates.
 
-## 6. Sources build the concept
+## 7. Clasificación desde origen
 
-Source strategy is proportional to depth:
+Toda unidad debe poder registrar, como mínimo:
 
-- stable/general sources for foundation;
-- institutional/manual/doctrinal sources appropriate to matter for conceptual learning;
-- explicit territory evidence for comparison;
-- primary source + date/version for current law, jurisprudence or specialized territorial claims.
+- materia;
+- nivel;
+- necesidad/pregunta;
+- puerta de entrada;
+- concepto(s);
+- tensión/error;
+- territorio;
+- fuentes;
+- explicación/aplicación;
+- relaciones con otras materias;
+- formato/superficie;
+- estado;
+- historial/fingerprint;
+- vínculos con web/app/game cuando existan.
 
-Sources are not decoration. Missing evidence creates research work, never filler certainty.
+## 8. Arte que comunica
 
-## 7. Utility, interest and market signal
+El arte no es decoración. Debe hacer visible el concepto, situación, diferencia, tensión, secuencia o consecuencia.
 
-Content selection balances legal value with real human need, clarity, practical usefulness, curiosity/interest, visual potential, continuity, product potential and measured performance when available.
+Las muestras aprobadas se consultan para estructura, jerarquía, legibilidad, integración de marca y relación concepto-imagen. No se copian sus temas.
 
-Viral potential and monetization may influence priority. They may not lower the source, territory, privacy or legal-truth standard.
+## 9. Separación arte base / asset final
 
-## 8. Classification and memory from birth
+La regla correcta es:
 
-Every knowledge/content unit should be classifiable from creation with, at minimum:
+> **El proveedor visual genera arte sin caracteres. Toda tipografía de LegalMente —la marca y, cuando el formato lo exija, el copy editorial— se incorpora después mediante composición determinista y se valida contra el contenido aprobado.**
 
-- matter/domain;
-- knowledge level;
-- product layer;
-- entry door;
-- human need/question;
-- concepts;
-- common error/tension;
-- explanation/application;
-- territory mode and territories when required;
-- source references and source tier;
-- related matters/concepts;
-- output surfaces;
-- visual contract when applicable;
-- professional provenance for Founder LinkedIn;
-- angle, format and anti-repetition fingerprint;
-- review/publication state outside this product layer.
+### Arte base generado
 
-The purpose is retrieval, reuse, branching, anti-repetition and future web/app/tool/game projection.
+- cero letras;
+- cero números;
+- cero pseudotexto;
+- una escena;
+- metáfora comprensible;
+- superficie física reservada para marca cuando corresponda.
 
-## 9. Visual contract
+### Composición determinista
 
-Art is a communication layer, not decoration.
+- `LegalMente` exacto;
+- integración física coherente con perspectiva, material, escala y luz;
+- título, pregunta, frase, pasos, comparación o copy editorial exacto si el formato lo requiere;
+- autor, cita o fuente sólo desde Content Pack aprobado;
+- prohibidos watermark y overlay arbitrario.
 
-For social visual production:
+### QA
 
-- the image must make the legal idea, distinction, process or tension easier to understand or remember;
-- founder-approved sample images must be consulted as structural/quality references before production;
-- the sample set is an external/private production reference and its Drive identifiers must not be hardcoded into this public repository;
-- the LegalMente wordmark must be physically integrated into a plausible object/surface in the scene, never used as a detached overlay or watermark;
-- artistic language should rotate and evolve from approvals rather than collapse into one template;
-- visual memory participates in anti-repetition.
+- texto exacto;
+- marca integrada;
+- legibilidad móvil;
+- perspectiva/material/luz coherentes;
+- no collage;
+- no repetición indebida;
+- revisión humana obligatoria.
 
-## 10. Anti-repetition
+No escalar a lotes de diez para validar esta arquitectura. Primero una unidad real end-to-end.
 
-The motor must compare a candidate against prior theme/concept/relation/human trigger/angle/format/metaphor/visual school and recent visual memory.
+## 10. Anti-repetición
 
-Exact or materially equivalent repetition should route to a different branch, relation, level, need or representation. Reusing a concept is valid only when the learning contribution is materially different.
+Registrar contenido producido, aprobado, rechazado, publicado, agotado y reservado. Evitar repetir la misma combinación de tema + ángulo + formato + metáfora. Reutilizar conceptos sólo cuando la relación, nivel, necesidad o tratamiento sea materialmente distinto.
 
-## 11. General LegalMente vs Founder LinkedIn
+## 11. Necesidad como puerta de producto
 
-These are separate projections of the same knowledge organism.
+LegalMente debe permitir entrar por una necesidad concreta, por ejemplo:
 
-### General LegalMente
+- comprar un vehículo usado;
+- comprar un terreno;
+- entender qué revisar antes de firmar;
+- consumidor;
+- denuncia/querella y proceso;
+- familia;
+- representación;
+- sociedad;
+- uso de suelo/desarrollo;
+- evidencia digital.
 
-Panhispanic educational discovery, concepts, needs, tools and routes.
+Estas rutas se construyen desde conocimiento validado. Las rutas iniciales son hipótesis de investigación, no asesoría ni listas universales de requisitos.
 
-### Founder LinkedIn
+## 12. Capas de producto
 
-Professional depth grounded only in documented professional evidence. Priority includes contractual real estate, due diligence, representation/powers, permissions and development dependencies, acquisition/sale/pre-sale, title/deeds, corporate structure, risk allocation, clauses, documentary evidence, legal operations, AI and architecture of real operations.
+Mantener como arquitectura flexible:
 
-Founder LinkedIn must never invent credentials, projects, outcomes or confidential facts.
+- LegalMente Basic;
+- LegalMente Needs;
+- LegalMente Comparative;
+- LegalMente Professional;
+- LegalMente Corporate.
 
-## 12. Product surfaces
+Los nombres comerciales no quedan congelados; deben evolucionar con evidencia de uso y mercado.
 
-Web, tools, future app and game/interactive mechanics must reuse the same classified knowledge. Do not build a second knowledge canon for each surface.
+## 13. LinkedIn profesional
 
-External products may be studied for proven mechanics, but LegalMente should adapt mechanisms rather than copy identities or force gamification where it adds no utility.
+La salida personal de Raymundo Acevedo Martínez es un carril profesional distinto del LegalMente general. Debe alimentarse sólo de experiencia y documentos verificables, con prioridad contractual-inmobiliaria, due diligence, representación, permisos, compraventa, promesa/preventa, escrituración, corporativo, riesgos, cláusulas, evidencia digital, IA y arquitectura jurídica de operaciones.
 
-## 13. Living cycle
+No inventar experiencia ni mezclar sin filtro el carril general con Founder LinkedIn.
 
-`signal/need → research/source → knowledge unit → classification → connection → brief/tool/visual → legal/editorial/visual QA → human decision → inventory → authorized publication/use → measurement → learning → motor update`
+## 14. Web, app y juego
 
-The system may evolve when evidence from audience behavior, market, product use, legal change, quality review or technology supports a better route. Changes must remain versioned and traceable.
+Son superficies posibles del mismo motor, no proyectos desconectados. La web es la expresión inmediata más simple del conocimiento clasificado. App y juego se evalúan después mediante evidencia de adopción, utilidad, coste y capacidad de reutilizar el mismo conocimiento.
 
-## 14. Provider independence and Gemini preflight
+La gamificación es opcional; no es el núcleo del producto.
 
-No image provider is assumed available merely because someone intended to install it. Provider state must distinguish:
+## 15. Ciclo obligatorio
 
-`NOT_INSTALLED → INSTALLED_NOT_CONFIGURED → CONFIGURED_NOT_PROVEN_USABLE → LIVE_CAPABILITY_PROVEN`.
+`investigación/fuente → unidad de conocimiento → clasificación → concepto/necesidad → visual/herramienta → QA jurídico/editorial/visual → aprobación → inventario → publicación sólo autorizada → medición → aprendizaje → motor`.
 
-Secrets must never be printed or committed. The repository includes a provider preflight that reports package/configuration state without exposing credential values.
+## 16. Sistema vivo
 
-Higgsfield is not a required dependency for this production path.
+Las reglas son dirección de producto, no una prisión. Cambios relevantes deben versionarse con fecha, razón y efecto para que futuras sesiones no reinicien el proyecto desde cero.
 
-## 15. Authority boundary
+## 17. Convergencia documental y técnica
 
-This directive governs product/editorial shape and validation invariants in `legalmente-web`. Canonical legal authority, claim approval, legal gates and jurisdictional truth remain in their designated legal-governance system. Product code may prove that a unit is properly classified; it may not prove that a legal claim is true.
+Reconciliar esta directiva con Content Engine, Arquitectura del Corazón, Blueprint, protocolo visual, LinkedIn Strategy y repositorios. No crear un segundo canon. Las contradicciones deben marcarse y resolverse con el mínimo cambio necesario.
+
+## 18. Tecnología e imagen
+
+No afirmar que Gemini u otro proveedor está disponible por suposiciones. Distinguir:
+
+1. SDK/integración en repositorio;
+2. CLI en el entorno inspeccionado;
+3. credenciales/configuración sin revelar secretos;
+4. capacidad real de generar imagen comprobada.
+
+La existencia de SDK/CLI/credencial no prueba generación real.
+
+## 19. ADR 0002
+
+PR #42 crea en remoto `docs/adr/0002-character-free-base-art-deterministic-typography.md` para dejar trazabilidad de la separación entre arte generado y tipografía determinista. Hasta su aprobación/merge conforme a gobernanza, su estado es `PROPOSED_FOR_CANONICAL_REVIEW`, no canon de `main`.
+
+## Estado
+
+`FOUNDER_DIRECTIVE_RECORDED / IMPLEMENTATION_IN_REVIEW / NO_DEPLOY / NOT_PUBLISHED`.
