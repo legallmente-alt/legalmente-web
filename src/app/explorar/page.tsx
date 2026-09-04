@@ -2,7 +2,8 @@ import Link from "next/link";
 import { worlds } from "@/lib/knowledge-graph/content";
 
 const entryModes = [
-  { label: "Una situación", note: "Empieza por algo que ocurrió o necesitas entender.", href: "/mundo/vida-cotidiana" },
+  { label: "Una necesidad concreta", note: "Empieza por algo que quieres entender, revisar, preparar o hacer.", href: "/necesidades" },
+  { label: "Una situación", note: "Empieza por algo que ocurrió y sigue sus conexiones jurídicas.", href: "/mundo/vida-cotidiana" },
   { label: "Un concepto", note: "Ve de una idea jurídica a sus relaciones y procesos.", href: "/concepto/consentimiento" },
   { label: "Un proceso", note: "Ordena hechos, evidencia y siguientes pasos sin convertirlo en asesoría individual.", href: "/proceso/organizar-hechos-y-prueba" },
   { label: "Explorar el Derecho", note: "Recorre mundos conectados por conducta, contexto, historia y territorio.", href: "#mundos" },
@@ -15,7 +16,7 @@ export default function ExplorePage() {
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#102A43]/50">Entrada relacional</p>
         <h1 className="mt-5 max-w-[12ch] font-serif text-[clamp(3rem,8vw,6.4rem)] font-semibold leading-[0.92] tracking-[-0.05em]">¿Qué quieres entender?</h1>
         <p className="mt-8 max-w-[62ch] text-lg leading-8 text-[#102A43]/68">
-          No necesitas saber primero qué rama del Derecho corresponde. Entra por una situación, un concepto, un proceso o un mundo y sigue conexiones comprensibles.
+          No necesitas saber primero qué rama del Derecho corresponde. Entra por una necesidad, una situación, un concepto, un proceso o un mundo y sigue conexiones comprensibles.
         </p>
 
         <div className="mt-12 border-t border-[#102A43]/12">

@@ -18,6 +18,8 @@
     "test:editorial-engine": "tsx --test src/lib/editorial-engine/*.test.ts",
     "test:knowledge-pilot": "tsx --test src/lib/knowledge-pilot/*.test.ts",
     "test:opportunity-engine": "tsx --test src/lib/opportunity-engine/*.test.ts",
+    "test:product-directive": "tsx --test src/lib/product-directive/*.test.ts",
+    "check:image-provider": "node scripts/check-image-provider.mjs",
     "test:public-routes": "node scripts/public-route-proof.mjs"
   },
   "dependencies": {
