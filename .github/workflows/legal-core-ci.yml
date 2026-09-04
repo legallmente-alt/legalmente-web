@@ -10,6 +10,7 @@ on:
       - 'src/lib/editorial-engine/**'
       - 'src/lib/knowledge-pilot/**'
       - 'src/lib/opportunity-engine/**'
+      - 'src/lib/product-directive/**'
       - 'src/lib/contracts/**'
       - 'src/components/**'
       - 'public/assets/legalmente/**'
@@ -30,6 +31,7 @@ on:
       - 'src/lib/editorial-engine/**'
       - 'src/lib/knowledge-pilot/**'
       - 'src/lib/opportunity-engine/**'
+      - 'src/lib/product-directive/**'
       - 'src/lib/contracts/**'
       - 'src/components/**'
       - 'public/assets/legalmente/**'
@@ -62,6 +64,9 @@ jobs:
       - run: npm run test:editorial-engine
       - run: npm run test:knowledge-pilot
       - run: npm run test:opportunity-engine
+      - run: npm run test:product-directive
+      - name: Image provider preflight (non-secret, fail-closed status)
+        run: npm run check:image-provider
       - run: npm run typecheck
       - run: npm run lint
       - name: Privacy surface smoke
