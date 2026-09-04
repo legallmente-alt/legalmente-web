@@ -21,6 +21,7 @@ const surfaces = [
   { name: "concept", route: "/concepto/consentimiento" },
   { name: "process", route: "/proceso/organizar-hechos-y-prueba" },
   { name: "trust", route: "/confianza" },
+  { name: "contract-preparation", route: "/preparar/contrato" },
 ];
 
 await mkdir(outputDir, { recursive: true });
