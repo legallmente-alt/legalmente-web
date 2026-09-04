@@ -1,114 +1,98 @@
-# LegalMente — Reconciliation of Founder Directive — 2026-09-04
+# LegalMente — Reconciliación de la directiva del fundador — 2026-09-04
 
-Status: `IMPLEMENTATION_REVIEW / REVERSIBLE / NO_DEPLOY / NO_PUBLICATION`
+## Estado
 
-Base reviewed: `legalmente-web/main` at `46948a0cd0db1a1d1fd2e914e00c616cd4bd82d0`.
+`FOUNDER_DIRECTIVE_RECONCILED / READY_FOR_REVIEW / NOT_PUBLISHED / NO_DEPLOY`
 
-## What already existed and is preserved
+Esta reconciliación extiende la arquitectura existente. No crea un segundo canon jurídico ni mueve autoridad legal al frontend/product layer.
 
-The current repository already contains a substantial knowledge architecture and should not be replaced by a second canon:
+## Dirección consolidada
 
-- `knowledge-graph` for relations and knowledge safety/integrity;
-- `knowledge-pilot` for human questions, territory requirements, canonical bindings and public/professional projections;
-- `editorial-engine` for distribution lanes and orchestration;
-- `opportunity-engine` for evidence-aware prioritization and portfolio diversity;
-- `visual-system` for visual assets/tokens;
-- `ecosystem-kernel` and `legal-core` for shared boundaries and legal-safe product behavior.
+LegalMente debe operar como un motor vivo de conocimiento, aprendizaje y aplicación. La persona puede entrar por necesidad, pregunta, error común, mito, concepto, requisitos, pasos, situación humana, prevención, historia/cultura o profundidad profesional. La clasificación jurídica por materia sigue existiendo, pero ya no es la única puerta de entrada.
 
-The Founder directive therefore adds missing product invariants rather than rebuilding these systems.
+El orden conceptual es progresivo: fundamentos → materias → necesidades/procesos → comparado explícito → especialización territorial. La metáfora de una pirámide es pedagógica, no una taxonomía rígida.
 
-## Gaps identified
+La capa general permanece panhispánica. Cuando la respuesta cambia por territorio, el sistema debe bloquear, cualificar o pasar a una capa territorial explícita. Comparado y actualidad requieren territorios/fecha/fuentes adecuadas; la prioridad de mercado nunca abre un gate jurídico.
 
-### 1. Need + matter + level were not one explicit unit contract
+## Motor de oportunidad y amplitud
 
-The repository had questions, domains, concepts and opportunity journeys, but no single small validator requiring a unit to declare all of: matter, knowledge level, product layer, entry door, human need, common confusion/tension, application, territory mode and source tier.
+Las necesidades, materias y relaciones deben rotar para impedir que contratos, inmobiliario o cualquier otro cluster capture todo el roadmap. El sistema ya dispone de rutas semilla no canónicas para compra de vehículo usado, terreno, pre-firma, consumidor, proceso penal, familia, representación, sociedad, uso de suelo/desarrollo y evidencia digital.
 
-**Action:** added `src/lib/product-directive/index.ts`.
+Estas rutas son hipótesis de investigación y producto. No son listas de requisitos aprobadas ni asesoría.
 
-### 2. Panhispanic vs comparative vs specialized territory needed an explicit product-level guard
+Las señales de utilidad, interés, viralidad, retención, monetización y búsqueda pueden modificar la prioridad editorial/producto. No pueden modificar claims, fuente, territorio, vigencia ni estado de gate.
 
-Existing canonical/legal territory controls remain authoritative. The product layer now adds a non-legal guard that rejects silent national binding in panhispanic-general units and requires explicit territories for comparative/specialized descriptors.
+## LinkedIn
 
-**Boundary:** this validator cannot approve jurisdictional truth or open a legal gate.
+La salida Founder LinkedIn permanece separada de LegalMente general. Toda proyección profesional debe tener provenance verificable y utilizar experiencia real/anónima; no inventar cargos, clientes, casos ni resultados.
 
-### 3. Visual production rules needed machine-checkable brief invariants
+## Visual — corrección operativa consolidada
 
-The visual system existed, but the Founder rules “art communicates”, “brand physically integrated” and “approved sample references checked” were not encoded as a brief-level validation contract.
+La separación correcta es entre arte base generado y asset final.
 
-**Action:** social visual descriptors now require these three booleans plus metaphor and visual school. This is not image understanding and does not certify final art; it prevents an incomplete brief from being treated as ready.
+> **El proveedor visual genera arte sin caracteres. Toda tipografía de LegalMente —la marca y, cuando el formato lo exija, el copy editorial— se incorpora después mediante composición determinista y se valida contra el contenido aprobado.**
 
-### 4. Anti-repetition needed a portable candidate fingerprint
+### Arte base
 
-The opportunity engine already prevents portfolio concentration, but an explicit content fingerprint at the unit level was missing.
+- cero letras;
+- cero números;
+- cero pseudotexto;
+- metáfora visual comprensible;
+- una sola escena;
+- superficie física reservada para la marca cuando aplique;
+- muestras aprobadas consultadas;
+- no collage/grid/storyboard.
 
-**Action:** added a deterministic fingerprint using matter, level, entry door, need/question, concepts, angle, format, metaphor and visual school. Exact prior fingerprints are blocked before brief generation.
+### Composición determinista
 
-**Next expansion:** similarity beyond exact fingerprints should reuse existing inventory/metrics rather than create an independent memory database.
+- `LegalMente` exacto;
+- integrado físicamente en placa, sello, lomo, cuaderno, carpeta, vidrio, metal, madera, piedra u otra superficie coherente;
+- nunca watermark ni overlay arbitrario;
+- título, pregunta, frase, pasos, comparación o copy editorial sólo si el formato lo requiere y desde Content Pack aprobado;
+- autor, cita y fuente sólo con binding aprobado;
+- tipografía, escala, perspectiva, material, luz y safe area controlados.
 
-### 5. Founder LinkedIn provenance needed a hard product requirement
+### QA
 
-The system already separates public and professional projection. The new product validator requires documented professional evidence IDs when a unit includes `FOUNDER_LINKEDIN`.
+- exactitud textual contra Content Pack;
+- marca integrada;
+- legibilidad móvil;
+- perspectiva/material/luz coherentes;
+- no collage;
+- no repetición indebida;
+- revisión humana obligatoria.
 
-**Boundary:** an evidence ID proves provenance linkage exists; it does not prove a legal proposition or authorize disclosure.
+El contrato ejecutable vive en `src/lib/product-directive/visual-composition.ts` y sus pruebas en `visual-composition.test.ts`.
 
-### 6. Source strategy needed a level-aware product check
+## ADR 0002 y trazabilidad
 
-The legal-governance system remains the authority for claims and sources. The product descriptor now rejects obviously mismatched source tiers (for example comparative content without explicit comparative/primary support, or `PRIMARY_CURRENT` declared on a non-primary reference).
+Antes de esta reconciliación no se pudo demostrar en el remoto accesible una rama `claude/convergencia-superset` ni un ADR 0002 remoto. Para cerrar esa ambigüedad sin fingir historia, PR #42 crea `docs/adr/0002-character-free-base-art-deterministic-typography.md` con estado `PROPOSED_FOR_CANONICAL_REVIEW`.
 
-### 7. Gemini status was being discussed without repository evidence
+No debe describirse como canon de `main` hasta aprobación/merge conforme a la gobernanza vigente.
 
-At the reviewed base, `package.json` declares no supported Gemini SDK package. No Gemini dependency is added in this change because adding a provider before deciding adapter/API shape and credentials would create unnecessary coupling.
+## Piloto visual end-to-end
 
-**Action:** added `scripts/check-image-provider.mjs` and `npm run check:image-provider`.
+No se debe volver a validar el motor con un lote de diez. El siguiente gate visual correcto es una sola pieza real:
 
-The preflight reports:
+`CONTENT PACK APTO → METÁFORA → ARTE BASE SIN CARACTERES → COMPOSICIÓN DETERMINISTA → QA → REVISIÓN HUMANA → ASSET FINAL`.
 
-- `NOT_INSTALLED` when no supported SDK is declared;
-- `INSTALLED_NOT_CONFIGURED` when an SDK exists but no supported credential variable is present;
-- `CONFIGURED_NOT_PROVEN_USABLE` when package + credential variable exist.
+Durante esta reconciliación se revisó `docs/content/legalmente-01-consentimiento/content-pack.md`; su estado declarado es `DRAFT_CONTENT`, por lo que no cumple el gate de pieza real aprobada para este piloto.
 
-It never prints credential values and deliberately does not call an external API. A live capability test remains a separate future gate.
+También se revisó `docs/FOUNDER_DECISION_RECEIPT_CLAIMS_1_2_4_V1.md`: registra aprobación humana externa, pero declara `CANONICAL_INGESTION_REQUIRED` y mantiene cerrado el gate de arte/publicación. No debe utilizarse para simular que ya existe un Content Pack apto.
 
-## Source-of-truth boundaries
+Por tanto el motor visual queda implementado y testeable, pero el primer asset end-to-end permanece correctamente bloqueado hasta localizar o producir mediante el flujo canónico un Content Pack con estado jurídico/editorial que permita arte.
 
-1. **Psyche/legal governance:** legal claim truth, primary-source binding, legal review and legal gates.
-2. **legalmente-web product layer:** classification, discovery, projection, product constraints, tools, public-safe interfaces and prioritization.
-3. **Drive:** Founder decisions, protocols, approved visual references, operational memory and evidence/handoffs that should not be hardcoded into a public repository.
+## Gemini
 
-## What this change intentionally does not do
+La capacidad de imagen debe distinguir:
 
-- no merge to `main`;
-- no deployment;
-- no public content publication;
-- no legal claim approval;
-- no opening of legal/publication gates;
-- no PII intake;
-- no contract generation;
-- no payment/service activation;
-- no secret creation or secret inspection;
-- no Gemini API installation or live call;
-- no copying of private Drive IDs into public source code.
+1. SDK/integración declarada en repositorio;
+2. CLI disponible en el entorno que se está inspeccionando;
+3. credencial/configuración presente sin revelar valores;
+4. generación real autorizada y comprobada.
 
-## Validation added
+Ninguna de las tres primeras por sí sola prueba capacidad real de imagen. La preflight existente debe permanecer fail-closed.
 
-`test:product-directive` covers:
+## Decisión final de esta reconciliación
 
-- need-first descriptor readiness;
-- panhispanic boundary;
-- comparative-territory requirement;
-- art/brand/sample-reference brief invariants;
-- Founder LinkedIn provenance;
-- exact anti-repetition fingerprint;
-- missing sources becoming research work instead of filler content.
-
-`check:image-provider` provides a fail-closed provider preflight.
-
-## Next implementation steps after review
-
-1. Integrate the product descriptor into candidate generation in `opportunity-engine`/`knowledge-pilot` rather than creating parallel candidate stores.
-2. Bind production inventory fingerprints to the existing content/asset registry.
-3. Build need-first web routes from the same graph: e.g. used-vehicle purchase, land purchase, contract signing, consumer, criminal-process entry points.
-4. Add a source-policy adapter that reads canonical legal envelopes rather than duplicating legal source authority.
-5. Add a private/external visual-reference receipt proving the Founder-approved sample set was actually consulted for each image batch.
-6. Evaluate provider adapters only after preflight and provider-neutral interface are accepted.
-7. Measure content/product performance and feed first-party evidence back into `opportunity-engine` without allowing popularity to override legal gates.
+Se acepta y ejecuta la corrección de arquitectura visual. Se preservan los gates de legalidad, fuente, territorio, publicación y revisión humana. El objetivo no es producir volumen antes de tiempo; es conseguir que LegalMente pueda repetir el ciclo correctamente y después escalar.
