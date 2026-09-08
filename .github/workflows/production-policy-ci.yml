@@ -1,0 +1,26 @@
+name: Production policy CI
+
+on:
+  pull_request:
+    paths:
+      - 'src/lib/production-policy/**'
+      - 'package.json'
+      - '.github/workflows/production-policy-ci.yml'
+  push:
+    paths:
+      - 'src/lib/production-policy/**'
+      - 'package.json'
+      - '.github/workflows/production-policy-ci.yml'
+
+jobs:
+  production-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run test:production-policy
+      - run: npm run typecheck
