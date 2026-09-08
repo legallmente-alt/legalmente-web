@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   historyItemIsActive,
+  productionContentFingerprint,
+  productionVisualFingerprint,
   validateImprovementRecord,
   validateProductionBatch,
   type ProductionHistoryItem,
@@ -32,7 +34,7 @@ function piece(index: number, overrides: Partial<ProductionPiece> = {}): Product
     angle: `Ángulo ${index}`,
     legalRelation: `Relación ${index}`,
     hook: `Pregunta ${index}`,
-    format: index % 2 === 0 ? "9:16" : "4:5",
+    format: "9:16",
     matterLabel: `Materia ${index}`,
     topicLabel: `Tema ${index}`,
     centralIdea: `Idea central ${index}`,
@@ -47,6 +49,8 @@ function piece(index: number, overrides: Partial<ProductionPiece> = {}): Product
     brandObject: `Objeto físico ${index}`,
     visibleBrand: "LegalMente",
     brandIntegration: "PHYSICAL_SCENE",
+    artBaseIsClean: true,
+    typographyCompositor: "CANONICAL",
     ...overrides,
   };
 }
@@ -56,13 +60,16 @@ test("a broad 10-piece LegalMente batch passes with domain and art diversity", (
   assert.equal(result.ok, true, result.errors.join("\n"));
 });
 
-test("general mode rejects digital overweighting", () => {
+test("general mode keeps digital topics paused unless explicitly enabled", () => {
   const batch = Array.from({ length: 10 }, (_, index) => piece(index));
   batch[0] = piece(0, { legalDomainIds: ["DIGITAL_DATA_AI"] });
-  batch[1] = piece(1, { legalDomainIds: ["DIGITAL_DATA_AI"] });
-  const result = validateProductionBatch(batch);
-  assert.equal(result.ok, false);
-  assert.match(result.errors.join(" "), /DIGITAL_DATA_AI/);
+
+  const blocked = validateProductionBatch(batch);
+  assert.equal(blocked.ok, false);
+  assert.match(blocked.errors.join(" "), /paused/);
+
+  const allowed = validateProductionBatch(batch, [], { mode: "LEGALMENTE_GENERAL", allowDigitalTopics: true });
+  assert.equal(allowed.ok, true, allowed.errors.join("\n"));
 });
 
 test("a 10-piece batch rejects repeated dominant art styles", () => {
@@ -81,6 +88,75 @@ test("the LegalMente logo must belong physically to the scene", () => {
   });
   assert.equal(result.ok, false);
   assert.match(result.errors.join(" "), /physically integrated/);
+});
+
+test("base art stays clean and typography is reserved for the canonical compositor", () => {
+  const dirty = validateProductionBatch([piece(0, { artBaseIsClean: false })], [], {
+    mode: "SPECIFIC_DOMAIN",
+    expectedSize: 1,
+    requestedDomainId: "CIVIL",
+  });
+  assert.equal(dirty.ok, false);
+  assert.match(dirty.errors.join(" "), /base art must remain clean/);
+});
+
+test("format follows channel defaults unless a concrete batch override is explicit", () => {
+  const linkedin = validateProductionBatch([piece(0, { format: "4:5" })], [], {
+    mode: "LINKEDIN_FOUNDER",
+    expectedSize: 1,
+  });
+  assert.equal(linkedin.ok, true, linkedin.errors.join("\n"));
+
+  const wrongLinkedin = validateProductionBatch([piece(0, { format: "9:16" })], [], {
+    mode: "LINKEDIN_FOUNDER",
+    expectedSize: 1,
+  });
+  assert.equal(wrongLinkedin.ok, false);
+  assert.match(wrongLinkedin.errors.join(" "), /format must be 4:5/);
+
+  const overridden = validateProductionBatch([piece(0, { format: "1:1" })], [], {
+    mode: "SPECIFIC_DOMAIN",
+    expectedSize: 1,
+    requestedDomainId: "CIVIL",
+    formatOverride: "1:1",
+  });
+  assert.equal(overridden.ok, true, overridden.errors.join("\n"));
+});
+
+test("changing only the hook does not create a new editorial identity", () => {
+  const original = piece(0);
+  const repackaged = piece(0, { id: "LM-POLICY-NEW", hook: "Otro gancho para la misma idea" });
+  assert.equal(productionContentFingerprint(original), productionContentFingerprint(repackaged));
+
+  const result = validateProductionBatch([original, repackaged], [], {
+    mode: "SPECIFIC_DOMAIN",
+    expectedSize: 2,
+    requestedDomainId: "CIVIL",
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join(" "), /repeated editorial substance/);
+});
+
+test("changing only crop or lighting does not create a new visual identity", () => {
+  const original = piece(0);
+  const cosmeticVariant = piece(0, {
+    id: "LM-POLICY-VISUAL-NEW",
+    topic: "Tema visual alterno",
+    angle: "Ángulo visual alterno",
+    legalRelation: "Relación visual alterna",
+    centralIdea: "Idea visual alterna",
+    lighting: "Otra luz",
+    framing: "Otro encuadre",
+  });
+  assert.equal(productionVisualFingerprint(original), productionVisualFingerprint(cosmeticVariant));
+
+  const result = validateProductionBatch([original, cosmeticVariant], [], {
+    mode: "SPECIFIC_DOMAIN",
+    expectedSize: 2,
+    requestedDomainId: "CIVIL",
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join(" "), /repeated visual identity/);
 });
 
 test("specific-domain mode fails if a candidate drifts into another domain", () => {
@@ -127,7 +203,7 @@ test("approved history remains strong while old generated history expires from s
 });
 
 test("LinkedIn modes require source bindings before review", () => {
-  const result = validateProductionBatch([piece(0, { sourceIds: [] })], [], {
+  const result = validateProductionBatch([piece(0, { sourceIds: [], format: "4:5" })], [], {
     mode: "LINKEDIN_LEGALMENTE",
     expectedSize: 1,
   });
@@ -145,7 +221,7 @@ test("agent improvements require evidence, test, result, decision and rollback",
     result: "Pendiente de prueba visual.",
     decision: "Mantener en rama hasta validación.",
     rollback: "Revertir el commit de política.",
-    affectedArtifacts: ["production-policy", "Drive v15"],
+    affectedArtifacts: ["production-policy", "Drive v16"],
   });
   assert.equal(valid.ok, true, valid.errors.join("\n"));
 
