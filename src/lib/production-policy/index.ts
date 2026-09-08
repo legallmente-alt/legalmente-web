@@ -52,6 +52,8 @@ export type ProductionPiece = {
   brandObject: string;
   visibleBrand: string;
   brandIntegration: BrandIntegrationMode;
+  artBaseIsClean: boolean;
+  typographyCompositor: "CANONICAL";
 };
 
 export type ProductionHistoryItem = ProductionPiece & {
@@ -65,6 +67,8 @@ export type ProductionBatchPolicy = {
   requestedDomainId?: string;
   now?: string;
   shortMemoryDays?: number;
+  allowDigitalTopics?: boolean;
+  formatOverride?: string;
 };
 
 export type ProductionPolicyResult = {
@@ -91,8 +95,9 @@ const SHORT_MEMORY_STATES = new Set<CurationState>(["GENERATED", "DISCARDED"]);
 const DEFAULT_SHORT_MEMORY_DAYS = 30;
 const GENERAL_MIN_DISTINCT_DOMAINS_FOR_TEN = 8;
 const GENERAL_MAX_PER_PRIMARY_DOMAIN = 2;
-const GENERAL_MAX_DIGITAL_PIECES = 1;
 const DIGITAL_DOMAIN_ID = "DIGITAL_DATA_AI";
+const GENERAL_FORMAT = "9:16";
+const LINKEDIN_FORMAT = "4:5";
 
 const normalize = (value: string): string => value
   .normalize("NFD")
@@ -104,25 +109,31 @@ const normalize = (value: string): string => value
 const nonEmpty = (value: string | undefined): value is string => typeof value === "string" && value.trim().length > 0;
 const nonEmptyList = (value: readonly string[] | undefined): value is readonly string[] => Array.isArray(value) && value.length > 0 && value.every(nonEmpty);
 
+/**
+ * Substance fingerprint deliberately excludes hook, labels and format.
+ * Those are presentation choices and must not make the same legal idea look new.
+ */
 export function productionContentFingerprint(piece: ProductionPiece): string {
   return [
-    piece.legalDomainIds.join(","),
+    [...piece.legalDomainIds].sort().join(","),
     piece.entryDoor,
     piece.topic,
     piece.angle,
     piece.legalRelation,
-    piece.hook,
+    piece.centralIdea,
   ].map(normalize).join("|");
 }
 
+/**
+ * Visual identity deliberately excludes lighting and framing. A crop or lighting
+ * adjustment is not enough to turn the same artistic solution into a new one.
+ */
 export function productionVisualFingerprint(piece: ProductionPiece): string {
   return [
     piece.artisticStyle,
     piece.visualMetaphor,
     piece.scenario,
     piece.material,
-    piece.lighting,
-    piece.framing,
     piece.composition,
     piece.brandObject,
   ].map(normalize).join("|");
@@ -143,8 +154,6 @@ export function historyItemIsActive(
   if (STRONG_MEMORY_STATES.has(item.state)) return true;
   if (!SHORT_MEMORY_STATES.has(item.state)) return false;
   const age = ageInDays(item.recordedAt, now);
-  // Invalid timestamps fail conservatively: a recent generated/discarded item
-  // should not silently disappear from anti-repetition memory.
   if (age === null) return true;
   return age <= shortMemoryDays;
 }
@@ -153,7 +162,11 @@ function primaryDomain(piece: ProductionPiece): string {
   return piece.legalDomainIds[0] ?? "";
 }
 
-function validatePiece(piece: ProductionPiece, mode: ProductionMode, errors: string[]): void {
+function expectedFormatForMode(mode: ProductionMode): string {
+  return mode === "LINKEDIN_LEGALMENTE" || mode === "LINKEDIN_FOUNDER" ? LINKEDIN_FORMAT : GENERAL_FORMAT;
+}
+
+function validatePiece(piece: ProductionPiece, mode: ProductionMode, policy: ProductionBatchPolicy, errors: string[]): void {
   if (!nonEmpty(piece.id)) errors.push("Every piece requires an id.");
   if (!nonEmptyList(piece.legalDomainIds)) errors.push(`${piece.id || "UNKNOWN"}: at least one legal domain is required.`);
 
@@ -179,11 +192,22 @@ function validatePiece(piece: ProductionPiece, mode: ProductionMode, errors: str
     if (!nonEmpty(value)) errors.push(`${piece.id || "UNKNOWN"}: ${field} is required.`);
   }
 
+  const requiredFormat = policy.formatOverride ?? expectedFormatForMode(mode);
+  if (piece.format !== requiredFormat) {
+    errors.push(`${piece.id}: format must be ${requiredFormat} for ${mode}${policy.formatOverride ? " under the explicit batch override" : ""}.`);
+  }
+
   if (piece.visibleBrand !== "LegalMente") {
     errors.push(`${piece.id}: visible brand must be exactly LegalMente.`);
   }
   if (piece.brandIntegration !== "PHYSICAL_SCENE") {
     errors.push(`${piece.id}: LegalMente must be physically integrated into the scene, never overlay/watermark/floating.`);
+  }
+  if (!piece.artBaseIsClean) {
+    errors.push(`${piece.id}: base art must remain clean; editorial typography is composed after image generation.`);
+  }
+  if (piece.typographyCompositor !== "CANONICAL") {
+    errors.push(`${piece.id}: final typography must use the canonical compositor.`);
   }
   if (/entretenimiento/i.test(piece.matterLabel) || /entretenimiento/i.test(piece.topicLabel) || /entretenimiento/i.test(piece.visibleBrand)) {
     errors.push(`${piece.id}: entretenimiento is not part of the visible LegalMente brand.`);
@@ -194,7 +218,7 @@ function validatePiece(piece: ProductionPiece, mode: ProductionMode, errors: str
   }
 }
 
-function validateGeneralBatch(pieces: readonly ProductionPiece[], expectedSize: number, errors: string[]): void {
+function validateGeneralBatch(pieces: readonly ProductionPiece[], expectedSize: number, policy: ProductionBatchPolicy, errors: string[]): void {
   if (expectedSize !== 10 || pieces.length !== 10) return;
 
   const primaryDomains = pieces.map(primaryDomain).filter(Boolean);
@@ -211,8 +235,8 @@ function validateGeneralBatch(pieces: readonly ProductionPiece[], expectedSize: 
   }
 
   const digitalCount = pieces.filter((piece) => piece.legalDomainIds.includes(DIGITAL_DOMAIN_ID)).length;
-  if (digitalCount > GENERAL_MAX_DIGITAL_PIECES) {
-    errors.push(`General batch overweights ${DIGITAL_DOMAIN_ID}: maximum ${GENERAL_MAX_DIGITAL_PIECES} unless explicitly requested.`);
+  if (digitalCount > 0 && !policy.allowDigitalTopics) {
+    errors.push(`General LegalMente production has ${DIGITAL_DOMAIN_ID} paused unless explicitly enabled for the batch.`);
   }
 
   if (new Set(pieces.map((piece) => normalize(piece.entryDoor))).size < 5) {
@@ -234,9 +258,9 @@ export function validateProductionBatch(
     errors.push(`Expected ${expectedSize} pieces; received ${pieces.length}.`);
   }
 
-  pieces.forEach((piece) => validatePiece(piece, policy.mode, errors));
+  pieces.forEach((piece) => validatePiece(piece, policy.mode, policy, errors));
 
-  if (policy.mode === "LEGALMENTE_GENERAL") validateGeneralBatch(pieces, expectedSize, errors);
+  if (policy.mode === "LEGALMENTE_GENERAL") validateGeneralBatch(pieces, expectedSize, policy, errors);
 
   if (policy.mode === "SPECIFIC_DOMAIN") {
     if (!nonEmpty(policy.requestedDomainId)) {
@@ -247,6 +271,9 @@ export function validateProductionBatch(
           errors.push(`${piece.id}: does not belong to requested domain ${policy.requestedDomainId}.`);
         }
       });
+      if (policy.requestedDomainId === DIGITAL_DOMAIN_ID && !policy.allowDigitalTopics) {
+        errors.push(`${DIGITAL_DOMAIN_ID} is paused unless explicitly enabled for the batch.`);
+      }
     }
   }
 
@@ -257,7 +284,7 @@ export function validateProductionBatch(
     errors.push("Batch contains repeated editorial substance.");
   }
   if (new Set(visualFingerprints).size !== visualFingerprints.length) {
-    errors.push("Batch contains a repeated visual composition fingerprint.");
+    errors.push("Batch contains a repeated visual identity; changing crop or lighting does not make it new.");
   }
 
   if (pieces.length === 10 && new Set(pieces.map((piece) => normalize(piece.artisticStyle))).size !== 10) {
@@ -273,7 +300,7 @@ export function validateProductionBatch(
       errors.push(`${piece.id}: editorial substance is still active in anti-repetition memory.`);
     }
     if (activeVisual.has(visualFingerprints[index])) {
-      errors.push(`${piece.id}: visual solution is still active in anti-repetition memory.`);
+      errors.push(`${piece.id}: visual identity is still active in anti-repetition memory.`);
     }
   });
 
@@ -297,10 +324,6 @@ const improvementKeys: readonly (keyof ImprovementRecord)[] = [
   "affectedArtifacts",
 ];
 
-/**
- * Agents may propose improvements, but the proposal must be traceable and
- * reversible. This validates the minimum receipt required by the Founder rule.
- */
 export function validateImprovementRecord(input: unknown): { ok: boolean; errors: readonly string[] } {
   const errors: string[] = [];
   if (typeof input !== "object" || input === null || Array.isArray(input)) {
@@ -338,9 +361,16 @@ export const PRODUCTION_POLICY_RULES = Object.freeze({
   defaultShortMemoryDays: DEFAULT_SHORT_MEMORY_DAYS,
   generalTenMinimumDistinctDomains: GENERAL_MIN_DISTINCT_DOMAINS_FOR_TEN,
   generalTenMaximumPerPrimaryDomain: GENERAL_MAX_PER_PRIMARY_DOMAIN,
-  generalTenMaximumDigitalPieces: GENERAL_MAX_DIGITAL_PIECES,
+  digitalTopicsPausedByDefault: true,
+  generalFormat: GENERAL_FORMAT,
+  linkedinFormat: LINKEDIN_FORMAT,
+  formatOverrideRequiresExplicitPolicy: true,
   tenDistinctArtStyles: true,
   artStyleRegistryIsOpen: true,
+  contentIdentityIgnoresPresentationOnlyChanges: true,
+  visualIdentityIgnoresCropAndLightingOnlyChanges: true,
+  artBaseMustBeClean: true,
+  typographyUsesCanonicalCompositor: true,
   logoMustBePhysicalScene: true,
   visibleBrandExact: "LegalMente",
   improvementReceiptsMustBeReversible: true,
