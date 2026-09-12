@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   MULTI_AXIS_EDITORIAL_RULES,
+  prioritizeForChannel,
   prioritizeForLane,
   routeEditorialCandidate,
   validatePlanningCandidate,
@@ -193,6 +194,23 @@ test("founder LinkedIn may intentionally prioritize specialized content", () => 
   });
 
   assert.equal(prioritizeForLane([basic, specialist], "FOUNDER_LINKEDIN")[0].id, "LM-SPECIALIST");
+});
+
+test("channel prioritization uses visual fit without changing the legal route", () => {
+  const instagramReady = planningCandidate({
+    id: "LM-INSTAGRAM-VISUAL",
+    format: "REFLECTION",
+    visualGrammar: "CINEMATIC_PHOTOGRAPHY",
+    visualPotential: 10,
+  });
+  const linkedinReady = planningCandidate({
+    id: "LM-LINKEDIN-VISUAL",
+    format: "ELEGANT_INSTITUTIONAL",
+    visualGrammar: "ARCHITECTURAL_MINIMALISM",
+    visualPotential: 10,
+  });
+  assert.equal(prioritizeForChannel([linkedinReady, instagramReady], "instagram")[0].id, "LM-INSTAGRAM-VISUAL");
+  assert.equal(prioritizeForChannel([instagramReady, linkedinReady], "linkedin-legalmente")[0].id, "LM-LINKEDIN-VISUAL");
 });
 
 test("normative hierarchy remains jurisdiction-aware rather than universally ranked", () => {
