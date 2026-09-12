@@ -35,7 +35,7 @@ describe("release readiness", () => {
     });
     assert.equal(result.status, "BLOCKED");
     assert.ok(result.missing.includes("REVIEWED_LIBRARY_THRESHOLD_SET"));
-    assert.ok(!result.missing.some((item) => item.startsWith("REVIEWED_LIBRARY_")));
+    assert.ok(!result.missing.some((item) => /^REVIEWED_LIBRARY_\d+_OF_\d+$/.test(item)));
   });
 
   it("rejects an invalid threshold after it is declared set", () => {
