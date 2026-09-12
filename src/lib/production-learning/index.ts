@@ -12,6 +12,11 @@ export type PerformanceObservation = {
   sourceRef: string;
 };
 
+export type RawPerformanceObservation = Omit<PerformanceObservation, "contentId"> & {
+  contentId: string | null;
+  externalContentRef: string;
+};
+
 export type HumanCurationSignal = {
   contentId: string;
   state: CurationState;
@@ -37,6 +42,11 @@ export type LearningMemoryItem = ProductionHistoryItem & {
   };
 };
 
+export type PerformanceMappingPartition = {
+  mapped: readonly PerformanceObservation[];
+  unmapped: readonly RawPerformanceObservation[];
+};
+
 function finiteNonNegative(value: number | null): value is number {
   return typeof value === "number" && Number.isFinite(value) && value >= 0;
 }
@@ -44,6 +54,29 @@ function finiteNonNegative(value: number | null): value is number {
 function rate(numerator: number | null, denominator: number | null): number | null {
   if (!finiteNonNegative(numerator) || !finiteNonNegative(denominator) || denominator <= 0) return null;
   return numerator / denominator;
+}
+
+function validContentId(value: string | null): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+/**
+ * Public/platform metrics often arrive without a canonical LegalMente CONTENT_ID.
+ * Those observations remain evidence, but are not allowed into production memory
+ * until an explicit mapping exists. Topic/title similarity is never a binding.
+ */
+export function partitionMappedPerformance(observations: readonly RawPerformanceObservation[]): PerformanceMappingPartition {
+  const mapped: PerformanceObservation[] = [];
+  const unmapped: RawPerformanceObservation[] = [];
+  for (const observation of observations) {
+    if (!validContentId(observation.contentId)) {
+      unmapped.push(observation);
+      continue;
+    }
+    const { externalContentRef: _externalContentRef, contentId, ...rest } = observation;
+    mapped.push({ contentId, ...rest });
+  }
+  return { mapped, unmapped };
 }
 
 export function derivePerformanceSignal(observation: PerformanceObservation): PerformanceSignal {
@@ -108,5 +141,6 @@ export const LEARNING_INVARIANTS = Object.freeze({
   performanceNeverChangesLegalState: true,
   performanceNeverAuthorizesPublication: true,
   missingMetricsRemainNull: true,
+  unmappedMetricsNeverEnterProductionMemory: true,
   humanSelectionIsSeparateFromAudiencePerformance: true,
 });
