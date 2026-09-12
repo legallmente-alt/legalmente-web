@@ -13,6 +13,7 @@ const ready = {
   humanReviewContractPresent: true,
   productionRuntimeConnected: true,
   performanceLearningConnected: true,
+  realVisualBatchQaComplete: true,
   initialReviewedLibraryCount: 20,
   minimumReviewedLibraryCount: 20,
   firstUsefulToolReady: true,
@@ -29,6 +30,12 @@ describe("release readiness", () => {
     const result = evaluateReleaseReadiness({ ...ready, initialReviewedLibraryCount: 7 });
     assert.equal(result.status, "BLOCKED");
     assert.ok(result.missing.includes("REVIEWED_LIBRARY_7_OF_20"));
+  });
+
+  it("does not let simulated provider tests stand in for a real rendered QA batch", () => {
+    const result = evaluateReleaseReadiness({ ...ready, realVisualBatchQaComplete: false });
+    assert.equal(result.status, "BLOCKED");
+    assert.ok(result.missing.includes("REAL_VISUAL_BATCH_QA_COMPLETE"));
   });
 
   it("can become ready only for a human release decision", () => {
