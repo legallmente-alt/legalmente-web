@@ -14,8 +14,25 @@ export const VISUAL_FUNCTIONS = [
 
 export type VisualFunction = (typeof VISUAL_FUNCTIONS)[number];
 
+export const VISUAL_ARGUMENT_CHANNELS = [
+  "instagram",
+  "linkedin-legalmente",
+  "linkedin-founder",
+  "website",
+] as const;
+
+export type VisualArgumentChannel = (typeof VISUAL_ARGUMENT_CHANNELS)[number];
+
+const CHANNEL_FUNCTION_PREFERENCES: Readonly<Record<VisualArgumentChannel, readonly VisualFunction[]>> = {
+  instagram: ["TENSION", "REVEAL", "HUMANIZE", "PROVOKE_REFLECTION", "SHOW_CONSEQUENCE"],
+  "linkedin-legalmente": ["EXPLAIN", "SEPARATE", "COMPARE", "SHOW_PROCESS", "SHOW_CONSEQUENCE", "WARN"],
+  "linkedin-founder": ["PROVOKE_REFLECTION", "HUMANIZE", "REVEAL", "TENSION", "SHOW_CONSEQUENCE"],
+  website: ["EXPLAIN", "SHOW_PROCESS", "SEPARATE", "COMPARE", "MATERIALIZE_ABSTRACTION"],
+};
+
 export type VisualArgumentPlan = {
   contentId: string;
+  channel?: VisualArgumentChannel;
   audience: string;
   conflict: string;
   learningGoal: string;
@@ -48,6 +65,13 @@ export function visualArgumentFingerprint(plan: VisualArgumentPlan): string {
     .join("|");
 }
 
+export function visualFunctionChannelFit(
+  visualFunction: VisualFunction,
+  channel: VisualArgumentChannel,
+): "PREFERRED" | "COMPATIBLE" {
+  return CHANNEL_FUNCTION_PREFERENCES[channel].includes(visualFunction) ? "PREFERRED" : "COMPATIBLE";
+}
+
 export function validateVisualArgumentPlan(plan: VisualArgumentPlan): string[] {
   const errors: string[] = [];
   for (const [field, value] of Object.entries({
@@ -62,6 +86,9 @@ export function validateVisualArgumentPlan(plan: VisualArgumentPlan): string[] {
   }
   if (!VISUAL_FUNCTIONS.includes(plan.visualFunction)) {
     errors.push(`${plan.contentId || "UNKNOWN"}: unsupported visualFunction.`);
+  }
+  if (plan.channel && !VISUAL_ARGUMENT_CHANNELS.includes(plan.channel)) {
+    errors.push(`${plan.contentId || "UNKNOWN"}: unsupported channel.`);
   }
   if (nonEmpty(plan.imageArgument) && normalize(plan.imageArgument) === normalize(plan.learningGoal)) {
     errors.push(`${plan.contentId}: imageArgument must translate the learning goal into a visual relation, not repeat it.`);
@@ -92,6 +119,12 @@ export function validateVisualArgumentBatch(
     errors.push(`Batch uses only ${distinctFunctions} visual functions; at least ${minimumDistinctFunctions} are required for this preflight.`);
   }
 
+  plans.forEach((plan) => {
+    if (plan.channel && visualFunctionChannelFit(plan.visualFunction, plan.channel) === "COMPATIBLE") {
+      warnings.push(`${plan.contentId}: visual function ${plan.visualFunction} is compatible but not preferred for ${plan.channel}; human review should confirm the choice.`);
+    }
+  });
+
   warnings.push("This preflight validates intent and functional diversity only; rendered-image QA and human curation remain mandatory.");
   return { ok: errors.length === 0, errors, warnings, distinctFunctions };
 }
@@ -99,6 +132,7 @@ export function validateVisualArgumentBatch(
 export const VISUAL_ARGUMENT_INVARIANTS = Object.freeze({
   imageMustCarryMeaningBeforeStyle: true,
   functionSelectedBeforeArtFamily: true,
+  channelProfileGuidesFunctionChoice: true,
   nominalStyleChangeDoesNotProveNovelty: true,
   renderedQaStillRequired: true,
   humanCurationStillRequired: true,

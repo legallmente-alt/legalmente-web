@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   validateVisualArgumentBatch,
   validateVisualArgumentPlan,
+  visualFunctionChannelFit,
   type VisualArgumentPlan,
 } from "./index";
 
@@ -48,4 +49,18 @@ test("requires functional variety for a ten-piece preflight", () => {
   const result = validateVisualArgumentBatch(plans, { expectedSize: 10 });
   assert.equal(result.ok, false);
   assert.match(result.errors.join("\n"), /at least 5/i);
+});
+
+test("channel profiles prefer different visual functions without forbidding compatible choices", () => {
+  assert.equal(visualFunctionChannelFit("TENSION", "instagram"), "PREFERRED");
+  assert.equal(visualFunctionChannelFit("SEPARATE", "linkedin-legalmente"), "PREFERRED");
+  assert.equal(visualFunctionChannelFit("TENSION", "linkedin-legalmente"), "COMPATIBLE");
+});
+
+test("records a human-review warning when a function is compatible but not preferred for the channel", () => {
+  const result = validateVisualArgumentBatch([
+    { ...plan("LM-LINKEDIN-01", "TENSION", "one"), channel: "linkedin-legalmente" },
+  ], { expectedSize: 1 });
+  assert.equal(result.ok, true);
+  assert.match(result.warnings.join("\n"), /compatible but not preferred/i);
 });
