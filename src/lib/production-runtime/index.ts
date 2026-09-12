@@ -10,6 +10,10 @@ import {
   type VisualProductionUnit,
   type VisualRoute,
 } from "@/lib/visual-factory";
+import {
+  validateVisualArgumentBatch,
+  type VisualArgumentPlan,
+} from "@/lib/visual-argument";
 
 export type VisualExecutionReceipt = {
   contentId: string;
@@ -22,7 +26,7 @@ export type VisualExecutionReceipt = {
 
 export type VisualBatchExecution =
   | {
-      status: "POLICY_BLOCKED" | "LEGAL_BLOCKED" | "BINDING_BLOCKED";
+      status: "POLICY_BLOCKED" | "VISUAL_ARGUMENT_BLOCKED" | "LEGAL_BLOCKED" | "BINDING_BLOCKED";
       errors: readonly string[];
       warnings: readonly string[];
       units: readonly VisualProductionUnit[];
@@ -60,6 +64,24 @@ function bindingErrors(pieces: readonly ProductionPiece[], units: readonly Visua
   return errors;
 }
 
+function visualArgumentBindingErrors(plans: readonly VisualArgumentPlan[], units: readonly VisualProductionUnit[]): string[] {
+  const errors: string[] = [];
+  for (const unit of units) {
+    const plan = plans.find((candidate) => candidate.contentId === unit.CONTENT_ID);
+    if (!plan) {
+      errors.push(`${unit.CONTENT_ID}: no VisualArgumentPlan is bound to this production unit.`);
+      continue;
+    }
+    if (!unit.CLAIM_REFS.includes(plan.legalBindingId)) {
+      errors.push(`${unit.CONTENT_ID}: visual legalBindingId is not present in the unit CLAIM_REFS.`);
+    }
+  }
+  for (const plan of plans) {
+    if (!units.some((unit) => unit.CONTENT_ID === plan.contentId)) errors.push(`${plan.contentId}: visual argument has no production unit.`);
+  }
+  return errors;
+}
+
 /**
  * End-to-end provider-neutral execution boundary:
  * production policy -> binding check -> legal route -> provider generation.
@@ -69,6 +91,7 @@ function bindingErrors(pieces: readonly ProductionPiece[], units: readonly Visua
 export async function executeVisualBatch(input: {
   pieces: readonly ProductionPiece[];
   units: readonly VisualProductionUnit[];
+  visualArguments: readonly VisualArgumentPlan[];
   history?: readonly ProductionHistoryItem[];
   policy: ProductionBatchPolicy;
   adapter: ImageGeneratorAdapter;
@@ -85,12 +108,29 @@ export async function executeVisualBatch(input: {
     };
   }
 
-  const bindings = bindingErrors(input.pieces, input.units);
+  const visualArgumentResult = validateVisualArgumentBatch(input.visualArguments, {
+    expectedSize: input.pieces.length,
+  });
+  if (!visualArgumentResult.ok) {
+    return {
+      status: "VISUAL_ARGUMENT_BLOCKED",
+      errors: visualArgumentResult.errors,
+      warnings: [...policyResult.warnings, ...visualArgumentResult.warnings],
+      units: input.units,
+      receipts: [],
+      publicationAuthorized: false,
+    };
+  }
+
+  const bindings = [
+    ...bindingErrors(input.pieces, input.units),
+    ...visualArgumentBindingErrors(input.visualArguments, input.units),
+  ];
   if (bindings.length > 0) {
     return {
       status: "BINDING_BLOCKED",
       errors: bindings,
-      warnings: policyResult.warnings,
+      warnings: [...policyResult.warnings, ...visualArgumentResult.warnings],
       units: input.units,
       receipts: [],
       publicationAuthorized: false,
@@ -103,7 +143,7 @@ export async function executeVisualBatch(input: {
     return {
       status: "LEGAL_BLOCKED",
       errors: legalBlocks.map(({ unit }) => `${unit.CONTENT_ID}: legal state does not authorize image generation.`),
-      warnings: policyResult.warnings,
+      warnings: [...policyResult.warnings, ...visualArgumentResult.warnings],
       units: input.units,
       receipts: [],
       publicationAuthorized: false,
@@ -145,7 +185,7 @@ export async function executeVisualBatch(input: {
   return {
     status: "IMAGE_READY_FOR_QA",
     errors: [],
-    warnings: policyResult.warnings,
+    warnings: [...policyResult.warnings, ...visualArgumentResult.warnings],
     units: generatedUnits,
     receipts,
     publicationAuthorized: false,
@@ -156,6 +196,7 @@ export const VISUAL_RUNTIME_INVARIANTS = Object.freeze({
   policyValidationBeforeProviderCall: true,
   legalGateBeforeProviderCall: true,
   exactBindingBeforeProviderCall: true,
+  visualArgumentBeforeProviderCall: true,
   generationNeverAuthorizesPublication: true,
   imageReadyStillRequiresQa: true,
 });
