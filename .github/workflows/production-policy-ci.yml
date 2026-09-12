@@ -55,6 +55,8 @@ jobs:
         run: npm ci
       - name: Convergence contracts
         run: npm run test:convergence
+      - name: Build public artifact
+        run: npm run build:public
       - name: Public legal surface contract
         run: npm run test:legal-surface
       - name: Social content contract
