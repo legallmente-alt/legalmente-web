@@ -26,6 +26,8 @@ History, disciplines, series and chapters are contextual layers. Similarity betw
 
 ## Living production policy — 2026-09-07 alignment
 
+Adaptive implementation candidate: the existing adapter now distinguishes LinkedIn and carousel continuity, checks eight visual dimensions against closest peers/history, and reports missing historical coverage. See [scope, migration and remaining integration gaps](docs/LEGALMENTE_PRODUCTION_POLICY_V3_ALIGNMENT.md#adaptive-alignment--implementation-candidate). Run `npm run test:production-policy` and `npm run typecheck`; passing these checks does not certify an image or publish it.
+
 Content/image production must not be inferred from a finite prompt bank, a forced channel quota or a fixed matter-to-art mapping. The repository-side policy adapter lives at `src/lib/production-policy/` and is documented in `docs/LEGALMENTE_PRODUCTION_POLICY_V3_ALIGNMENT.md`.
 
 Operational interpretation follows the current LegalMente Drive canon. The production adapter encodes four distinct modes (`LEGALMENTE_GENERAL`, `SPECIFIC_DOMAIN`, `LINKEDIN_LEGALMENTE`, `LINKEDIN_FOUNDER`), broad-domain diversity for generic batches, open artistic-style strings, physical `LegalMente` brand integration, curation states that separate generated work from approved/published work, short-vs-strong anti-repetition memory, and reversible agent-improvement receipts.

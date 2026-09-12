@@ -47,6 +47,8 @@ export type ProductionPiece = {
   scenario: string;
   material: string;
   lighting: string;
+  /** Explicit absence (e.g. "none") is valid; unknown/missing is not evidence. */
+  humanPresence?: string;
   framing: string;
   composition: string;
   brandObject: string;
@@ -69,6 +71,8 @@ export type ProductionBatchPolicy = {
   shortMemoryDays?: number;
   allowDigitalTopics?: boolean;
   formatOverride?: string;
+  unit?: "INDEPENDENT_PUBLICATIONS" | "CAROUSEL_PAGES";
+  collectionId?: string;
 };
 
 export type ProductionPolicyResult = {
@@ -76,6 +80,16 @@ export type ProductionPolicyResult = {
   errors: readonly string[];
   contentFingerprints: readonly string[];
   visualFingerprints: readonly string[];
+  visualComparisons: readonly VisualComparison[];
+  warnings: readonly string[];
+};
+
+export type VisualComparison = {
+  pieceId: string;
+  comparedId: string;
+  scope: "BATCH" | "HISTORY";
+  changedDimensions: number;
+  knownDimensions: number;
 };
 
 export type ImprovementRecord = {
@@ -108,6 +122,35 @@ const normalize = (value: string): string => value
 
 const nonEmpty = (value: string | undefined): value is string => typeof value === "string" && value.trim().length > 0;
 const nonEmptyList = (value: readonly string[] | undefined): value is readonly string[] => Array.isArray(value) && value.length > 0 && value.every(nonEmpty);
+
+const knownVisualValue = (value: string | undefined): boolean => nonEmpty(value)
+  && normalize(value).length > 0
+  && !["unknown", "desconocido", "pendiente", "tbd", "null", "n a"].includes(normalize(value));
+
+/** Eight policy dimensions; camera + composition count once, not twice. */
+function visualDimensions(piece: ProductionPiece): (string | undefined)[] {
+  return [piece.artisticStyle, piece.visualMetaphor, piece.scenario, piece.material,
+    piece.lighting, piece.humanPresence,
+    knownVisualValue(piece.framing) && knownVisualValue(piece.composition)
+      ? `${piece.framing}|${piece.composition}` : undefined,
+    piece.brandObject];
+}
+
+export function productionVisualDistance(a: ProductionPiece, b: ProductionPiece): {
+  changedDimensions: number; knownDimensions: number;
+} {
+  const left = visualDimensions(a);
+  const right = visualDimensions(b);
+  let changedDimensions = 0;
+  let knownDimensions = 0;
+  left.forEach((value, i) => {
+    if (knownVisualValue(value) && knownVisualValue(right[i])) {
+      knownDimensions++;
+      if (normalize(value!) !== normalize(right[i]!)) changedDimensions++;
+    }
+  });
+  return { changedDimensions, knownDimensions };
+}
 
 /**
  * Substance fingerprint deliberately excludes hook, labels and format.
@@ -185,11 +228,15 @@ function validatePiece(piece: ProductionPiece, mode: ProductionMode, policy: Pro
     scenario: piece.scenario,
     material: piece.material,
     lighting: piece.lighting,
+    humanPresence: piece.humanPresence,
     framing: piece.framing,
     composition: piece.composition,
     brandObject: piece.brandObject,
   })) {
     if (!nonEmpty(value)) errors.push(`${piece.id || "UNKNOWN"}: ${field} is required.`);
+  }
+  if (!visualDimensions(piece).every(knownVisualValue)) {
+    errors.push(`${piece.id}: all eight visual dimensions require explicit known values.`);
   }
 
   const requiredFormat = policy.formatOverride ?? expectedFormatForMode(mode);
@@ -250,9 +297,16 @@ export function validateProductionBatch(
   policy: ProductionBatchPolicy = { mode: "LEGALMENTE_GENERAL" },
 ): ProductionPolicyResult {
   const errors: string[] = [];
+  const warnings: string[] = [];
+  const visualComparisons: VisualComparison[] = [];
   const expectedSize = policy.expectedSize ?? 10;
   const now = policy.now ?? new Date().toISOString();
   const shortMemoryDays = policy.shortMemoryDays ?? DEFAULT_SHORT_MEMORY_DAYS;
+  const carousel = policy.unit === "CAROUSEL_PAGES";
+  const linkedin = policy.mode === "LINKEDIN_LEGALMENTE" || policy.mode === "LINKEDIN_FOUNDER";
+
+  if (carousel && !nonEmpty(policy.collectionId)) errors.push("Carousel pages require a collectionId.");
+  if (new Set(pieces.map((piece) => piece.id)).size !== pieces.length) errors.push("Piece ids must be unique within a batch.");
 
   if (pieces.length !== expectedSize) {
     errors.push(`Expected ${expectedSize} pieces; received ${pieces.length}.`);
@@ -260,7 +314,7 @@ export function validateProductionBatch(
 
   pieces.forEach((piece) => validatePiece(piece, policy.mode, policy, errors));
 
-  if (policy.mode === "LEGALMENTE_GENERAL") validateGeneralBatch(pieces, expectedSize, policy, errors);
+  if (policy.mode === "LEGALMENTE_GENERAL" && !carousel) validateGeneralBatch(pieces, expectedSize, policy, errors);
 
   if (policy.mode === "SPECIFIC_DOMAIN") {
     if (!nonEmpty(policy.requestedDomainId)) {
@@ -283,17 +337,41 @@ export function validateProductionBatch(
   if (new Set(contentFingerprints).size !== contentFingerprints.length) {
     errors.push("Batch contains repeated editorial substance.");
   }
-  if (new Set(visualFingerprints).size !== visualFingerprints.length) {
+  if (!carousel && new Set(visualFingerprints).size !== visualFingerprints.length) {
     errors.push("Batch contains a repeated visual identity; changing crop or lighting does not make it new.");
   }
 
-  if (pieces.length === 10 && new Set(pieces.map((piece) => normalize(piece.artisticStyle))).size !== 10) {
+  if (!carousel && !linkedin && pieces.length === 10 && new Set(pieces.map((piece) => normalize(piece.artisticStyle))).size !== 10) {
     errors.push("A 10-piece batch must use 10 distinct dominant artistic styles.");
   }
 
   const activeHistory = history.filter((item) => historyItemIsActive(item, now, shortMemoryDays));
   const activeContent = new Set(activeHistory.map(productionContentFingerprint));
   const activeVisual = new Set(activeHistory.map(productionVisualFingerprint));
+  warnings.push("Metadata checks do not prove visual quality, semantic novelty or complete historical coverage; inspect rendered images.");
+  if (history.length === 0) warnings.push("No history supplied: historical repetition has not been verified.");
+
+  pieces.forEach((piece, index) => {
+    const candidates = [
+      ...(!carousel ? pieces.filter((_, i) => i !== index).map((other) => ({ other, scope: "BATCH" as const })) : []),
+      ...activeHistory.map((other) => ({ other, scope: "HISTORY" as const })),
+    ].map(({ other, scope }) => ({ pieceId: piece.id, comparedId: other.id, scope,
+      ...productionVisualDistance(piece, other) }));
+    // Review closest peers in each scope so a large history cannot hide batch repeats.
+    for (const scope of ["BATCH", "HISTORY"] as const) {
+      const nearest = candidates.filter((item) => item.scope === scope)
+        .sort((a, b) => a.changedDimensions - b.changedDimensions || a.comparedId.localeCompare(b.comparedId))
+        .slice(0, 3);
+      visualComparisons.push(...nearest);
+      for (const comparison of nearest) {
+        if (comparison.knownDimensions < 8) {
+          errors.push(`${piece.id}: incomplete visual evidence against ${comparison.comparedId} (${scope}); review history before claiming novelty.`);
+        } else if (comparison.changedDimensions < 5) {
+          errors.push(`${piece.id}: visual distance from ${comparison.comparedId} (${scope}) is ${comparison.changedDimensions}/8; at least 5/8 required for initial review.`);
+        }
+      }
+    }
+  });
 
   pieces.forEach((piece, index) => {
     if (activeContent.has(contentFingerprints[index])) {
@@ -309,6 +387,8 @@ export function validateProductionBatch(
     errors,
     contentFingerprints,
     visualFingerprints,
+    visualComparisons,
+    warnings,
   };
 }
 
@@ -365,7 +445,12 @@ export const PRODUCTION_POLICY_RULES = Object.freeze({
   generalFormat: GENERAL_FORMAT,
   linkedinFormat: LINKEDIN_FORMAT,
   formatOverrideRequiresExplicitPolicy: true,
-  tenDistinctArtStyles: true,
+  tenDistinctArtStylesForIndependentGeneralPieces: true,
+  linkedinMayRepeatArtisticMedium: true,
+  carouselPreservesInternalVisualContinuity: true,
+  visualDistanceMinimum: 5,
+  visualComparisonDimensions: 8,
+  nearestComparisonsPerScope: 3,
   artStyleRegistryIsOpen: true,
   contentIdentityIgnoresPresentationOnlyChanges: true,
   visualIdentityIgnoresCropAndLightingOnlyChanges: true,
