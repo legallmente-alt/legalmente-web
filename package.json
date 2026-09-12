@@ -18,7 +18,8 @@
     "test:editorial-engine": "tsx --test src/lib/editorial-engine/*.test.ts",
     "test:knowledge-pilot": "tsx --test src/lib/knowledge-pilot/*.test.ts",
     "test:opportunity-engine": "tsx --test src/lib/opportunity-engine/*.test.ts",
-    "test:public-routes": "node scripts/public-route-proof.mjs"
+    "test:public-routes": "node scripts/public-route-proof.mjs",
+    "test:legal-surface": "node scripts/legal-surface-smoke.mjs"
   },
   "dependencies": {
     "next": "14.2.35",
