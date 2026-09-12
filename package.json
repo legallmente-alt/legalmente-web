@@ -17,6 +17,10 @@
     "test:agent-contribution": "tsx --test src/lib/agent-contribution/contract.test.ts",
     "test:editorial-engine": "tsx --test src/lib/editorial-engine/*.test.ts",
     "test:production-policy": "node --import tsx --test src/lib/production-policy/*.test.ts",
+    "test:visual-factory": "node --import tsx --test src/lib/visual-factory/*.test.ts",
+    "test:production-learning": "node --import tsx --test src/lib/production-learning/*.test.ts",
+    "test:production-runtime": "node --import tsx --test src/lib/production-runtime/*.test.ts",
+    "test:convergence": "npm run test:production-policy && npm run test:visual-factory && npm run test:production-learning && npm run test:production-runtime",
     "test:knowledge-pilot": "tsx --test src/lib/knowledge-pilot/*.test.ts",
     "test:opportunity-engine": "tsx --test src/lib/opportunity-engine/*.test.ts",
     "test:public-routes": "node scripts/public-route-proof.mjs"
