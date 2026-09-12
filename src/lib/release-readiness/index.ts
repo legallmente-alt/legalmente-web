@@ -9,6 +9,7 @@ export type ReleaseReadinessInput = {
   humanReviewContractPresent: boolean;
   productionRuntimeConnected: boolean;
   performanceLearningConnected: boolean;
+  realVisualBatchQaComplete: boolean;
   initialReviewedLibraryCount: number;
   minimumReviewedLibraryCount: number;
   firstUsefulToolReady: boolean;
@@ -24,6 +25,7 @@ export type ReleaseReadinessResult = {
 /**
  * This is a preparation gate, never a deploy gate. Passing it means the
  * minimum launch package can be presented for a human release decision.
+ * A simulated provider/test double cannot satisfy realVisualBatchQaComplete.
  */
 export function evaluateReleaseReadiness(input: ReleaseReadinessInput): ReleaseReadinessResult {
   const missing: string[] = [];
@@ -38,6 +40,7 @@ export function evaluateReleaseReadiness(input: ReleaseReadinessInput): ReleaseR
     [input.humanReviewContractPresent, "HUMAN_REVIEW_CONTRACT"],
     [input.productionRuntimeConnected, "PRODUCTION_RUNTIME_CONNECTED"],
     [input.performanceLearningConnected, "PERFORMANCE_LEARNING_CONNECTED"],
+    [input.realVisualBatchQaComplete, "REAL_VISUAL_BATCH_QA_COMPLETE"],
     [input.firstUsefulToolReady, "FIRST_USEFUL_TOOL_READY"],
   ];
   for (const [ok, code] of checks) if (!ok) missing.push(code);
@@ -64,4 +67,5 @@ export const RELEASE_INVARIANTS = Object.freeze({
   usefulToolRequired: true,
   accessibilityRequired: true,
   provenanceRequired: true,
+  realVisualQaCannotBeReplacedBySimulatedProviderTests: true,
 });
