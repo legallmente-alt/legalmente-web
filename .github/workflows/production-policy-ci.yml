@@ -19,6 +19,8 @@ on:
       - 'scripts/legal-surface-smoke.mjs'
       - 'scripts/social-content-contract-smoke.mjs'
       - 'scripts/public-route-proof.mjs'
+      - 'scripts/release-readiness-status.ts'
+      - 'data/release/**'
       - 'package.json'
       - '.github/workflows/production-policy-ci.yml'
   push:
@@ -39,6 +41,8 @@ on:
       - 'scripts/legal-surface-smoke.mjs'
       - 'scripts/social-content-contract-smoke.mjs'
       - 'scripts/public-route-proof.mjs'
+      - 'scripts/release-readiness-status.ts'
+      - 'data/release/**'
       - 'package.json'
       - '.github/workflows/production-policy-ci.yml'
 
@@ -61,6 +65,8 @@ jobs:
         run: npm run test:legal-surface
       - name: Social content contract
         run: npm run test:social-content
+      - name: Current release status
+        run: npm run release:status
       - name: Typecheck
         if: always()
         run: npm run typecheck
