@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import type { ProductionPiece } from "@/lib/production-policy";
 import type { ImageGeneratorAdapter, VisualProductionUnit } from "@/lib/visual-factory";
 import { executeVisualBatch } from "./index";
+import type { VisualArgumentPlan } from "@/lib/visual-argument";
 
 const piece: ProductionPiece = {
   id: "LM-RUNTIME-001",
@@ -64,6 +65,21 @@ const unit: VisualProductionUnit = {
   PROVENANCE: { promptVersion: "v1", referenceAssets: [], copySource: "claim-packet", createdBy: "system" },
 };
 
+const visualArgument: VisualArgumentPlan = {
+  contentId: piece.id,
+  legalBindingId: "CLAIM-1",
+  audience: "LegalMente general",
+  realQuestion: "¿Qué protege la imparcialidad?",
+  conflict: "Una decisión parece neutral aunque el proceso no lo sea.",
+  consequence: "La persona puede confiar en una decisión producida sin garantías.",
+  learningGoal: "Distinguir apariencia institucional de garantía procesal.",
+  visualFunction: "SEPARATE",
+  sceneStrategy: "PROCESS",
+  imageArgument: "Dos recorridos idénticos se separan cuando uno pierde un control verificable.",
+  dominantVisualLogic: "fotografía editorial de proceso",
+  expectedPerception: "La garantía se percibe como una condición del recorrido, no como decoración.",
+};
+
 function fakeAdapter(text = false) {
   let calls = 0;
   const adapter: ImageGeneratorAdapter = {
@@ -88,28 +104,28 @@ const policy = {
 describe("production runtime", () => {
   it("blocks policy failures before the provider is called", async () => {
     const fake = fakeAdapter();
-    const result = await executeVisualBatch({ pieces: [{ ...piece, visibleBrand: "Other" }], units: [unit], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [{ ...piece, visibleBrand: "Other" }], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter });
     assert.equal(result.status, "POLICY_BLOCKED");
     assert.equal(fake.getCalls(), 0);
   });
 
   it("blocks legal HOLD before the provider is called", async () => {
     const fake = fakeAdapter();
-    const result = await executeVisualBatch({ pieces: [piece], units: [{ ...unit, LEGAL_STATE: "HOLD_SOURCE" }], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [piece], units: [{ ...unit, LEGAL_STATE: "HOLD_SOURCE" }], visualArguments: [visualArgument], policy, adapter: fake.adapter });
     assert.equal(result.status, "LEGAL_BLOCKED");
     assert.equal(fake.getCalls(), 0);
   });
 
   it("blocks post-validation visual drift before generation", async () => {
     const fake = fakeAdapter();
-    const result = await executeVisualBatch({ pieces: [piece], units: [{ ...unit, VISUAL_METAPHOR: "changed later" }], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [piece], units: [{ ...unit, VISUAL_METAPHOR: "changed later" }], visualArguments: [visualArgument], policy, adapter: fake.adapter });
     assert.equal(result.status, "BINDING_BLOCKED");
     assert.equal(fake.getCalls(), 0);
   });
 
   it("calls the provider only after policy, binding and legal gates pass", async () => {
     const fake = fakeAdapter(false);
-    const result = await executeVisualBatch({ pieces: [piece], units: [unit], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter });
     assert.equal(result.status, "IMAGE_READY_FOR_QA");
     assert.equal(fake.getCalls(), 1);
     assert.equal(result.publicationAuthorized, false);
@@ -122,12 +138,26 @@ describe("production runtime", () => {
 
   it("still stops at QA even when a provider can render text", async () => {
     const fake = fakeAdapter(true);
-    const result = await executeVisualBatch({ pieces: [piece], units: [unit], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter });
     assert.equal(result.status, "IMAGE_READY_FOR_QA");
     if (result.status === "IMAGE_READY_FOR_QA") {
       assert.equal(result.receipts[0].route, "FULL_COMPOSITE_GENERATION");
       assert.equal(result.units[0].COMPOSED_ASSET, "asset-1.png");
       assert.notEqual(result.units[0].STATE, "PUBLISHED");
     }
+  });
+
+  it("blocks missing visual argument before the provider is called", async () => {
+    const fake = fakeAdapter();
+    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [], policy, adapter: fake.adapter });
+    assert.equal(result.status, "VISUAL_ARGUMENT_BLOCKED");
+    assert.equal(fake.getCalls(), 0);
+  });
+
+  it("blocks a visual argument bound to an unapproved claim reference", async () => {
+    const fake = fakeAdapter();
+    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [{ ...visualArgument, legalBindingId: "CLAIM-OTHER" }], policy, adapter: fake.adapter });
+    assert.equal(result.status, "BINDING_BLOCKED");
+    assert.equal(fake.getCalls(), 0);
   });
 });
