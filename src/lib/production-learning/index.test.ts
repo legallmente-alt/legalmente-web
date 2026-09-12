@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { ProductionPiece } from "@/lib/production-policy";
-import { buildLearningMemoryItem, derivePerformanceSignal, rankMeasuredUtility } from "./index";
+import { buildLearningMemoryItem, derivePerformanceSignal, partitionMappedPerformance, rankMeasuredUtility } from "./index";
 
 const piece: ProductionPiece = {
   id: "LM-METRIC-001",
@@ -84,5 +84,37 @@ describe("production learning", () => {
       { ...observation, contentId: "LM-METRIC-003", reach: null },
     ]);
     assert.deepEqual(ranked.map((item) => item.contentId), ["LM-METRIC-001", "LM-METRIC-002"]);
+  });
+
+  it("keeps public-platform metrics unmapped until a canonical content id exists", () => {
+    const partition = partitionMappedPerformance([
+      {
+        contentId: null,
+        externalContentRef: "instagram:imparcialidad",
+        channel: "INSTAGRAM",
+        observedAt: "2026-09-11T00:00:00Z",
+        reach: 534,
+        views: 846,
+        interactions: 74,
+        shares: 25,
+        saves: 12,
+        sourceRef: "drive://instagram-audit-2026-09-11",
+      },
+      {
+        contentId: piece.id,
+        externalContentRef: "instagram:mapped-example",
+        channel: "INSTAGRAM",
+        observedAt: "2026-09-11T00:00:00Z",
+        reach: 500,
+        views: 800,
+        interactions: 70,
+        shares: 25,
+        saves: 10,
+        sourceRef: "drive://instagram-audit-2026-09-11",
+      },
+    ]);
+    assert.equal(partition.unmapped.length, 1);
+    assert.equal(partition.mapped.length, 1);
+    assert.equal(partition.mapped[0].contentId, piece.id);
   });
 });
