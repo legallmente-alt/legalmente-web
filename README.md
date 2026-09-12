@@ -45,3 +45,11 @@ Do not promote any scaffold to public UI until art/UX review explicitly passes d
 ### Engineering rule
 
 Keep legal logic, source data, territory, copy, graph relationships and image assets separate. The graph can organize learning and navigation but cannot manufacture legal rules. Feature flags remain fail-closed. The public artifact excludes `/internal/`, uses no PII/document/payment surfaces, and must pass the legal-core, knowledge-safety, privacy, typecheck and static-build gates before each publication.
+
+## Adaptive art direction incorporation
+
+Read [LegalMente adaptive art direction v1.2](docs/art-direction-adaptive-v1.2.md) before creating editorial images or proposing changes to visual selection.
+
+This is an authorized documentary incorporation, not proof of automatic engine integration or improved performance. It separates general and LinkedIn production, preserves narrative continuity, requires real feedback and nullable metrics, and keeps exploration open. On each active production cycle, review new acceptance evidence and comparable performance, propose at least three materially new alternatives, and document the next test. Do not equate missing metrics with zero or generating with approval/publication.
+
+[Drive production copy](https://drive.google.com/file/d/1qYCNUdIRC1Xq3zDa6YKWey9yepW-7IRs/view?usp=drivesdk). The production index remains the entry point. Runtime integration must map to existing selector, history and compositor under repository review; no parallel engine, merge or deploy is authorized by this incorporation.
