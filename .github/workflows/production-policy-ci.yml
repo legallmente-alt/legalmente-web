@@ -51,7 +51,17 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
-      - run: npm run test:release-integration
-      - run: npm run typecheck
-      - run: npm run lint
+      - name: Install
+        run: npm ci
+      - name: Convergence contracts
+        run: npm run test:convergence
+      - name: Public legal surface contract
+        run: npm run test:legal-surface
+      - name: Social content contract
+        run: npm run test:social-content
+      - name: Typecheck
+        if: always()
+        run: npm run typecheck
+      - name: Lint
+        if: always()
+        run: npm run lint
