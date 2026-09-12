@@ -36,7 +36,7 @@ test("rejects a learning goal copied verbatim into imageArgument", () => {
 test("rejects a ten-piece batch with too little functional or scene diversity", () => {
   const plans = Array.from({ length: 10 }, (_, i) => plan(`LM-${i}`, i % 2 ? "EXPLAIN" : "SEPARATE", String(i), i % 2 ? "REAL_SITUATION" : "PROCESS"));
   const result = validateVisualArgumentBatch(plans, { expectedSize: 10 });
-  assert.equal(result.ok, false); assert.match(result.errors.join("\n"), /at least 5 visual functions/i); assert.match(result.errors.join("\n"), /at least 5 scene strategies/i);
+  assert.equal(result.ok, false); assert.match(result.errors.join("\n"), /2 visual functions; at least 5/i); assert.match(result.errors.join("\n"), /2 scene strategies; at least 5/i);
 });
 
 test("rejects metaphor as the default grammar and repeated motifs", () => {
