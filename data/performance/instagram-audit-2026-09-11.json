@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "performance-observations-v1",
+  "channel": "INSTAGRAM",
+  "account": "@legalmentees",
+  "observedAt": "2026-09-11T00:00:00Z",
+  "sourceRef": "drive://1F5TyPCmW5WH2D1rEg_R9z0uUjReC4Ysc6vy9qkSh5t0",
+  "mappingStatus": "UNMAPPED_TO_CANONICAL_CONTENT_IDS",
+  "notes": [
+    "These are observed audience metrics, not legal-quality scores or causal evidence.",
+    "No canonical CONTENT_ID was present in the audit source; contentId remains null until an explicit mapping is reviewed."
+  ],
+  "observations": [
+    {
+      "contentId": null,
+      "externalContentRef": "instagram:interpretacion-de-la-ley",
+      "topicLabel": "Interpretación de la ley",
+      "reach": 788,
+      "views": 1123,
+      "interactions": 74,
+      "shares": 15,
+      "saves": 8
+    },
+    {
+      "contentId": null,
+      "externalContentRef": "instagram:imparcialidad",
+      "topicLabel": "Imparcialidad",
+      "reach": 534,
+      "views": 846,
+      "interactions": 74,
+      "shares": 25,
+      "saves": 12
+    },
+    {
+      "contentId": null,
+      "externalContentRef": "instagram:non-bis-in-idem",
+      "topicLabel": "Non bis in idem",
+      "reach": 460,
+      "views": 866,
+      "interactions": 54,
+      "shares": 8,
+      "saves": 19
+    },
+    {
+      "contentId": null,
+      "externalContentRef": "instagram:litis-cerrada",
+      "topicLabel": "Litis cerrada",
+      "reach": 524,
+      "views": 835,
+      "interactions": 44,
+      "shares": 3,
+      "saves": 6
+    },
+    {
+      "contentId": null,
+      "externalContentRef": "instagram:pruebas-digitales",
+      "topicLabel": "Pruebas digitales",
+      "reach": 218,
+      "views": 284,
+      "interactions": 19,
+      "shares": 2,
+      "saves": 6
+    }
+  ]
+}
