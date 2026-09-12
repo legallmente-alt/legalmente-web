@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "release-readiness-v1",
+  "asOf": "2026-09-11",
+  "evidenceHead": "chatgpt/legalmente-release-integration-v1",
+  "publicTermsPresent": true,
+  "publicPrivacyPresent": true,
+  "publicDisclosurePresent": true,
+  "educationalScopeNoticePresent": true,
+  "sourceTerritoryDateLimitContractPresent": true,
+  "assetProvenanceRegisterPresent": true,
+  "accessibilityContractPresent": true,
+  "humanReviewContractPresent": true,
+  "productionRuntimeConnected": true,
+  "performanceLearningConnected": true,
+  "realVisualBatchQaComplete": false,
+  "reviewedLibraryThresholdSet": false,
+  "initialReviewedLibraryCount": 0,
+  "minimumReviewedLibraryCount": 0,
+  "firstUsefulToolReady": true,
+  "notes": [
+    "The three Wave 01A units are verified only to READY_FOR_COPY; none is counted as release/publication-ready.",
+    "Internal visual convergence testing is currently authorized, but provider preflight is blocked by insufficient credits and no real batch has completed QA.",
+    "The minimum reviewed-library threshold is intentionally unset until an explicit product decision defines it."
+  ]
+}

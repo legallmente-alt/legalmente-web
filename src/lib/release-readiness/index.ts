@@ -10,6 +10,7 @@ export type ReleaseReadinessInput = {
   productionRuntimeConnected: boolean;
   performanceLearningConnected: boolean;
   realVisualBatchQaComplete: boolean;
+  reviewedLibraryThresholdSet: boolean;
   initialReviewedLibraryCount: number;
   minimumReviewedLibraryCount: number;
   firstUsefulToolReady: boolean;
@@ -26,6 +27,8 @@ export type ReleaseReadinessResult = {
  * This is a preparation gate, never a deploy gate. Passing it means the
  * minimum launch package can be presented for a human release decision.
  * A simulated provider/test double cannot satisfy realVisualBatchQaComplete.
+ * The reviewed-library threshold must be an explicit product decision;
+ * code is not allowed to invent it from an old target or current count.
  */
 export function evaluateReleaseReadiness(input: ReleaseReadinessInput): ReleaseReadinessResult {
   const missing: string[] = [];
@@ -41,14 +44,21 @@ export function evaluateReleaseReadiness(input: ReleaseReadinessInput): ReleaseR
     [input.productionRuntimeConnected, "PRODUCTION_RUNTIME_CONNECTED"],
     [input.performanceLearningConnected, "PERFORMANCE_LEARNING_CONNECTED"],
     [input.realVisualBatchQaComplete, "REAL_VISUAL_BATCH_QA_COMPLETE"],
+    [input.reviewedLibraryThresholdSet, "REVIEWED_LIBRARY_THRESHOLD_SET"],
     [input.firstUsefulToolReady, "FIRST_USEFUL_TOOL_READY"],
   ];
   for (const [ok, code] of checks) if (!ok) missing.push(code);
 
   if (!Number.isInteger(input.initialReviewedLibraryCount) || input.initialReviewedLibraryCount < 0) {
     missing.push("INITIAL_REVIEWED_LIBRARY_COUNT_INVALID");
-  } else if (input.initialReviewedLibraryCount < input.minimumReviewedLibraryCount) {
-    missing.push(`REVIEWED_LIBRARY_${input.initialReviewedLibraryCount}_OF_${input.minimumReviewedLibraryCount}`);
+  }
+
+  if (input.reviewedLibraryThresholdSet) {
+    if (!Number.isInteger(input.minimumReviewedLibraryCount) || input.minimumReviewedLibraryCount <= 0) {
+      missing.push("MINIMUM_REVIEWED_LIBRARY_COUNT_INVALID");
+    } else if (input.initialReviewedLibraryCount < input.minimumReviewedLibraryCount) {
+      missing.push(`REVIEWED_LIBRARY_${input.initialReviewedLibraryCount}_OF_${input.minimumReviewedLibraryCount}`);
+    }
   }
 
   return {
@@ -64,6 +74,7 @@ export const RELEASE_INVARIANTS = Object.freeze({
   readinessNeverPublishes: true,
   legalAndPrivacySurfaceRequired: true,
   reviewedContentRequired: true,
+  reviewedLibraryThresholdMustBeExplicit: true,
   usefulToolRequired: true,
   accessibilityRequired: true,
   provenanceRequired: true,

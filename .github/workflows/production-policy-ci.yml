@@ -1,4 +1,4 @@
-name: Production policy CI
+name: Production and release integration CI
 
 on:
   pull_request:
@@ -8,6 +8,19 @@ on:
       - 'src/lib/production-learning/**'
       - 'src/lib/production-runtime/**'
       - 'src/lib/release-readiness/**'
+      - 'src/lib/editorial-engine/**'
+      - 'src/app/terminos/**'
+      - 'src/app/privacidad/**'
+      - 'src/app/disclosure/**'
+      - 'src/app/sitemap.ts'
+      - 'src/components/LegalDocument.tsx'
+      - 'src/components/LegalScopeNotice.tsx'
+      - 'src/components/Footer.tsx'
+      - 'scripts/legal-surface-smoke.mjs'
+      - 'scripts/social-content-contract-smoke.mjs'
+      - 'scripts/public-route-proof.mjs'
+      - 'scripts/release-readiness-status.ts'
+      - 'data/release/**'
       - 'package.json'
       - '.github/workflows/production-policy-ci.yml'
   push:
@@ -17,11 +30,24 @@ on:
       - 'src/lib/production-learning/**'
       - 'src/lib/production-runtime/**'
       - 'src/lib/release-readiness/**'
+      - 'src/lib/editorial-engine/**'
+      - 'src/app/terminos/**'
+      - 'src/app/privacidad/**'
+      - 'src/app/disclosure/**'
+      - 'src/app/sitemap.ts'
+      - 'src/components/LegalDocument.tsx'
+      - 'src/components/LegalScopeNotice.tsx'
+      - 'src/components/Footer.tsx'
+      - 'scripts/legal-surface-smoke.mjs'
+      - 'scripts/social-content-contract-smoke.mjs'
+      - 'scripts/public-route-proof.mjs'
+      - 'scripts/release-readiness-status.ts'
+      - 'data/release/**'
       - 'package.json'
       - '.github/workflows/production-policy-ci.yml'
 
 jobs:
-  production-policy:
+  release-integration:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,7 +55,21 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
-      - run: npm run test:convergence
-      - run: npm run typecheck
-      - run: npm run lint
+      - name: Install
+        run: npm ci
+      - name: Convergence contracts
+        run: npm run test:convergence
+      - name: Build public artifact
+        run: npm run build:public
+      - name: Public legal surface contract
+        run: npm run test:legal-surface
+      - name: Social content contract
+        run: npm run test:social-content
+      - name: Current release status
+        run: npm run release:status
+      - name: Typecheck
+        if: always()
+        run: npm run typecheck
+      - name: Lint
+        if: always()
+        run: npm run lint

@@ -1,0 +1,18 @@
+{
+  "account": "legalmentees",
+  "auditedAt": "2026-09-11",
+  "followers": 1425,
+  "mediaCount": 237,
+  "following": 0,
+  "sampleSize": 20,
+  "sampleFormatMix": {"video": 17, "carousel": 3},
+  "insightsSample": [
+    {"postId": "18188871823399543", "topic": "interpretacion-de-la-ley", "format": "reel", "reach": 788, "views": 1123, "interactions": 74, "shares": 15, "saves": 8},
+    {"postId": "18080318447700705", "topic": "imparcialidad", "format": "reel", "reach": 534, "views": 846, "interactions": 74, "shares": 25, "saves": 12},
+    {"postId": "18134985529622013", "topic": "non-bis-in-idem", "format": "reel", "reach": 460, "views": 866, "interactions": 54, "shares": 8, "saves": 19},
+    {"postId": "18099067904255450", "topic": "litis-cerrada", "format": "reel", "reach": 524, "views": 835, "interactions": 44, "shares": 3, "saves": 6},
+    {"postId": "17953636581015993", "topic": "pruebas-digitales", "format": "reel", "reach": 218, "views": 284, "interactions": 19, "shares": 2, "saves": 6}
+  ],
+  "editorialDecision": "Prioritize tension-led explainers, practical evidence/guarantee content, explicit territory/source/date qualifiers, accessible captions, and a single related LegalMente route.",
+  "publicationStatus": "AUDIT_ONLY_NOT_PUBLISHED"
+}
