@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit",
     "test:legal-core": "tsx --test src/lib/legal-core/legal-core.test.ts",
     "test:knowledge-safety": "tsx --test src/lib/knowledge-graph/safety.test.ts",
-    "test:knowledge-integrity": "tsx --test src/lib/knowledge-graph/inity.test.ts",
+    "test:knowledge-integrity": "tsx --test src/lib/knowledge-graph/integrity.test.ts",
     "test:ecosystem-kernel": "tsx --test src/lib/ecosystem-kernel/index.test.ts",
     "test:agent-contribution": "tsx --test src/lib/agent-contribution/contract.test.ts",
     "test:editorial-engine": "tsx --test src/lib/editorial-engine/*.test.ts",
