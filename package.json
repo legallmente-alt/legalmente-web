@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit",
     "test:legal-core": "tsx --test src/lib/legal-core/legal-core.test.ts",
     "test:knowledge-safety": "tsx --test src/lib/knowledge-graph/safety.test.ts",
-    "test:knowledge-integrity": "tsx --test src/lib/knowledge-graph/integrity.test.ts",
+    "test:knowledge-integrity": "tsx --test src/lib/knowledge-graph/inity.test.ts",
     "test:ecosystem-kernel": "tsx --test src/lib/ecosystem-kernel/index.test.ts",
     "test:agent-contribution": "tsx --test src/lib/agent-contribution/contract.test.ts",
     "test:editorial-engine": "tsx --test src/lib/editorial-engine/*.test.ts",
@@ -20,7 +20,8 @@
     "test:visual-factory": "node --import tsx --test src/lib/visual-factory/*.test.ts",
     "test:production-learning": "node --import tsx --test src/lib/production-learning/*.test.ts",
     "test:production-runtime": "node --import tsx --test src/lib/production-runtime/*.test.ts",
-    "test:convergence": "npm run test:production-policy && npm run test:visual-factory && npm run test:production-learning && npm run test:production-runtime",
+    "test:release-readiness": "node --import tsx --test src/lib/release-readiness/*.test.ts",
+    "test:convergence": "npm run test:production-policy && npm run test:visual-factory && npm run test:production-learning && npm run test:production-runtime && npm run test:release-readiness",
     "test:knowledge-pilot": "tsx --test src/lib/knowledge-pilot/*.test.ts",
     "test:opportunity-engine": "tsx --test src/lib/opportunity-engine/*.test.ts",
     "test:public-routes": "node scripts/public-route-proof.mjs"
