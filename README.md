@@ -55,3 +55,8 @@ Do not promote any scaffold to public UI until art/UX review explicitly passes d
 ### Engineering rule
 
 Keep legal logic, source data, territory, copy, graph relationships and image assets separate. The graph can organize learning and navigation but cannot manufacture legal rules. Feature flags remain fail-closed. The public artifact excludes `/internal/`, uses no PII/document/payment surfaces, and must pass the legal-core, knowledge-safety, privacy, typecheck and static-build gates before each publication.
+
+
+### Adaptive visual direction v1.3 — implementation candidate
+
+The visual-argument preflight now requires a canonical legal binding, real question, conflict, consequence, scene strategy and one dominant visual logic before art-family selection. It limits metaphor to a non-default role, rejects repeated motifs, requires functional and scene-strategy diversity, and keeps LinkedIn LegalMente primarily operational rather than allegorical. See [the v1.3 receipt](docs/LEGALMENTE_DIRECCION_ARTISTICA_ADAPTATIVA_V1_3_2026-09-12.md). These checks do not authorize claims, rendered art, merge, deploy or publication.
