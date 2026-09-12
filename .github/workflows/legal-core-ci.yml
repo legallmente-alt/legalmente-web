@@ -69,11 +69,7 @@ jobs:
       - name: Build sanitized public artifact
         run: npm run build:public
       - name: Public artifact fail-closed checks
-        run: |
-          test -f out/_headers
-          test -f out/robots.txt
-          test ! -e out/internal
-          grep -q 'Disallow: /internal/' out/robots.txt
+        run: npm run verify:public-artifact
       - name: Public route and discovery proof
         run: npm run test:public-routes
       - name: Upload sanitized public artifact
