@@ -117,9 +117,8 @@ export function createEmptyQa(): VisualQaResult {
   };
 }
 
-export function routeGeneration(adapter: ImageGeneratorAdapter, unit: VisualProductionUnit): VisualRoute {
+export function routeGeneration(_adapter: ImageGeneratorAdapter, unit: VisualProductionUnit): VisualRoute {
   if (unit.LEGAL_STATE !== "APROBADO" && unit.LEGAL_STATE !== "APTO_PARA_NARRATIVA") return "COPY_BLOCK";
-  if (adapter.capabilities.text) return "FULL_COMPOSITE_GENERATION";
   return "PROGRAMMATIC_TEXT_COMPOSITION";
 }
 
