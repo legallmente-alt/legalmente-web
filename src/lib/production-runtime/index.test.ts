@@ -136,13 +136,14 @@ describe("production runtime", () => {
     }
   });
 
-  it("still stops at QA even when a provider can render text", async () => {
+  it("keeps a text-capable provider on clean base art and stops at QA", async () => {
     const fake = fakeAdapter(true);
     const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter });
     assert.equal(result.status, "IMAGE_READY_FOR_QA");
     if (result.status === "IMAGE_READY_FOR_QA") {
-      assert.equal(result.receipts[0].route, "FULL_COMPOSITE_GENERATION");
-      assert.equal(result.units[0].COMPOSED_ASSET, "asset-1.png");
+      assert.equal(result.receipts[0].route, "PROGRAMMATIC_TEXT_COMPOSITION");
+      assert.equal(result.units[0].BASE_ASSET, "asset-1.png");
+      assert.equal(result.units[0].COMPOSED_ASSET, undefined);
       assert.notEqual(result.units[0].STATE, "PUBLISHED");
     }
   });
