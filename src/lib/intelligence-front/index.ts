@@ -1,12 +1,22 @@
 import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
+import type { SceneStrategy, VisualArgumentChannel, VisualArgumentPlan, VisualFunction } from "../visual-argument";
 
 export const SIGNAL_CHANNELS = ["HUMAN", "MARKET", "EDITORIAL", "INTERNAL"] as const;
 export type SignalChannel = (typeof SIGNAL_CHANNELS)[number];
 
 export const NEED_TYPES = ["QUESTION", "CONFUSION", "DECISION", "PROCESS", "RISK", "OPPORTUNITY", "CURRENT_EVENT"] as const;
 export type NeedType = (typeof NEED_TYPES)[number];
+
+export const EDITORIAL_FAMILIES = [
+  "QUESTION", "PRACTICAL_GUIDANCE", "CONCEPT", "DIFFERENCE", "CONFUSION", "MYTH", "ERROR",
+  "RULE", "EXCEPTION", "REQUIREMENT", "RIGHT", "OBLIGATION", "CONSEQUENCE", "RISK",
+  "CHECKLIST", "DOCUMENT", "CLAUSE", "PROCESS", "EVIDENCE", "RESPONSIBILITY", "DEADLINE",
+  "JURISDICTION", "CASE", "HISTORY", "CULTURE", "DOCTRINE", "COMPARISON", "BUSINESS",
+  "PREVENTION", "NEGOTIATION", "CONCILIATION", "REPAIR", "COMPLIANCE", "INTERPRETATION",
+] as const;
+export type EditorialFamily = (typeof EDITORIAL_FAMILIES)[number];
 
 export const AUDIENCES = ["PUBLIC", "PROFESSIONAL", "BOTH"] as const;
 export type Audience = (typeof AUDIENCES)[number];
@@ -38,6 +48,10 @@ export type NeedClassification = FrontFields & {
   audience: Audience;
   confidence: number;
   rationale: string;
+  editorialFamily: EditorialFamily;
+  readerRole: string;
+  angle: string;
+  consequence: string;
   classifiedAt: string;
   status: "CLASSIFIED";
 };
@@ -47,6 +61,12 @@ export type TopicCandidate = FrontFields & {
   signalId: string;
   classificationId: string;
   question: string;
+  questionResolved: string;
+  editorialFamily: EditorialFamily;
+  readerRole: string;
+  angle: string;
+  consequence: string;
+  depth: "INTRODUCTORY" | "OPERATIONAL" | "PROCEDURAL" | "ADVANCED";
   audience: Audience;
   sourceReadiness: "UNKNOWN" | "PENDING" | "READY";
   legalReadiness: "NOT_ASSESSED" | "REQUIRES_RESEARCH" | "CANONICAL_BOUND_PENDING";
@@ -86,6 +106,10 @@ export type ClassifySignalInput = {
   audience: Audience;
   confidence: number;
   rationale: string;
+  editorialFamily: EditorialFamily;
+  readerRole: string;
+  angle: string;
+  consequence: string;
   fields?: Partial<FrontFields>;
 };
 
@@ -93,6 +117,8 @@ export type CreateTopicCandidateInput = {
   signalId: string;
   classificationId: string;
   question: string;
+  questionResolved?: string;
+  depth?: TopicCandidate["depth"];
   audience?: Audience;
   fields?: Partial<FrontFields>;
 };
@@ -103,6 +129,17 @@ export type RouteRadarInput = {
   freshness: RadarSignal["freshness"];
   priorityHint: RadarSignal["priorityHint"];
   evidenceClass: RadarSignal["evidenceClass"];
+};
+
+export type VisualDirectionInput = {
+  legalBindingId: string;
+  channel?: VisualArgumentChannel;
+  visualFunction: VisualFunction;
+  sceneStrategy: SceneStrategy;
+  imageArgument: string;
+  dominantVisualLogic: string;
+  expectedPerception: string;
+  motifKeys?: readonly string[];
 };
 
 const isOneOf = <T extends readonly string[]>(values: T, value: string): value is T[number] => values.includes(value);
@@ -151,12 +188,21 @@ export function validateStore(store: IntelligenceFrontStore): string[] {
     if (!nonEmpty(classification.rationale)) errors.push(`classification.${classification.id}.rationale is required.`);
     if (!isOneOf(NEED_TYPES, classification.needType)) errors.push(`classification.${classification.id}.needType is invalid.`);
     if (!isOneOf(AUDIENCES, classification.audience)) errors.push(`classification.${classification.id}.audience is invalid.`);
+    if (!isOneOf(EDITORIAL_FAMILIES, classification.editorialFamily)) errors.push(`classification.${classification.id}.editorialFamily is invalid.`);
+    for (const [key, value] of Object.entries({ readerRole: classification.readerRole, angle: classification.angle, consequence: classification.consequence })) {
+      if (!nonEmpty(value)) errors.push(`classification.${classification.id}.${key} is required.`);
+    }
     if (!Number.isFinite(classification.confidence) || classification.confidence < 0 || classification.confidence > 1) errors.push(`classification.${classification.id}.confidence must be between 0 and 1.`);
     if (!store.signals.some((item) => item.id === classification.signalId)) errors.push(`classification.${classification.id} references an unknown signal.`);
   }
   for (const candidate of store.topicCandidates) {
     errors.push(...validateSharedFields(candidate, `topicCandidate.${candidate.id}`));
     if (!nonEmpty(candidate.question)) errors.push(`topicCandidate.${candidate.id}.question is required.`);
+    if (!nonEmpty(candidate.questionResolved)) errors.push(`topicCandidate.${candidate.id}.questionResolved is required.`);
+    if (!isOneOf(EDITORIAL_FAMILIES, candidate.editorialFamily)) errors.push(`topicCandidate.${candidate.id}.editorialFamily is invalid.`);
+    for (const [key, value] of Object.entries({ readerRole: candidate.readerRole, angle: candidate.angle, consequence: candidate.consequence })) {
+      if (!nonEmpty(value)) errors.push(`topicCandidate.${candidate.id}.${key} is required.`);
+    }
     if (!store.signals.some((item) => item.id === candidate.signalId)) errors.push(`topicCandidate.${candidate.id} references an unknown signal.`);
     if (!store.classifications.some((item) => item.id === candidate.classificationId)) errors.push(`topicCandidate.${candidate.id} references an unknown classification.`);
   }
@@ -188,18 +234,40 @@ export function classifySignal(signal: Signal, input: ClassifySignalInput): Need
   if (!isOneOf(NEED_TYPES, input.needType) || !isOneOf(AUDIENCES, input.audience)) throw new Error("Invalid need type or audience.");
   if (!Number.isFinite(input.confidence) || input.confidence < 0 || input.confidence > 1) throw new Error("Confidence must be between 0 and 1.");
   if (!nonEmpty(input.rationale)) throw new Error("Classification rationale is required.");
-  return { id: id("NEED"), signalId: signal.id, concern: clean(input.fields?.concern ?? signal.concern), functionalContext: clean(input.fields?.functionalContext ?? signal.functionalContext), scope: clean(input.fields?.scope ?? signal.scope), subject: clean(input.fields?.subject ?? signal.subject), needType: input.needType, audience: input.audience, confidence: input.confidence, rationale: clean(input.rationale), classifiedAt: now(), status: "CLASSIFIED" };
+  if (!isOneOf(EDITORIAL_FAMILIES, input.editorialFamily) || !nonEmpty(input.readerRole) || !nonEmpty(input.angle) || !nonEmpty(input.consequence)) throw new Error("Editorial family, reader role, angle and consequence are required.");
+  return { id: id("NEED"), signalId: signal.id, concern: clean(input.fields?.concern ?? signal.concern), functionalContext: clean(input.fields?.functionalContext ?? signal.functionalContext), scope: clean(input.fields?.scope ?? signal.scope), subject: clean(input.fields?.subject ?? signal.subject), needType: input.needType, audience: input.audience, confidence: input.confidence, rationale: clean(input.rationale), editorialFamily: input.editorialFamily, readerRole: clean(input.readerRole), angle: clean(input.angle), consequence: clean(input.consequence), classifiedAt: now(), status: "CLASSIFIED" };
 }
 
 export function createTopicCandidate(signal: Signal, classification: NeedClassification, input: CreateTopicCandidateInput): TopicCandidate {
   if (input.signalId !== signal.id || input.classificationId !== classification.id) throw new Error("Topic candidate references do not match supplied records.");
   if (!nonEmpty(input.question)) throw new Error("Topic candidate question is required.");
-  return { id: id("TOPIC"), signalId: signal.id, classificationId: classification.id, concern: clean(input.fields?.concern ?? classification.concern), functionalContext: clean(input.fields?.functionalContext ?? classification.functionalContext), scope: clean(input.fields?.scope ?? classification.scope), subject: clean(input.fields?.subject ?? classification.subject), question: clean(input.question), audience: input.audience ?? classification.audience, sourceReadiness: "UNKNOWN", legalReadiness: "NOT_ASSESSED", editorialStatus: "CANDIDATE", createdAt: now() };
+  return { id: id("TOPIC"), signalId: signal.id, classificationId: classification.id, concern: clean(input.fields?.concern ?? classification.concern), functionalContext: clean(input.fields?.functionalContext ?? classification.functionalContext), scope: clean(input.fields?.scope ?? classification.scope), subject: clean(input.fields?.subject ?? classification.subject), question: clean(input.question), questionResolved: clean(input.questionResolved ?? input.question), editorialFamily: classification.editorialFamily, readerRole: classification.readerRole, angle: classification.angle, consequence: classification.consequence, depth: input.depth ?? "INTRODUCTORY", audience: input.audience ?? classification.audience, sourceReadiness: "UNKNOWN", legalReadiness: "NOT_ASSESSED", editorialStatus: "CANDIDATE", createdAt: now() };
 }
 
 export function routeToRadar(signal: Signal, candidate: TopicCandidate, input: RouteRadarInput): RadarSignal {
-  if (input.signalId !== signal.id || input.candidateId !== candidate.id) throw new Error("Radar references do not match supplied records.");
+  if (input.signalId !== signal.id || input.candidateId !== candidate.id) throw new Error("Radar references do not match supplied signal or candidate.");
   return { id: id("RADAR"), signalId: signal.id, candidateId: candidate.id, concern: signal.concern, functionalContext: signal.functionalContext, scope: signal.scope, subject: signal.subject, freshness: input.freshness, priorityHint: input.priorityHint, evidenceClass: input.evidenceClass, status: "ROUTED" };
+}
+
+export function createVisualDirection(candidate: TopicCandidate, input: VisualDirectionInput): VisualArgumentPlan {
+  if (candidate.legalReadiness === "NOT_ASSESSED") throw new Error("Visual direction requires a reviewed legal readiness state before provider execution.");
+  if (!nonEmpty(input.legalBindingId)) throw new Error("Visual direction requires a canonical legal binding.");
+  return {
+    contentId: candidate.id,
+    legalBindingId: input.legalBindingId,
+    channel: input.channel,
+    audience: candidate.audience,
+    realQuestion: candidate.question,
+    conflict: candidate.concern,
+    consequence: candidate.consequence,
+    learningGoal: candidate.questionResolved,
+    visualFunction: input.visualFunction,
+    sceneStrategy: input.sceneStrategy,
+    imageArgument: input.imageArgument,
+    dominantVisualLogic: input.dominantVisualLogic,
+    expectedPerception: input.expectedPerception,
+    motifKeys: input.motifKeys,
+  };
 }
 
 export function storeDigest(store: IntelligenceFrontStore): string {

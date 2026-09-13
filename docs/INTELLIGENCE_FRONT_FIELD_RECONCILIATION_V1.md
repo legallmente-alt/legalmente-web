@@ -25,6 +25,8 @@ Cada salto conserva el identificador del objeto anterior. La cadena puede valida
 
 Estos campos son descriptivos y no sustituyen los `legalDomainIds`, fuentes, claims o bindings canónicos de Psyche-creation.
 
+La clasificación también conserva `editorialFamily`, `readerRole`, `angle` y `consequence`. El `TopicCandidate` añade `questionResolved` y `depth`. Estas dimensiones viajan con el candidato porque cambiar únicamente la materia o el título no demuestra diversidad editorial.
+
 ## Objetos y estados
 
 | Objeto | Identificador | Estado | Función |
@@ -39,6 +41,8 @@ Estos campos son descriptivos y no sustituyen los `legalDomainIds`, fuentes, cla
 La captura rechaza correo electrónico, teléfono, expediente, folio, CLABE, cuenta y patrones equivalentes. El almacén inicial contiene cero registros. No hay captura pública ni `localStorage`; esta primera entrega es una librería de servidor y archivo auditable.
 
 El motor no crea claims, fuentes, jurisdicciones definitivas ni gates legales. `legalReadiness` empieza en `NOT_ASSESSED`; el candidato debe pasar por investigación y binding canónico antes de adaptación concluyente. `MEASURED_FIRST_PARTY` está bloqueado en Radar hasta que se implemente un registro de medición separado con identidad canónica y procedencia.
+
+La función `createVisualDirection` conecta el candidato con el preflight visual v1.3. Rechaza la dirección antes del proveedor si no existe readiness canónico y `legalBindingId`, y transmite duda, conflicto, consecuencia, aprendizaje, función visual, estrategia de escena, lógica dominante y percepción esperada. El proveedor ejecuta; no decide claims ni publicación.
 
 ## Persistencia
 

@@ -8,6 +8,7 @@ import {
   captureSignal,
   classifySignal,
   createTopicCandidate,
+  createVisualDirection,
   emptyStore,
   routeToRadar,
   validateStore,
@@ -33,6 +34,10 @@ test("builds a traceable signal -> classification -> topic -> radar chain", () =
     audience: "PROFESSIONAL",
     confidence: 0.9,
     rationale: "La pregunta pide distinguir cargo formal, poder y alcance de representación.",
+    editorialFamily: "DIFFERENCE",
+    readerRole: "administrador de una sociedad",
+    angle: "distinguir facultad formal de poder específico",
+    consequence: "actuar sin facultad puede producir una decisión impugnable",
   });
   const topic = createTopicCandidate(signal, classification, {
     signalId: signal.id,
@@ -58,7 +63,7 @@ test("rejects sensitive signal text before persistence", () => {
 
 test("does not allow measured evidence without a measurement record", () => {
   const signal = captureSignal(input);
-  const classification = classifySignal(signal, { signalId: signal.id, needType: "QUESTION", audience: "BOTH", confidence: 0.5, rationale: "Hipótesis editorial." });
+  const classification = classifySignal(signal, { signalId: signal.id, needType: "QUESTION", audience: "BOTH", confidence: 0.5, rationale: "Hipótesis editorial.", editorialFamily: "QUESTION", readerRole: "lector general", angle: "explicación inicial", consequence: "la falta de contexto dificulta elegir el siguiente paso" });
   const topic = createTopicCandidate(signal, classification, { signalId: signal.id, classificationId: classification.id, question: "¿Qué conviene entender?" });
   const radar = routeToRadar(signal, topic, { signalId: signal.id, candidateId: topic.id, freshness: "UNKNOWN", priorityHint: "LOW", evidenceClass: "MEASURED_FIRST_PARTY" });
   const errors = validateStore({ schemaVersion: "1.0", signals: [signal], classifications: [classification], topicCandidates: [topic], radarSignals: [radar] });
@@ -75,6 +80,10 @@ test("persists atomically and reloads the same traceable store", async () => {
     audience: "BOTH",
     confidence: 0.7,
     rationale: "La señal requiere una explicación inicial.",
+    editorialFamily: "QUESTION",
+    readerRole: "lector general",
+    angle: "explicación inicial",
+    consequence: "la falta de contexto dificulta elegir el siguiente paso",
   });
   const topic = await repository.appendTopicCandidate(signal.id, classification.id, {
     question: "¿Qué conviene entender primero?",
@@ -94,4 +103,25 @@ test("persists atomically and reloads the same traceable store", async () => {
 
 test("empty store is valid and safe as the initial state", () => {
   assert.deepEqual(validateStore(emptyStore()), []);
+});
+
+test("blocks visual direction before canonical legal readiness", () => {
+  const signal = captureSignal(input);
+  const classification = classifySignal(signal, {
+    signalId: signal.id,
+    needType: "CONFUSION",
+    audience: "PROFESSIONAL",
+    confidence: 0.9,
+    rationale: "Se necesita separar facultades.",
+    editorialFamily: "DIFFERENCE",
+    readerRole: "administrador",
+    angle: "facultad frente a poder",
+    consequence: "una actuación sin facultad puede ser impugnable",
+  });
+  const candidate = createTopicCandidate(signal, classification, { signalId: signal.id, classificationId: classification.id, question: "¿Qué facultad existe?" });
+  assert.throws(() => createVisualDirection(candidate, { legalBindingId: "CLAIM-1", visualFunction: "SEPARATE", sceneStrategy: "ARCHITECTURE", imageArgument: "A visible threshold separates two scopes.", dominantVisualLogic: "architectural editorial photography", expectedPerception: "The viewer sees a scope boundary." }), /legal readiness/i);
+  candidate.legalReadiness = "CANONICAL_BOUND_PENDING";
+  const direction = createVisualDirection(candidate, { legalBindingId: "CLAIM-1", visualFunction: "SEPARATE", sceneStrategy: "ARCHITECTURE", imageArgument: "A visible threshold separates two scopes.", dominantVisualLogic: "architectural editorial photography", expectedPerception: "The viewer sees a scope boundary." });
+  assert.equal(direction.contentId, candidate.id);
+  assert.equal(direction.legalBindingId, "CLAIM-1");
 });
