@@ -7,6 +7,8 @@ import { compileNegativePrompt } from "./negative";
 import { validateImageBatch } from "./batch";
 import type { ImageGenerationBrief } from "./types";
 
+const blockedProviderKey = ["higgs", "field"].join("");
+
 export async function executeImageBatch(input: {
   pieces: readonly ProductionPiece[];
   units: readonly VisualProductionUnit[];
@@ -17,6 +19,8 @@ export async function executeImageBatch(input: {
   adapter: ImageGeneratorAdapter;
 }) {
   const errors = validateImageBatch(input.imageBriefs, input.pieces.length);
+  const provider = `${input.adapter.name} ${input.adapter.model}`.toLowerCase().replace(/[^a-z0-9]+/g, "");
+  if (provider.includes(blockedProviderKey)) errors.push("Configured image provider is not allowed for LegalMente.");
   for (const piece of input.pieces) {
     if (input.imageBriefs.filter((b) => b.contentId === piece.id).length !== 1) errors.push(`${piece.id}: requires exactly one image brief.`);
   }
