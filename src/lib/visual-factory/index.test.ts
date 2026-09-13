@@ -65,9 +65,9 @@ function passingQa(): VisualQaResult {
 }
 
 describe("VisualProductionUnit", () => {
-  it("routes clean-copy providers to full composite and fallback providers to programmatic text", () => {
+  it("always routes approved generation through clean base art", () => {
     assert.equal(routeGeneration({ ...adapter, capabilities: { ...adapter.capabilities, text: false } }, unit), "PROGRAMMATIC_TEXT_COMPOSITION");
-    assert.equal(routeGeneration({ ...adapter, capabilities: { ...adapter.capabilities, text: true } }, unit), "FULL_COMPOSITE_GENERATION");
+    assert.equal(routeGeneration({ ...adapter, capabilities: { ...adapter.capabilities, text: true } }, unit), "PROGRAMMATIC_TEXT_COMPOSITION");
   });
 
   it("blocks content that is not approved", () => {
