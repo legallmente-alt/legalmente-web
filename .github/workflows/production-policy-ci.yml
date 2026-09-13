@@ -4,7 +4,9 @@ on:
   pull_request:
     paths:
       - 'src/lib/production-policy/**'
+      - 'src/lib/visual-argument/**'
       - 'src/lib/visual-factory/**'
+      - 'src/lib/image-generator/**'
       - 'src/lib/production-learning/**'
       - 'src/lib/production-runtime/**'
       - 'src/lib/release-readiness/**'
@@ -26,7 +28,9 @@ on:
   push:
     paths:
       - 'src/lib/production-policy/**'
+      - 'src/lib/visual-argument/**'
       - 'src/lib/visual-factory/**'
+      - 'src/lib/image-generator/**'
       - 'src/lib/production-learning/**'
       - 'src/lib/production-runtime/**'
       - 'src/lib/release-readiness/**'
