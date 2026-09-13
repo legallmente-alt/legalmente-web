@@ -16,6 +16,7 @@ export function validateImageBrief(b: ImageGenerationBrief): string[] {
   if (b.argument.contentId !== b.contentId) errors.push(`${b.contentId}: visual argument binding mismatch.`);
   if (b.argument.consequence && norm(b.argument.consequence) !== norm(b.consequence)) errors.push(`${b.contentId}: consequence drift between semantic and visual layers.`);
   if (norm(b.artDirection) === norm(b.argument.imageArgument)) errors.push(`${b.contentId}: art direction cannot replace the image argument.`);
+  if (b.territoryMode === "VERIFIED_LOCAL" && !(b.allowedLocalCues?.length)) errors.push(`${b.contentId}: verified local imagery requires explicit allowed cues.`);
   const visual = norm([b.artDirection, b.composition, b.argument.imageArgument, b.argument.conflict, b.brandSurface].join(" "));
   for (const term of banned) if (visual.includes(norm(term))) errors.push(`${b.contentId}: banned visual pattern ${term}.`);
   return errors;
