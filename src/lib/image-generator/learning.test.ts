@@ -15,9 +15,12 @@ const brief = (id: string, family: string): ImageGenerationBrief => ({
 
 describe("Founder selection learning", () => {
   it("reports selection rate with sample-size caution", () => {
-    const briefs = [brief("a", "mito"), brief("b", "historia"), brief("c", "prueba")];
+    const briefs = [brief("a", "mito"), brief("b", "historia"), brief("c", "prueba"), brief("d", "concepto")];
     const result = founderSelectionMetrics(briefs, [
-      { contentId: "a", selected: true }, { contentId: "b", selected: false }, { contentId: "c", selected: true },
+      { contentId: "a", state: "PRESELECTED" },
+      { contentId: "b", state: "DISCARDED" },
+      { contentId: "c", state: "APPROVED" },
+      { contentId: "d", state: "GENERATED" },
     ]);
     assert.equal(result.overall.generated, 3);
     assert.equal(result.overall.selected, 2);
