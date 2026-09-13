@@ -4,6 +4,7 @@ export * from "./negative";
 export * from "./validation";
 export * from "./batch";
 export * from "./runtime";
+export * from "./learning";
 
 export const IMAGE_GENERATOR_INVARIANTS = Object.freeze({
   semanticMeaningBeforeStyle: true,
