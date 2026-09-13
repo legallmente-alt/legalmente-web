@@ -11,7 +11,7 @@ export function compileBaseArtPrompt(b: ImageGenerationBrief): string {
     `Composition: ${b.composition}. Camera: ${b.camera}. Material: ${b.material}. Light: ${b.lighting}. Human presence: ${b.humanPresence}.`,
     `Apply art direction only after meaning and emotion: ${b.artDirection}.`,
     `Physical brand surface: ${b.brandSurface}; keep it blank, clean and perspective-correct for later canonical wordmark composition.`,
-    `Aspect ${b.format}; preserve mobile-safe negative space.`,
-    "No letters, words, captions, logos or pseudo-text in base art; final typography is composed later.",
+    `Aspect ${b.format}; preserve mobile-safe negative space around the key object or action.`,
+    "No letters, words, captions, logos, legal text, signatures, UI or pseudo-text in base art; exact copy and the LegalMente wordmark are composed later.",
   ].join(" ");
 }
