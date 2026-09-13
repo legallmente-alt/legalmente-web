@@ -22,6 +22,8 @@ export type ImageGenerationBrief = {
   brandSurface: string;
   format: string;
   copyExact: string;
+  territoryMode?: "PANHISPANIC_NEUTRAL" | "VERIFIED_LOCAL";
+  allowedLocalCues?: readonly string[];
   isDigitalDataAi?: boolean;
   recentStyleKeys?: readonly string[];
   recentMetaphorKeys?: readonly string[];
