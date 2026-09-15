@@ -35,6 +35,15 @@ export function resolveLane(
     };
   }
 
+  if (explicitLane !== undefined) {
+    return {
+      lane: "B",
+      lane_contract_version: LANE_CONTRACT_VERSION,
+      lane_eligibility_reason: "fallback seguro a Carril B por incertidumbre",
+      lane_fallback_applied: true,
+    };
+  }
+
   const normalized = contentType?.trim().toLocaleLowerCase("es-MX");
   if (normalized && ABSTRACT_CONTENT_TYPES.has(normalized)) {
     return {
