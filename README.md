@@ -63,3 +63,7 @@ Read [LegalMente adaptive art direction v1.2](docs/art-direction-adaptive-v1.2.m
 This is an authorized documentary incorporation, not proof of automatic engine integration or improved performance. It separates general and LinkedIn production, preserves narrative continuity, requires real feedback and nullable metrics, and keeps exploration open. On each active production cycle, review new acceptance evidence and comparable performance, propose at least three materially new alternatives, and document the next test. Do not equate missing metrics with zero or generating with approval/publication.
 
 [Drive production copy](https://drive.google.com/file/d/1qYCNUdIRC1Xq3zDa6YKWey9yepW-7IRs/view?usp=drivesdk). The production index remains the entry point. Runtime integration must map to existing selector, history and compositor under repository review; no parallel engine, merge or deploy is authorized by this incorporation.
+
+### Adaptive visual direction v1.3 — implementation candidate
+
+The visual-argument preflight now requires a canonical legal binding, real question, conflict, consequence, scene strategy and one dominant visual logic before art-family selection. It limits metaphor to a non-default role, rejects repeated motifs, requires functional and scene-strategy diversity, and keeps LinkedIn LegalMente primarily operational rather than allegorical. See [the v1.3 receipt](docs/LEGALMENTE_DIRECCION_ARTISTICA_ADAPTATIVA_V1_3-2026-09-12.md). These checks do not authorize claims, rendered art, merge, deploy or publication.
