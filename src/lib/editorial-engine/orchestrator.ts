@@ -6,6 +6,7 @@ import {
   type EditorialCandidate,
   type LegalDepthLevel,
 } from "./index";
+import { scoreChannelFit, type EditorialChannel } from "./channel-strategy";
 
 /**
  * Lanes are internal orchestration queues. They answer WHY/WHAT path should
@@ -345,6 +346,18 @@ export function prioritizeForLane(
   });
 }
 
+/** Rank knowledge-backed candidates for a real publishing channel after lane routing. */
+export function prioritizeForChannel(
+  candidates: readonly EditorialPlanningCandidate[],
+  channel: EditorialChannel,
+): EditorialPlanningCandidate[] {
+  return [...candidates].sort((a, b) => {
+    const scoreDelta = scoreChannelFit(b, channel) - scoreChannelFit(a, channel);
+    if (Math.abs(scoreDelta) > 0.01) return scoreDelta;
+    return editorialUtility(b) - editorialUtility(a);
+  });
+}
+
 export const MULTI_AXIS_EDITORIAL_RULES = Object.freeze({
   pyramidRole: "KNOWLEDGE_DEPTH_SPINE",
   graphRole: "RELATIONSHIP_AND_REUSE_MEMORY",
@@ -358,4 +371,6 @@ export const MULTI_AXIS_EDITORIAL_RULES = Object.freeze({
   oneKnowledgeRecordMayHaveMultipleDistributionAdaptations: true,
   adaptationsDoNotResetAntiRepetitionHistory: true,
   currentContentNeedsStrongSourceSignal: true,
+  channelSpecificVisualProfiles: true,
+  performanceSignalsGuidePresentationNotLegalTruth: true,
 });
