@@ -19,6 +19,9 @@ const wave01aReviews = [
     ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-013_visual_4x5.png",
+    copyState: "READY_FOR_COPY_INTERNAL",
+    integrationState: "PRODUCT_REVIEW_REQUIRED",
+    publicationState: "NOT_PUBLIC",
     alt: "Bodegón editorial con caja, regla y papel para LM-PC-013; no incorpora texto jurídico.",
   },
   {
@@ -34,6 +37,9 @@ const wave01aReviews = [
     ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-031_visual_4x5.png",
+    copyState: "READY_FOR_COPY_INTERNAL",
+    integrationState: "PRODUCT_REVIEW_REQUIRED",
+    publicationState: "NOT_PUBLIC",
     alt: "Bodegón editorial con herramientas, delantal y etiqueta en blanco para LM-PC-031; no incorpora texto jurídico.",
   },
   {
@@ -49,6 +55,9 @@ const wave01aReviews = [
     ],
     vertical: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual.png",
     feed: "/internal-assets/legalmente/wave-01a/LM-PC-065_visual_4x5.png",
+    copyState: "READY_FOR_COPY_INTERNAL",
+    integrationState: "PRODUCT_REVIEW_REQUIRED",
+    publicationState: "NOT_PUBLIC",
     alt: "Bodegón editorial con muestras, carpeta y placa en blanco para LM-PC-065; no incorpora texto jurídico.",
   },
 ] as const;
@@ -120,12 +129,12 @@ export default function InternalProductLabPage() {
       <section id="wave-01a-review" aria-labelledby="wave-01a-title" className="space-y-6">
         <div className="max-w-3xl space-y-3">
           <p className="text-sm uppercase tracking-[0.08em] text-tinta/55">Wave 01A · revisión de integración</p>
-          <h2 id="wave-01a-title" className="font-serif text-3xl">Visuales preparados, claims todavía bajo revisión humana.</h2>
-          <p className="text-base leading-7 text-tinta/70">Esta bandeja interna comprueba la presencia binaria y la relación candidata con rutas existentes. No muestra el claim jurídico, no abre publicación y no convierte una fuente en aprobación. El territorio de los tres expedientes es México — PILOT_RESEARCH_TERRITORY.</p>
+          <h2 id="wave-01a-title" className="font-serif text-3xl">Visuales preparados y copy aprobado para el siguiente gate.</h2>
+          <p className="text-base leading-7 text-tinta/70">Esta bandeja interna comprueba la presencia binaria y la relación candidata con rutas existentes. El copy vinculado tiene estado READY_FOR_COPY_INTERNAL; la integración pública requiere decisión de producto y la publicación conserva una autorización humana separada. El territorio de los tres expedientes es México — PILOT_RESEARCH_TERRITORY.</p>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
           {wave01aReviews.map((item) => (
-            <article key={item.contentId} data-content-id={item.contentId} data-review-state="HUMAN_REVIEW_REQUIRED" className="overflow-hidden border border-tinta/15 bg-white shadow-sm">
+            <article key={item.contentId} data-content-id={item.contentId} data-copy-state={item.copyState} data-integration-state={item.integrationState} data-publication-state={item.publicationState} className="overflow-hidden border border-tinta/15 bg-white shadow-sm">
               <picture>
                 <source media="(min-width: 768px)" srcSet={item.vertical} />
                 <img src={item.feed} alt={item.alt} className="aspect-[4/5] w-full object-cover lg:aspect-[9/16]" loading="lazy" decoding="async" />
@@ -136,17 +145,20 @@ export default function InternalProductLabPage() {
                     <p className="text-xs font-semibold uppercase tracking-[0.12em] text-tinta/50">{item.contentId}</p>
                     <h3 className="mt-2 font-serif text-2xl">Unidad visual</h3>
                   </div>
-                  <LegalStateBadge state="reviewRequired" symbol="source" reason="Claim y binding pendientes." />
+                  <LegalStateBadge state="reviewRequired" symbol="source" reason="Copy listo; integración y publicación permanecen separadas." />
                 </div>
                 <p className="text-sm leading-6 text-tinta/75">{item.question}</p>
                 <dl className="grid gap-2 border-t border-tinta/10 pt-4 text-xs leading-5 text-tinta/65">
                   <div className="flex justify-between gap-4"><dt className="font-semibold">Territorio</dt><dd className="text-right">México · piloto</dd></div>
                   <div className="flex justify-between gap-4"><dt className="font-semibold">Ruta candidata</dt><dd className="text-right">{item.candidateRoute}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="font-semibold">Formatos</dt><dd className="text-right">9:16 · 4:5</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="font-semibold">Copy</dt><dd className="text-right">{item.copyState}</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="font-semibold">Integración</dt><dd className="text-right">{item.integrationState}</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="font-semibold">Publicación</dt><dd className="text-right">{item.publicationState}</dd></div>
                 </dl>
                 <div className="space-y-3 border-t border-tinta/10 pt-4">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-tinta/50">Copy educativo interno</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-tinta/50">Copy educativo interno · {item.copyState}</p>
                     <a className="text-xs font-semibold underline underline-offset-2" href={item.sourceUrl} target="_blank" rel="noreferrer">Fuente oficial</a>
                   </div>
                   <p className="text-xs leading-5 text-tinta/60">{item.sourceLabel} · {item.sourceVersion}</p>
@@ -159,7 +171,7 @@ export default function InternalProductLabPage() {
                     ))}
                   </ul>
                 </div>
-                <p className="border-l-2 border-oro pl-3 text-xs leading-5 text-tinta/60">Solo revisión interna de asset/procedencia. La relación de ruta requiere decisión de producto y el claim requiere revisión humana.</p>
+                <p className="border-l-2 border-oro pl-3 text-xs leading-5 text-tinta/60">Asset y copy se conservan en revisión interna. La relación de ruta requiere decisión de producto; la publicación requiere autorización humana separada.</p>
               </div>
             </article>
           ))}
@@ -167,7 +179,7 @@ export default function InternalProductLabPage() {
       </section>
 
       <footer className="border-t border-tinta/15 pt-6 text-sm leading-6 text-tinta/65">
-        Asset pack: {productionAssetPack.count} proofs registrados · Wave 01A importada solo para revisión interna · publicación bloqueada.
+        Asset pack: {productionAssetPack.count} proofs registrados · Wave 01A con copy READY_FOR_COPY_INTERNAL · integración y publicación bloqueadas.
       </footer>
     </main>
   );
