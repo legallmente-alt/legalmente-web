@@ -3,6 +3,23 @@
 Status: proposed repository alignment on an unmerged branch.
 Date: 2026-09-07.
 
+## Adaptive alignment — implementation candidate
+
+The active artistic procedure is [LM-ART-ADAPTIVE-1.2 in Drive](https://drive.google.com/file/d/1qYCNUdIRC1Xq3zDa6YKWey9yepW-7IRs/view), incorporated by the [production index v18](https://docs.google.com/document/d/1UzU1nbltiAEiMAjTt0GsHcZd14d_ofOtNeK4pFQjKs4/edit). The following implementation extends the existing adapter; it is not a new artistic canon or an image generator.
+
+- Independent general/specific-domain batches retain style diversity. Both LinkedIn modes may repeat a professional medium while changing the visual argument.
+- `unit: "CAROUSEL_PAGES"` plus an explicit `collectionId` preserves internal visual continuity and skips independent-post breadth/style quotas. Content duplication, per-piece format/source/brand checks and historical checks remain active.
+- Candidates now require an explicit `humanPresence` description. Use `none` for known absence. Missing or unknown fields do not count as novelty; legacy history must be inspected and enriched, not filled by assumption.
+- The adapter reports the three closest batch peers and the three closest active history records for each candidate. It uses eight dimensions, with framing + composition counted once, and requires at least five changed dimensions as an initial metadata filter. Historical comparisons remain active for carousels.
+- Empty history is explicitly unverified. This does not prove semantic novelty, visible diversity or full historical coverage. Human inspection of actual images remains necessary.
+- Duplicate piece IDs fail validation. Passing the adapter never grants legal, artistic or publication approval.
+
+The repaired lockfile restores missing optional platform dependencies without changing previously locked package versions. The focused test runner uses Node's `--import tsx` path to avoid the tsx CLI's unnecessary IPC listener in restricted environments.
+
+Scope limitation: there are no production callers of this adapter in the accessible branch. The tests exercise the adapter; integration into the inaccessible Remotion selector and visual QA remain pending. Single-pass final-image QA, tabletop-archetype quotas, acceptance/performance storage and semantic similarity are not implemented by this change. No audience improvement is claimed.
+
+Rollback: revert the adaptive implementation commit, retaining historical evidence. Review and merge remain separate from execution of these tests.
+
 ## Purpose
 
 Make the repository understand the same production rules that govern the current LegalMente Drive canon without turning implementation details into a second source of truth.
@@ -27,7 +44,7 @@ The production-policy module now encodes the intended minimums for a generic 10-
 - exactly 10 candidates when the policy expects 10;
 - at least 8 distinct primary legal domains;
 - no primary domain more than twice;
-- `DIGITAL_DATA_AI` at most once unless a different policy is explicitly requested;
+- `DIGITAL_DATA_AI` paused unless explicitly enabled, as recorded in the later hardening entry of the Drive change log;
 - at least five distinct entry doors;
 - ten distinct dominant artistic-style strings;
 - no repeated content fingerprint;

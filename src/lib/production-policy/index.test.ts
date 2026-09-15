@@ -4,6 +4,7 @@ import {
   historyItemIsActive,
   productionContentFingerprint,
   productionVisualFingerprint,
+  productionVisualDistance,
   validateImprovementRecord,
   validateProductionBatch,
   type ProductionHistoryItem,
@@ -44,6 +45,7 @@ function piece(index: number, overrides: Partial<ProductionPiece> = {}): Product
     scenario: `Escenario ${index}`,
     material: `Material ${index}`,
     lighting: `Luz ${index}`,
+    humanPresence: "none",
     framing: `Encuadre ${index}`,
     composition: `Composición ${index}`,
     brandObject: `Objeto físico ${index}`,
@@ -231,4 +233,78 @@ test("agent improvements require evidence, test, result, decision and rollback",
   });
   assert.equal(invalid.ok, false);
   assert.match(invalid.errors.join(" "), /rollback is required/);
+});
+
+test("both LinkedIn modes permit a coherent medium with distinct arguments", () => {
+  const batch = Array.from({ length: 10 }, (_, i) => piece(i, { artisticStyle: "Fotografía editorial", format: "4:5" }));
+  for (const mode of ["LINKEDIN_LEGALMENTE", "LINKEDIN_FOUNDER"] as const) {
+    const result = validateProductionBatch(batch, [], { mode });
+    assert.equal(result.ok, true, result.errors.join("\n"));
+    assert.equal(result.visualComparisons.length, 30);
+  }
+});
+
+test("renaming styles or reordering a batch cannot disguise the same scene", () => {
+  const batch = Array.from({ length: 10 }, (_, i) => piece(i, {
+    scenario: "mesa", material: "latón", lighting: "ventana",
+    visualMetaphor: "pluma sobre contrato", framing: "macro", composition: "centrada", brandObject: "placa",
+  }));
+  for (const ordered of [batch, [...batch].reverse()]) {
+    const result = validateProductionBatch(ordered);
+    assert.equal(result.ok, false);
+    assert.match(result.errors.join(" "), /visual distance/);
+  }
+});
+
+test("camera and composition are one dimension and unknown values add no novelty", () => {
+  const a = piece(0);
+  const b = { ...a, framing: "aéreo", composition: "diagonal", humanPresence: "unknown" };
+  assert.deepEqual(productionVisualDistance(a, b), { changedDimensions: 1, knownDimensions: 7 });
+  const result = validateProductionBatch([b], [], { mode: "LEGALMENTE_GENERAL", expectedSize: 1 });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join(" "), /eight visual dimensions/);
+});
+
+test("the 5/8 threshold accepts five changes and rejects four", () => {
+  const a = piece(0);
+  const b = piece(1, { scenario: a.scenario, material: a.material });
+  assert.equal(productionVisualDistance(a, b).changedDimensions, 5);
+  assert.equal(validateProductionBatch([a, b], [], { mode: "LEGALMENTE_GENERAL", expectedSize: 2 }).ok, true);
+  assert.equal(validateProductionBatch([a, { ...b, lighting: a.lighting }], [], { mode: "LEGALMENTE_GENERAL", expectedSize: 2 }).ok, false);
+});
+
+test("carousel pages retain visual continuity without acquiring publication approval", () => {
+  const visual = piece(0);
+  const batch = Array.from({ length: 10 }, (_, i) => ({ ...visual,
+    id: `PAGE-${i}`, topic: `Subtema ${i}`, centralIdea: `Aprendizaje ${i}`,
+  }));
+  const result = validateProductionBatch(batch, [], {
+    mode: "LEGALMENTE_GENERAL", unit: "CAROUSEL_PAGES", collectionId: "CAROUSEL-TEST",
+  });
+  assert.equal(result.ok, true, result.errors.join("\n"));
+  assert.equal(result.visualComparisons.length, 0);
+  assert.equal("state" in result, false);
+  assert.equal(validateProductionBatch(batch, [], { mode: "LEGALMENTE_GENERAL", unit: "CAROUSEL_PAGES" }).ok, false);
+});
+
+test("nonadjacent similar history is checked and incomplete history is not counted as diversity", () => {
+  const candidate = piece(0);
+  const history: ProductionHistoryItem[] = Array.from({ length: 5 }, (_, i) => ({
+    ...piece(i + 10), state: "APPROVED", recordedAt: "2026-09-01T00:00:00Z",
+  }));
+  history[3] = { ...candidate, id: "NEAR-HISTORY", topic: "Otra cuestión", artisticStyle: "Otra técnica",
+    state: "APPROVED", recordedAt: "2026-09-01T00:00:00Z" };
+  const result = validateProductionBatch([candidate], history, { mode: "LEGALMENTE_GENERAL", expectedSize: 1 });
+  assert.equal(result.ok, false);
+  assert.ok(result.visualComparisons.some((c) => c.comparedId === "NEAR-HISTORY"));
+  const legacy = { ...history[0], humanPresence: undefined };
+  const incomplete = validateProductionBatch([candidate], [legacy], { mode: "LEGALMENTE_GENERAL", expectedSize: 1 });
+  assert.equal(incomplete.ok, false);
+  assert.match(incomplete.errors.join(" "), /incomplete visual evidence/);
+});
+
+test("missing history remains explicitly unverified and duplicate ids fail", () => {
+  const result = validateProductionBatch([piece(0)], [], { mode: "LEGALMENTE_GENERAL", expectedSize: 1 });
+  assert.match(result.warnings.join(" "), /historical repetition has not been verified/);
+  assert.equal(validateProductionBatch([piece(0), piece(1, { id: piece(0).id })], [], { mode: "LEGALMENTE_GENERAL", expectedSize: 2 }).ok, false);
 });
