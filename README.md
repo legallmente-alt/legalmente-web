@@ -24,6 +24,16 @@ The canonical learning journey is:
 
 History, disciplines, series and chapters are contextual layers. Similarity between legal systems is not treated as legal equivalence without territorial evidence.
 
+## Living production policy — 2026-09-07 alignment
+
+Adaptive implementation candidate: the existing adapter now distinguishes LinkedIn and carousel continuity, checks eight visual dimensions against closest peers/history, and reports missing historical coverage. See [scope, migration and remaining integration gaps](docs/LEGALMENTE_PRODUCTION_POLICY_V3_ALIGNMENT.md#adaptive-alignment--implementation-candidate). Run `npm run test:production-policy` and `npm run typecheck`; passing these checks does not certify an image or publish it.
+
+Content/image production must not be inferred from a finite prompt bank, a forced channel quota or a fixed matter-to-art mapping. The repository-side policy adapter lives at `src/lib/production-policy/` and is documented in `docs/LEGALMENTE_PRODUCTION_POLICY_V3_ALIGNMENT.md`.
+
+Operational interpretation follows the current LegalMente Drive canon. The production adapter encodes four distinct modes (`LEGALMENTE_GENERAL`, `SPECIFIC_DOMAIN`, `LINKEDIN_LEGALMENTE`, `LINKEDIN_FOUNDER`), broad-domain diversity for generic batches, open artistic-style strings, physical `LegalMente` brand integration, curation states that separate generated work from approved/published work, short-vs-strong anti-repetition memory, and reversible agent-improvement receipts.
+
+This policy is not a legal source and cannot manufacture claims. Source, territory, legal-review, Founder approval, publication, merge and deploy gates remain separate.
+
 ### Visual acceptance principles
 
 LegalMente must feel like a premium, explorable editorial/product experience, not a legacy legal portal, generic SaaS dashboard, school slide deck or grid of identical cards. Complexity belongs in the graph, not on the first screen.
@@ -45,3 +55,15 @@ Do not promote any scaffold to public UI until art/UX review explicitly passes d
 ### Engineering rule
 
 Keep legal logic, source data, territory, copy, graph relationships and image assets separate. The graph can organize learning and navigation but cannot manufacture legal rules. Feature flags remain fail-closed. The public artifact excludes `/internal/`, uses no PII/document/payment surfaces, and must pass the legal-core, knowledge-safety, privacy, typecheck and static-build gates before each publication.
+
+## Adaptive art direction incorporation
+
+Read [LegalMente adaptive art direction v1.2](docs/art-direction-adaptive-v1.2.md) before creating editorial images or proposing changes to visual selection.
+
+This is an authorized documentary incorporation, not proof of automatic engine integration or improved performance. It separates general and LinkedIn production, preserves narrative continuity, requires real feedback and nullable metrics, and keeps exploration open. On each active production cycle, review new acceptance evidence and comparable performance, propose at least three materially new alternatives, and document the next test. Do not equate missing metrics with zero or generating with approval/publication.
+
+[Drive production copy](https://drive.google.com/file/d/1qYCNUdIRC1Xq3zDa6YKWey9yepW-7IRs/view?usp=drivesdk). The production index remains the entry point. Runtime integration must map to existing selector, history and compositor under repository review; no parallel engine, merge or deploy is authorized by this incorporation.
+
+### Adaptive visual direction v1.3 — implementation candidate
+
+The visual-argument preflight now requires a canonical legal binding, real question, conflict, consequence, scene strategy and one dominant visual logic before art-family selection. It limits metaphor to a non-default role, rejects repeated motifs, requires functional and scene-strategy diversity, and keeps LinkedIn LegalMente primarily operational rather than allegorical. See [the v1.3 receipt](docs/LEGALMENTE_DIRECCION_ARTISTICA_ADAPTATIVA_V1_3-2026-09-12.md). These checks do not authorize claims, rendered art, merge, deploy or publication.

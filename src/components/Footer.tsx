@@ -15,6 +15,9 @@ export default function Footer() {
         <div className="flex flex-wrap items-start gap-x-5 gap-y-3 md:justify-end">
           <Link className={linkClass} href="/confianza">Fuentes y límites</Link>
           <Link className={linkClass} href="/sobre">Sobre LegalMente</Link>
+          <Link className={linkClass} href="/terminos">Términos</Link>
+          <Link className={linkClass} href="/privacidad">Privacidad</Link>
+          <Link className={linkClass} href="/disclosure">Disclosure</Link>
         </div>
       </div>
     </footer>
