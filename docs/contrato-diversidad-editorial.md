@@ -216,6 +216,49 @@ conocimiento creciente + familias editoriales abiertas + señales reales + anti-
 
 Un banco, XLSX o catálogo es una semilla operacional; nunca es el universo completo de LegalMente.
 
-## 12. No cambia estos gates
+## 12. Línea especializada de LinkedIn LegalMente: marítimo, portuario y ZOFEMAT
+
+Por aprobación expresa del Founder del 17-sep-2026, `LINKEDIN_LEGALMENTE` incorpora una línea temática profesional y educativa especializada en asuntos marítimos, portuarios, administrativos y costeros.
+
+La señal de origen es una vacante profesional que concentra responsabilidades jurídicas de alto valor temático. Esa vacante funciona únicamente como **señal de necesidad y descubrimiento editorial**; no es fuente jurídica ni valida claims.
+
+El motor debe poder generar candidatos, sin convertirlos en banco cerrado, alrededor de:
+
+- Derecho marítimo y portuario;
+- Zona Federal Marítimo Terrestre (ZOFEMAT);
+- concesiones, permisos y otros actos administrativos vinculados con zona costera;
+- autoridades marítimas, portuarias y administrativas;
+- interpretación de normativa nacional e internacional aplicable al sector marítimo;
+- contratos marítimos y comerciales;
+- revisión, negociación e incumplimiento contractual en operaciones del sector;
+- prevención y matriz de riesgos legales;
+- documentación, expediente y trazabilidad regulatoria;
+- coordinación jurídica con áreas operativas, comerciales, inmobiliarias, ambientales y de cumplimiento;
+- diferencias entre permiso, autorización, concesión, contrato y título habilitante cuando la fuente y el territorio permitan explicarlas;
+- etapas, requisitos, vigencia, modificación, transmisión, terminación o extinción de figuras administrativas cuando exista soporte jurídico suficiente;
+- preguntas profesionales del tipo: qué autoridad interviene, qué documento importa, qué riesgo se controla, qué etapa sigue, qué diferencia jurídica cambia la estrategia y qué debe verificarse antes de ejecutar una operación.
+
+### Tratamiento editorial obligatorio
+
+Para esta línea, LinkedIn LegalMente debe conservar tono **formal, técnico, institucional y pedagógico**. La pieza debe enseñar cómo funciona una institución, relación, documento, etapa, riesgo o decisión jurídica. No debe sentirse como publicidad, captación comercial ni currículum disfrazado.
+
+La combinación recomendada es:
+
+```text
+MATERIA / SUBMATERIA
+→ INSTITUCIÓN O FIGURA
+→ PREGUNTA PROFESIONAL
+→ MECANISMO / ETAPA
+→ DOCUMENTO O EVIDENCIA
+→ RIESGO / CONSECUENCIA
+→ FUENTE + TERRITORIO + VIGENCIA
+→ PIEZA LINKEDIN
+```
+
+La salida debe privilegiar conceptos, diferencias, procesos, requisitos, documentos clave, riesgos, contratos, concesiones/permisos, cumplimiento, autoridad competente y errores frecuentes. Los casos humanos pueden aparecer, pero no deben dominar esta línea.
+
+Toda afirmación concreta sobre ZOFEMAT, concesiones, autoridades, procedimiento, contratos marítimos o normativa nacional/internacional exige verificación de fuente, territorio y vigencia antes de pasar a claim o publicación.
+
+## 13. No cambia estos gates
 
 Este contrato no autoriza publicación, merge, deploy, cambio de claims, eliminación de revisión jurídica ni sustitución de fuentes primarias. Sólo establece la diversidad editorial como requisito estructural del motor.
