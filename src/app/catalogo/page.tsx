@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { concepts, processes } from "@/lib/knowledge-graph/content";
+import CatalogExplorer from "@/components/catalog/CatalogExplorer";
+import { catalogEntries } from "@/lib/knowledge-graph/catalog";
+import { concepts, processes, worlds } from "@/lib/knowledge-graph/content";
 
 const editorialFamilies = [
   { label: "Conceptos jurídicos", note: "Ideas de entrada que cambian de significado según la materia, los hechos y el territorio.", href: "/concepto/consentimiento" },
@@ -33,6 +35,8 @@ export default function CatalogoPage() {
           ))}
         </div>
       </section>
+
+      <CatalogExplorer entries={catalogEntries} worlds={worlds.map(({ id, title }) => ({ id, title }))} />
 
       <section className="bg-[#102A43] text-[#F5F0E8]">
         <div className="mx-auto max-w-[1320px] px-5 py-14 md:px-8 md:py-20">
