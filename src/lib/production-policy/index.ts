@@ -7,6 +7,7 @@ export const PRODUCTION_MODES = [
 
 export const CURATION_STATES = [
   "GENERATED",
+  "ENTREGADO",
   "PRESELECTED",
   "APPROVED",
   "PUBLISHED",
@@ -105,7 +106,7 @@ export type ImprovementRecord = {
 };
 
 const STRONG_MEMORY_STATES = new Set<CurationState>(["PRESELECTED", "APPROVED", "PUBLISHED"]);
-const SHORT_MEMORY_STATES = new Set<CurationState>(["GENERATED", "DISCARDED"]);
+const SHORT_MEMORY_STATES = new Set<CurationState>(["GENERATED", "ENTREGADO", "DISCARDED"]);
 const DEFAULT_SHORT_MEMORY_DAYS = 30;
 const GENERAL_MIN_DISTINCT_DOMAINS_FOR_TEN = 8;
 const GENERAL_MAX_PER_PRIMARY_DOMAIN = 2;
@@ -265,7 +266,7 @@ function validatePiece(piece: ProductionPiece, mode: ProductionMode, policy: Pro
   }
 }
 
-function validateGeneralBatch(pieces: readonly ProductionPiece[], expectedSize: number, policy: ProductionBatchPolicy, errors: string[]): void {
+function validateGeneralBatch(pieces: readonly ProductionPiece[], expectedSize: number, policy: ProductionBatchPolicy, errors: string[], warnings: string[]): void {
   if (expectedSize !== 10 || pieces.length !== 10) return;
 
   const primaryDomains = pieces.map(primaryDomain).filter(Boolean);
@@ -273,7 +274,7 @@ function validateGeneralBatch(pieces: readonly ProductionPiece[], expectedSize: 
   primaryDomains.forEach((domain) => domainCounts.set(domain, (domainCounts.get(domain) ?? 0) + 1));
 
   if (domainCounts.size < GENERAL_MIN_DISTINCT_DOMAINS_FOR_TEN) {
-    errors.push(`A general 10-piece batch requires at least ${GENERAL_MIN_DISTINCT_DOMAINS_FOR_TEN} distinct primary legal domains.`);
+    warnings.push(`Prefer at least ${GENERAL_MIN_DISTINCT_DOMAINS_FOR_TEN} distinct primary legal domains; review editorial-family diversity.`);
   }
   for (const [domain, count] of domainCounts) {
     if (count > GENERAL_MAX_PER_PRIMARY_DOMAIN) {
@@ -282,8 +283,8 @@ function validateGeneralBatch(pieces: readonly ProductionPiece[], expectedSize: 
   }
 
   const digitalCount = pieces.filter((piece) => piece.legalDomainIds.includes(DIGITAL_DOMAIN_ID)).length;
-  if (digitalCount > 0 && !policy.allowDigitalTopics) {
-    errors.push(`General LegalMente production has ${DIGITAL_DOMAIN_ID} paused unless explicitly enabled for the batch.`);
+  if (digitalCount > 1 && !policy.allowDigitalTopics) {
+    errors.push(`General LegalMente allows at most one ${DIGITAL_DOMAIN_ID} topic unless explicitly requested.`);
   }
 
   if (new Set(pieces.map((piece) => normalize(piece.entryDoor))).size < 5) {
@@ -314,7 +315,7 @@ export function validateProductionBatch(
 
   pieces.forEach((piece) => validatePiece(piece, policy.mode, policy, errors));
 
-  if (policy.mode === "LEGALMENTE_GENERAL" && !carousel) validateGeneralBatch(pieces, expectedSize, policy, errors);
+  if (policy.mode === "LEGALMENTE_GENERAL" && !carousel) validateGeneralBatch(pieces, expectedSize, policy, errors, warnings);
 
   if (policy.mode === "SPECIFIC_DOMAIN") {
     if (!nonEmpty(policy.requestedDomainId)) {
@@ -325,9 +326,6 @@ export function validateProductionBatch(
           errors.push(`${piece.id}: does not belong to requested domain ${policy.requestedDomainId}.`);
         }
       });
-      if (policy.requestedDomainId === DIGITAL_DOMAIN_ID && !policy.allowDigitalTopics) {
-        errors.push(`${DIGITAL_DOMAIN_ID} is paused unless explicitly enabled for the batch.`);
-      }
     }
   }
 
@@ -437,11 +435,12 @@ export const PRODUCTION_POLICY_RULES = Object.freeze({
   institutionalLinkedInIsSeparateFromFounderLinkedIn: true,
   generatedDoesNotEqualPublished: true,
   strongMemoryStates: ["PRESELECTED", "APPROVED", "PUBLISHED"] as const,
-  shortMemoryStates: ["GENERATED", "DISCARDED"] as const,
+  shortMemoryStates: ["GENERATED", "ENTREGADO", "DISCARDED"] as const,
   defaultShortMemoryDays: DEFAULT_SHORT_MEMORY_DAYS,
-  generalTenMinimumDistinctDomains: GENERAL_MIN_DISTINCT_DOMAINS_FOR_TEN,
+  generalTenPreferredDistinctDomains: GENERAL_MIN_DISTINCT_DOMAINS_FOR_TEN,
   generalTenMaximumPerPrimaryDomain: GENERAL_MAX_PER_PRIMARY_DOMAIN,
-  digitalTopicsPausedByDefault: true,
+  digitalTopicsPausedByDefault: false,
+  generalDigitalMaximumWithoutExplicitRequest: 1,
   generalFormat: GENERAL_FORMAT,
   linkedinFormat: LINKEDIN_FORMAT,
   formatOverrideRequiresExplicitPolicy: true,
