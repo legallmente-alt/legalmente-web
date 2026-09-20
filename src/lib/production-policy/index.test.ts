@@ -62,16 +62,27 @@ test("a broad 10-piece LegalMente batch passes with domain and art diversity", (
   assert.equal(result.ok, true, result.errors.join("\n"));
 });
 
-test("general mode keeps digital topics paused unless explicitly enabled", () => {
+test("general digital quota permits one, rejects two, and honors explicit requests", () => {
   const batch = Array.from({ length: 10 }, (_, index) => piece(index));
   batch[0] = piece(0, { legalDomainIds: ["DIGITAL_DATA_AI"] });
-
-  const blocked = validateProductionBatch(batch);
-  assert.equal(blocked.ok, false);
-  assert.match(blocked.errors.join(" "), /paused/);
-
-  const allowed = validateProductionBatch(batch, [], { mode: "LEGALMENTE_GENERAL", allowDigitalTopics: true });
-  assert.equal(allowed.ok, true, allowed.errors.join("\n"));
+  assert.equal(validateProductionBatch(batch).ok, true);
+  batch[1] = piece(1, { legalDomainIds: ["DIGITAL_DATA_AI"] });
+  assert.match(validateProductionBatch(batch).errors.join(" "), /at most one/);
+  assert.equal(validateProductionBatch(batch, [], { mode: "LEGALMENTE_GENERAL", allowDigitalTopics: true }).ok, true);
+});
+test("domain breadth is a preference while concentration remains a hard limit", () => {
+  const batch = Array.from({ length: 10 }, (_, i) => piece(i, { legalDomainIds: [domains[Math.floor(i / 2)]] }));
+  const result = validateProductionBatch(batch);
+  assert.equal(result.ok, true, result.errors.join("\n"));
+  assert.match(result.warnings.join(" "), /Prefer at least 8/);
+  batch[9] = piece(9, { legalDomainIds: [domains[0]] });
+  assert.equal(validateProductionBatch(batch).ok, false);
+});
+test("delivered imagery blocks recent reuse without becoming approval", () => {
+  const delivered: ProductionHistoryItem = { ...piece(0), state: "ENTREGADO", recordedAt: "2026-09-20T00:00:00Z" };
+  assert.equal(historyItemIsActive(delivered, "2026-09-21T00:00:00Z"), true);
+  const result = validateProductionBatch([piece(0)], [delivered], { mode: "LEGALMENTE_GENERAL", expectedSize: 1, now: "2026-09-21T00:00:00Z" });
+  assert.match(result.errors.join(" "), /anti-repetition memory/);
 });
 
 test("a 10-piece batch rejects repeated dominant art styles", () => {
