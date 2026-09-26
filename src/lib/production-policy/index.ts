@@ -42,6 +42,9 @@ export type ProductionPiece = {
   matterLabel: string;
   topicLabel: string;
   centralIdea: string;
+  reflection?: string;
+  textMode?: "BASE_THEN_COMPOSE" | "NATIVE_EXACT";
+  artFamily?: string;
   sourceIds?: readonly string[];
   artisticStyle: string;
   visualMetaphor: string;
@@ -251,7 +254,7 @@ function validatePiece(piece: ProductionPiece, mode: ProductionMode, policy: Pro
   if (piece.brandIntegration !== "PHYSICAL_SCENE") {
     errors.push(`${piece.id}: LegalMente must be physically integrated into the scene, never overlay/watermark/floating.`);
   }
-  if (!piece.artBaseIsClean) {
+  if (!piece.artBaseIsClean && piece.textMode !== "NATIVE_EXACT") {
     errors.push(`${piece.id}: base art must remain clean; editorial typography is composed after image generation.`);
   }
   if (piece.typographyCompositor !== "CANONICAL") {
@@ -429,6 +432,10 @@ export function validateImprovementRecord(input: unknown): { ok: boolean; errors
 }
 
 export const PRODUCTION_POLICY_RULES = Object.freeze({
+  version: "2026-09-26",
+  nativeExactTextAllowedWithRenderedQa: true,
+  centeredTextRequired: true,
+  matterConceptAnswerRequired: true,
   generalBatchIsBroadByDefault: true,
   genericLegalMenteDoesNotForceLinkedIn: true,
   specificDomainRequestOverridesGeneralBreadth: true,
@@ -453,7 +460,7 @@ export const PRODUCTION_POLICY_RULES = Object.freeze({
   artStyleRegistryIsOpen: true,
   contentIdentityIgnoresPresentationOnlyChanges: true,
   visualIdentityIgnoresCropAndLightingOnlyChanges: true,
-  artBaseMustBeClean: true,
+  artBaseMustBeCleanUnlessNativeExact: true,
   typographyUsesCanonicalCompositor: true,
   logoMustBePhysicalScene: true,
   visibleBrandExact: "LegalMente",
