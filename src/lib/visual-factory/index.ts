@@ -1,3 +1,5 @@
+import { artifactErrors, boxInside, formatContract, type ArtifactEvidence, type Box } from "../production-runtime/contract";
+
 export type VisualProductionState =
   | "DRAFT"
   | "IMAGE_READY"
@@ -61,6 +63,14 @@ export type VisualProductionUnit = {
 };
 
 export type VisualQaResult = {
+  technicalErrors?: readonly string[];
+  evidence?: ArtifactEvidence & {
+    reviewedBy: string;
+    reviewedAt: string;
+    observedCopy: string;
+    essentialBoxes: Record<"matter" | "concept" | "answer" | "brand" | "focus", Box> & { reflection?: Box };
+    textAlignment: "CENTER" | "OTHER";
+  };
   scores: Record<string, number>;
   hardGates: Record<string, "PASS" | "FAIL" | "NOT_CHECKED">;
   visualArtQa: "PASS" | "FAIL" | "NOT_CHECKED";
@@ -103,6 +113,8 @@ const hardGateKeys = [
   "NO_SEPIA_GENERIC", "NO_MURKY_DARK", "NO_CANVA_SCHOOL_SLIDE", "NO_COLLAGE", "NO_GRID",
   "NO_GENERIC_LEGAL_CLICHE", "NO_FLOATING_LOGO", "NO_REPEATED_COMPOSITION", "NO_TINY_BODY_COPY",
   "NO_TEXT_OVER_KEY_OBJECT", "NO_FAKE_LEGAL_TEXT", "NO_UNREADABLE_MOBILE_COPY",
+  "MATTER_CONCEPT_ANSWER_VISIBLE", "CENTERED_TEXT", "CENTRAL_4X5_SAFE",
+  "NO_NORMATIVE_CITATIONS", "NO_COMMERCIAL_ART", "CONCEPT_SPECIFIC_SCENE",
 ] as const;
 
 export function createEmptyQa(): VisualQaResult {
@@ -111,7 +123,7 @@ export function createEmptyQa(): VisualQaResult {
     hardGates: Object.fromEntries(hardGateKeys.map((key) => [key, "NOT_CHECKED"])),
     visualArtQa: "NOT_CHECKED",
     editorialCompositionQa: "NOT_CHECKED",
-    mobilePreviews: [360, 390, 430],
+    mobilePreviews: [],
     classification: "UNCLASSIFIED_PENDING_IMAGE_QA",
     nextAction: "HUMAN_REVIEW",
   };
@@ -133,6 +145,7 @@ export function deriveQaDisposition(qa: VisualQaResult): VisualQaDisposition {
   const artPass = qa.visualArtQa === "PASS" && qa.editorialCompositionQa === "PASS";
   const mobilePass = (qa.scores.MOBILE_READABILITY ?? 0) >= 4;
   const copyPass = (qa.scores.LEGAL_COPY_EXACT ?? 0) >= 4 && (qa.scores.PSEUDOTEXT_ZERO ?? 0) >= 4;
+  if (!qa.mobilePreviews.includes(335) || !qa.mobilePreviews.includes(270)) reasons.push("MOBILE_PREVIEWS_NOT_REVIEWED");
 
   if (!scoresReady) reasons.push("SCORES_INCOMPLETE_OR_INVALID");
   if (!hardGatesReady) reasons.push("HARD_GATES_INCOMPLETE_OR_FAILED");
@@ -178,6 +191,26 @@ export function normalizeQaResult(qa: VisualQaResult): VisualQaResult {
 export function evaluateQa(unit: VisualProductionUnit, qa: VisualQaResult): VisualProductionUnit {
   const disposition = deriveQaDisposition(qa);
   const normalizedQa = normalizeQaResult(qa);
+  const evidence = qa.evidence;
+  const errors: string[] = [];
+  if (!evidence) errors.push("MISSING_ARTIFACT_EVIDENCE");
+  else {
+    errors.push(...artifactErrors(evidence, unit));
+    if (!unit.HASH || evidence.sha256 !== unit.HASH || evidence.asset !== unit.COMPOSED_ASSET) errors.push("QA_ARTIFACT_MISMATCH");
+    if (!evidence.reviewedBy.trim() || !Number.isFinite(Date.parse(evidence.reviewedAt))) errors.push("MISSING_REVIEW_RECEIPT");
+    if (evidence.observedCopy !== unit.COPY_EXACT) errors.push("COPY_NOT_EXACT");
+    if (evidence.textAlignment !== "CENTER") errors.push("TEXT_NOT_CENTERED");
+    const safe = formatContract(unit.FORMAT).safe;
+    for (const role of ["matter", "concept", "answer", "brand", "focus"] as const) {
+      if (!evidence.essentialBoxes[role] || !boxInside(evidence.essentialBoxes[role], safe)) errors.push(`UNSAFE_${role.toUpperCase()}`);
+    }
+    if (evidence.essentialBoxes.reflection && !boxInside(evidence.essentialBoxes.reflection, safe)) errors.push("UNSAFE_REFLECTION");
+    for (const role of ["matter", "concept", "answer", "reflection"] as const) {
+      const box = evidence.essentialBoxes[role];
+      if (box && Math.abs(box.x + box.width / 2 - 540) > 12) errors.push(`UNCENTERED_${role.toUpperCase()}`);
+    }
+  }
+  if (errors.length) return { ...unit, QA_RESULTS: { ...normalizedQa, technicalErrors: errors, classification: "C_REWORK", nextAction: "LOCAL_FIX" }, STATE: "REWORK_REQUIRED" };
   return {
     ...unit,
     QA_RESULTS: normalizedQa,
