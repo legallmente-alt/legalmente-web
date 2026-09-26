@@ -41,6 +41,8 @@ const unit: VisualProductionUnit = {
   GENERATION_DATE: "2026-08-30",
   REGEN_COUNT: 0,
   STATE: "IMAGE_READY",
+  HASH: "a".repeat(64),
+  COMPOSED_ASSET: "verified.png",
   PROVENANCE: { promptVersion: "v1", referenceAssets: [], copySource: "Drive", createdBy: "test" },
 };
 
@@ -53,6 +55,10 @@ const adapter: ImageGeneratorAdapter = {
 
 function passingQa(): VisualQaResult {
   const qa = createEmptyQa();
+  qa.mobilePreviews = [335, 270];
+  qa.evidence = { asset: "verified.png", sha256: "a".repeat(64), width: 1080, height: 1920, reviewedBy: "test reviewer", reviewedAt: "2026-09-26T12:00:00Z", observedCopy: unit.COPY_EXACT, textAlignment: "CENTER", essentialBoxes: {
+    matter: { x: 140, y: 380, width: 800, height: 50 }, concept: { x: 140, y: 460, width: 800, height: 100 }, answer: { x: 140, y: 620, width: 800, height: 180 }, brand: { x: 380, y: 1350, width: 300, height: 60 }, focus: { x: 200, y: 850, width: 600, height: 450 },
+  } };
   qa.scores = Object.fromEntries(Object.keys(qa.scores).map((key) => [key, 4]));
   qa.scores.LEGAL_COPY_EXACT = 5;
   qa.scores.PSEUDOTEXT_ZERO = 5;
@@ -114,4 +120,16 @@ describe("VisualProductionUnit", () => {
     const found = selectAsset([{ CONTENT_ID: "LM-PA-W01", CHANNEL: "WEB", FORMAT: "16:9", STATE: "IMAGE_READY" }], { CHANNEL: "WEB", STATE: "IMAGE_READY" });
     assert.equal(found?.CONTENT_ID, "LM-PA-W01");
   });
+});
+
+it("rejects QA copied from another image or text outside central crop", () => {
+  let qa = passingQa();
+  qa.evidence!.sha256 = "b".repeat(64);
+  assert.equal(evaluateQa(unit, qa).STATE, "REWORK_REQUIRED");
+  qa = passingQa();
+  qa.evidence!.essentialBoxes.matter.y = 170;
+  assert.equal(evaluateQa(unit, qa).STATE, "REWORK_REQUIRED");
+  qa = passingQa();
+  qa.evidence!.essentialBoxes.answer.x = 100;
+  assert.equal(evaluateQa(unit, qa).STATE, "REWORK_REQUIRED");
 });
