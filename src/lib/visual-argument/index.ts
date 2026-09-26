@@ -141,7 +141,7 @@ export function validateVisualArgumentBatch(
   if (plans.length > 1 && distinctSceneStrategies < minimumDistinctSceneStrategies) errors.push(`Batch uses only ${distinctSceneStrategies} scene strategies; at least ${minimumDistinctSceneStrategies} are required.`);
 
   const metaphorCount = plans.filter((plan) => plan.sceneStrategy === "METAPHOR").length;
-  if (plans.length > 0 && metaphorCount / plans.length > maximumMetaphorShare) errors.push(`Metaphor is overused (${metaphorCount}/${plans.length}); it is one scene strategy, not the default visual grammar.`);
+  if (plans.length >= 4 && metaphorCount / plans.length > maximumMetaphorShare) errors.push(`Metaphor is overused (${metaphorCount}/${plans.length}); it is one scene strategy, not the default visual grammar.`);
 
   const motifs = plans.flatMap((plan) => plan.motifKeys ?? []).map(normalize).filter(Boolean);
   if (new Set(motifs).size !== motifs.length) errors.push("Batch repeats a motif key; use cooldown/history before reusing keys, doors, shadows, cracks, scales or equivalent devices.");

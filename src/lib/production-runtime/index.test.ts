@@ -1,8 +1,10 @@
+import { exactCopy } from "./contract";
+import { importMasterMemory } from "./memory";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { ProductionPiece } from "@/lib/production-policy";
 import type { ImageGeneratorAdapter, VisualProductionUnit } from "@/lib/visual-factory";
-import { executeVisualBatch } from "./index";
+import { executeVisualBatch, prepareVisualBatch } from "./index";
 import type { VisualArgumentPlan } from "@/lib/visual-argument";
 
 const piece: ProductionPiece = {
@@ -41,7 +43,7 @@ const unit: VisualProductionUnit = {
   CLAIM_REFS: ["CLAIM-1"],
   TERRITORY: "general-principle",
   LEGAL_STATE: "APROBADO",
-  COPY_EXACT: "Copy aprobado para prueba interna.",
+  COPY_EXACT: exactCopy(piece),
   CHANNEL: "SOCIAL",
   FORMAT: "9:16",
   WIDTH: 1080,
@@ -101,31 +103,38 @@ const policy = {
   now: "2026-09-11T12:00:00Z",
 };
 
+const memory = importMasterMemory('```json\n{"entries":[{"title":"Tema antiguo"}]}\n```', "2026-09-11T11:00:00Z");
+const context = {
+  memory,
+  memoryReview: { digest: memory.digest, reviewedBy: "test reviewer", reviewedAt: "2026-09-11T11:30:00Z", comparedTopics: [piece.topic], decision: "CLEAR" as const },
+  inspectArtifact: async (asset: string) => ({ asset, sha256: "a".repeat(64), width: 1080, height: 1920 }),
+};
+
 describe("production runtime", () => {
   it("blocks policy failures before the provider is called", async () => {
     const fake = fakeAdapter();
-    const result = await executeVisualBatch({ pieces: [{ ...piece, visibleBrand: "Other" }], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [{ ...piece, visibleBrand: "Other" }], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter, ...context });
     assert.equal(result.status, "POLICY_BLOCKED");
     assert.equal(fake.getCalls(), 0);
   });
 
   it("blocks legal HOLD before the provider is called", async () => {
     const fake = fakeAdapter();
-    const result = await executeVisualBatch({ pieces: [piece], units: [{ ...unit, LEGAL_STATE: "HOLD_SOURCE" }], visualArguments: [visualArgument], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [piece], units: [{ ...unit, LEGAL_STATE: "HOLD_SOURCE" }], visualArguments: [visualArgument], policy, adapter: fake.adapter, ...context });
     assert.equal(result.status, "LEGAL_BLOCKED");
     assert.equal(fake.getCalls(), 0);
   });
 
   it("blocks post-validation visual drift before generation", async () => {
     const fake = fakeAdapter();
-    const result = await executeVisualBatch({ pieces: [piece], units: [{ ...unit, VISUAL_METAPHOR: "changed later" }], visualArguments: [visualArgument], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [piece], units: [{ ...unit, VISUAL_METAPHOR: "changed later" }], visualArguments: [visualArgument], policy, adapter: fake.adapter, ...context });
     assert.equal(result.status, "BINDING_BLOCKED");
     assert.equal(fake.getCalls(), 0);
   });
 
   it("calls the provider only after policy, binding and legal gates pass", async () => {
     const fake = fakeAdapter(false);
-    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter, ...context });
     assert.equal(result.status, "IMAGE_READY_FOR_QA");
     assert.equal(fake.getCalls(), 1);
     assert.equal(result.publicationAuthorized, false);
@@ -138,7 +147,7 @@ describe("production runtime", () => {
 
   it("still stops at QA even when a provider can render text", async () => {
     const fake = fakeAdapter(true);
-    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter, ...context });
     assert.equal(result.status, "IMAGE_READY_FOR_QA");
     if (result.status === "IMAGE_READY_FOR_QA") {
       assert.equal(result.receipts[0].route, "FULL_COMPOSITE_GENERATION");
@@ -149,15 +158,48 @@ describe("production runtime", () => {
 
   it("blocks missing visual argument before the provider is called", async () => {
     const fake = fakeAdapter();
-    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [], policy, adapter: fake.adapter, ...context });
     assert.equal(result.status, "VISUAL_ARGUMENT_BLOCKED");
     assert.equal(fake.getCalls(), 0);
   });
 
   it("blocks a visual argument bound to an unapproved claim reference", async () => {
     const fake = fakeAdapter();
-    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [{ ...visualArgument, legalBindingId: "CLAIM-OTHER" }], policy, adapter: fake.adapter });
+    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [{ ...visualArgument, legalBindingId: "CLAIM-OTHER" }], policy, adapter: fake.adapter, ...context });
     assert.equal(result.status, "BINDING_BLOCKED");
     assert.equal(fake.getCalls(), 0);
   });
+});
+
+it("compiles the literal approved copy instead of trusting a stale prompt", () => {
+  const result = prepareVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fakeAdapter(true).adapter, ...context });
+  assert.equal(result.status, "GENERATION_READY");
+  assert.ok(result.units[0].GENERATION_PROMPT.includes(exactCopy(piece)));
+  assert.ok(result.units[0].GENERATION_PROMPT.includes("centrado"));
+});
+it("rejects the actual wrong dimensions observed in the seven-image run", async () => {
+  const fake = fakeAdapter(true);
+  const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter, ...context,
+    inspectArtifact: async (asset) => ({ asset, sha256: "b".repeat(64), width: 941, height: 1672 }) });
+  assert.equal(result.status, "ARTIFACT_BLOCKED");
+  assert.match(result.errors.join(), /941x1672/);
+  assert.equal(fake.getCalls(), 1);
+});
+it("rejects changed copy and excluded provider before spending a generation", async () => {
+  const fake = fakeAdapter(true);
+  const base = { pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter, ...context };
+  assert.equal((await executeVisualBatch({ ...base, units: [{ ...unit, COPY_EXACT: "otro texto" }] })).status, "BINDING_BLOCKED");
+  assert.equal((await executeVisualBatch({ ...base, adapter: { ...fake.adapter, name: "Higgsfield" } })).status, "PROVIDER_BLOCKED");
+  assert.equal(fake.getCalls(), 0);
+});
+it("preserves failure without claiming image-ready when the provider throws", async () => {
+  const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: { ...fakeAdapter(true).adapter, async generate() { throw new Error("unavailable"); } }, ...context });
+  assert.equal(result.status, "PROVIDER_FAILED");
+  assert.equal(result.receipts.length, 0);
+});
+it("cannot bypass the current memory", async () => {
+  const fake = fakeAdapter(true);
+  const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter, ...context, memoryReview: { ...context.memoryReview, digest: "stale" } });
+  assert.equal(result.status, "MEMORY_BLOCKED");
+  assert.equal(fake.getCalls(), 0);
 });

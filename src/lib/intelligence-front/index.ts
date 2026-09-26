@@ -15,6 +15,7 @@ export const EDITORIAL_FAMILIES = [
   "CHECKLIST", "DOCUMENT", "CLAUSE", "PROCESS", "EVIDENCE", "RESPONSIBILITY", "DEADLINE",
   "JURISDICTION", "CASE", "HISTORY", "CULTURE", "DOCTRINE", "COMPARISON", "BUSINESS",
   "PREVENTION", "NEGOTIATION", "CONCILIATION", "REPAIR", "COMPLIANCE", "INTERPRETATION",
+  "QUOTE", "MAXIM", "REFLECTION", "CUSTOM", "FORENSIC",
 ] as const;
 export type EditorialFamily = (typeof EDITORIAL_FAMILIES)[number];
 
@@ -239,18 +240,18 @@ export function classifySignal(signal: Signal, input: ClassifySignalInput): Need
 }
 
 export function createTopicCandidate(signal: Signal, classification: NeedClassification, input: CreateTopicCandidateInput): TopicCandidate {
-  if (input.signalId !== signal.id || input.classificationId !== classification.id) throw new Error("Topic candidate references do not match supplied records.");
+  if (input.signalId !== signal.id || input.classificationId !== classification.id || classification.signalId !== signal.id) throw new Error("Topic candidate references do not match supplied records.");
   if (!nonEmpty(input.question)) throw new Error("Topic candidate question is required.");
   return { id: id("TOPIC"), signalId: signal.id, classificationId: classification.id, concern: clean(input.fields?.concern ?? classification.concern), functionalContext: clean(input.fields?.functionalContext ?? classification.functionalContext), scope: clean(input.fields?.scope ?? classification.scope), subject: clean(input.fields?.subject ?? classification.subject), question: clean(input.question), questionResolved: clean(input.questionResolved ?? input.question), editorialFamily: classification.editorialFamily, readerRole: classification.readerRole, angle: classification.angle, consequence: classification.consequence, depth: input.depth ?? "INTRODUCTORY", audience: input.audience ?? classification.audience, sourceReadiness: "UNKNOWN", legalReadiness: "NOT_ASSESSED", editorialStatus: "CANDIDATE", createdAt: now() };
 }
 
 export function routeToRadar(signal: Signal, candidate: TopicCandidate, input: RouteRadarInput): RadarSignal {
-  if (input.signalId !== signal.id || input.candidateId !== candidate.id) throw new Error("Radar references do not match supplied signal or candidate.");
+  if (input.signalId !== signal.id || input.candidateId !== candidate.id || candidate.signalId !== signal.id) throw new Error("Radar references do not match supplied signal or candidate.");
   return { id: id("RADAR"), signalId: signal.id, candidateId: candidate.id, concern: signal.concern, functionalContext: signal.functionalContext, scope: signal.scope, subject: signal.subject, freshness: input.freshness, priorityHint: input.priorityHint, evidenceClass: input.evidenceClass, status: "ROUTED" };
 }
 
 export function createVisualDirection(candidate: TopicCandidate, input: VisualDirectionInput): VisualArgumentPlan {
-  if (candidate.legalReadiness === "NOT_ASSESSED") throw new Error("Visual direction requires a reviewed legal readiness state before provider execution.");
+  if (candidate.legalReadiness !== "CANONICAL_BOUND_PENDING" || candidate.sourceReadiness !== "READY" || candidate.editorialStatus !== "READY_FOR_CANONICAL_REVIEW") throw new Error("Visual direction requires legal readiness and source-ready canonical binding; research pending is not legal clearance.");
   if (!nonEmpty(input.legalBindingId)) throw new Error("Visual direction requires a canonical legal binding.");
   return {
     contentId: candidate.id,

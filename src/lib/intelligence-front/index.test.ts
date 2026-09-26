@@ -121,6 +121,8 @@ test("blocks visual direction before canonical legal readiness", () => {
   const candidate = createTopicCandidate(signal, classification, { signalId: signal.id, classificationId: classification.id, question: "¿Qué facultad existe?" });
   assert.throws(() => createVisualDirection(candidate, { legalBindingId: "CLAIM-1", visualFunction: "SEPARATE", sceneStrategy: "ARCHITECTURE", imageArgument: "A visible threshold separates two scopes.", dominantVisualLogic: "architectural editorial photography", expectedPerception: "The viewer sees a scope boundary." }), /legal readiness/i);
   candidate.legalReadiness = "CANONICAL_BOUND_PENDING";
+  candidate.sourceReadiness = "READY";
+  candidate.editorialStatus = "READY_FOR_CANONICAL_REVIEW";
   const direction = createVisualDirection(candidate, { legalBindingId: "CLAIM-1", visualFunction: "SEPARATE", sceneStrategy: "ARCHITECTURE", imageArgument: "A visible threshold separates two scopes.", dominantVisualLogic: "architectural editorial photography", expectedPerception: "The viewer sees a scope boundary." });
   assert.equal(direction.contentId, candidate.id);
   assert.equal(direction.legalBindingId, "CLAIM-1");
