@@ -80,6 +80,9 @@ const visualArgument: VisualArgumentPlan = {
   imageArgument: "Dos recorridos idénticos se separan cuando uno pierde un control verificable.",
   dominantVisualLogic: "fotografía editorial de proceso",
   expectedPerception: "La garantía se percibe como una condición del recorrido, no como decoración.",
+  subjectMode: "PROCESS_MECHANISM",
+  sceneSignature: "recorrido-procesal-control-verificable",
+  legalAnchorKeys: ["ruta-procesal", "control-verificable"],
 };
 
 function fakeAdapter(text = false) {
