@@ -48,3 +48,19 @@ Los archivos de salida son exclusivos: usar una ruta nueva para cada recibo. `.p
 `npm run lint`
 
 Mantener la decisión de release en `release-readiness`: las pruebas simuladas no sustituyen un lote real revisado ni los requisitos de lanzamiento existentes.
+
+
+## Diversidad representacional — 1 oct 2026
+
+La diversidad visual no se acredita cambiando solamente estilo, género de los personajes o paleta.
+
+Para lotes de LegalMente General:
+- usar al menos seis modos de sujeto en una tanda de diez cuando el contenido lo permita;
+- las escenas centradas en personas no deben superar 40% por defecto;
+- toda escena humana declara un `castPattern` y no puede repetir la misma pareja, trío, junta o disposición;
+- toda pieza declara `sceneSignature` y al menos un `legalAnchorKey`;
+- objetos, documentos, evidencia, arquitectura, procesos, mecanismos y entornos deben cargar significado jurídico real cuando la escena no sea humana;
+- una pareja hombre+mujer, una persona sola o tres personas alrededor de una mesa no son variedad por sí mismas;
+- si el QA detecta personas de relleno, ancla jurídica débil o modo de sujeto incoherente, la pieza se regenera o se corrige antes de continuar.
+
+Esta regla complementa, no sustituye, memoria temática, causalidad visual, safe area, exactitud del copy y revisión humana.
