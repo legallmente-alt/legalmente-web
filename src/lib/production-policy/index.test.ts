@@ -42,6 +42,7 @@ function piece(index: number, overrides: Partial<ProductionPiece> = {}): Product
     artisticStyle: `Estilo artístico ${index}`,
     visualMetaphor: `Metáfora ${index}`,
     scenario: `Escenario ${index}`,
+    sceneFamily: `Objeto ${index}`,
     material: `Material ${index}`,
     lighting: `Luz ${index}`,
     framing: `Encuadre ${index}`,
@@ -157,6 +158,31 @@ test("changing only crop or lighting does not create a new visual identity", () 
   });
   assert.equal(result.ok, false);
   assert.match(result.errors.join(" "), /repeated visual identity/);
+});
+
+
+
+test("a general batch rejects repeated scene formulas even when style changes", () => {
+  const batch = Array.from({ length: 10 }, (_, index) => piece(index, {
+    sceneFamily: index < 8 ? "human desk conversation" : `Objeto ${index}`,
+  }));
+  const result = validateProductionBatch(batch);
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join(" "), /at least 7 distinct scene families/);
+  assert.match(result.errors.join(" "), /at most 3 human-led scene families/);
+});
+
+test("scene family participates in visual identity", () => {
+  const original = piece(0, { sceneFamily: "document evidence table" });
+  const changedFamily = piece(0, {
+    id: "LM-POLICY-SCENE-NEW",
+    topic: "Tema visual distinto",
+    angle: "Ángulo visual distinto",
+    legalRelation: "Relación visual distinta",
+    centralIdea: "Idea visual distinta",
+    sceneFamily: "architectural threshold",
+  });
+  assert.notEqual(productionVisualFingerprint(original), productionVisualFingerprint(changedFamily));
 });
 
 test("specific-domain mode fails if a candidate drifts into another domain", () => {
