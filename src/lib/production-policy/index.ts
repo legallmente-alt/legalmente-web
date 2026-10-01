@@ -45,6 +45,7 @@ export type ProductionPiece = {
   artisticStyle: string;
   visualMetaphor: string;
   scenario: string;
+  sceneFamily: string;
   material: string;
   lighting: string;
   framing: string;
@@ -133,6 +134,7 @@ export function productionVisualFingerprint(piece: ProductionPiece): string {
     piece.artisticStyle,
     piece.visualMetaphor,
     piece.scenario,
+    piece.sceneFamily,
     piece.material,
     piece.composition,
     piece.brandObject,
@@ -183,6 +185,7 @@ function validatePiece(piece: ProductionPiece, mode: ProductionMode, policy: Pro
     artisticStyle: piece.artisticStyle,
     visualMetaphor: piece.visualMetaphor,
     scenario: piece.scenario,
+    sceneFamily: piece.sceneFamily,
     material: piece.material,
     lighting: piece.lighting,
     framing: piece.framing,
@@ -241,6 +244,16 @@ function validateGeneralBatch(pieces: readonly ProductionPiece[], expectedSize: 
 
   if (new Set(pieces.map((piece) => normalize(piece.entryDoor))).size < 5) {
     errors.push("A general 10-piece batch requires at least 5 distinct entry doors; ten definitions are not variety.");
+  }
+
+  const sceneFamilies = pieces.map((piece) => normalize(piece.sceneFamily)).filter(Boolean);
+  if (new Set(sceneFamilies).size < 7) {
+    errors.push("A general 10-piece batch requires at least 7 distinct scene families; changing people, crop, lighting or props is not enough.");
+  }
+
+  const humanLedCount = sceneFamilies.filter((family) => family.startsWith("human ")).length;
+  if (humanLedCount > 3) {
+    errors.push("A general 10-piece batch may use at most 3 human-led scene families; objects, architecture, evidence, process and material scenes must carry the rest.");
   }
 }
 
@@ -366,6 +379,8 @@ export const PRODUCTION_POLICY_RULES = Object.freeze({
   linkedinFormat: LINKEDIN_FORMAT,
   formatOverrideRequiresExplicitPolicy: true,
   tenDistinctArtStyles: true,
+  generalTenMinimumDistinctSceneFamilies: 7,
+  generalTenMaximumHumanLedScenes: 3,
   artStyleRegistryIsOpen: true,
   contentIdentityIgnoresPresentationOnlyChanges: true,
   visualIdentityIgnoresCropAndLightingOnlyChanges: true,
