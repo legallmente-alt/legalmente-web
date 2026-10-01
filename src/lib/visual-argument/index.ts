@@ -27,6 +27,25 @@ export const SCENE_STRATEGIES = [
 
 export type SceneStrategy = (typeof SCENE_STRATEGIES)[number];
 
+export const SUBJECT_MODES = [
+  "HUMAN_INTERACTION",
+  "HUMAN_SOLITARY",
+  "DOCUMENT_OBJECT",
+  "LEGAL_OBJECT",
+  "ARCHITECTURE_SPACE",
+  "PROCESS_MECHANISM",
+  "FORENSIC_EVIDENCE",
+  "MATERIAL_ABSTRACTION",
+  "ENVIRONMENT_CONTEXT",
+] as const;
+
+export type SubjectMode = (typeof SUBJECT_MODES)[number];
+
+const HUMAN_CENTERED_SUBJECT_MODES: readonly SubjectMode[] = [
+  "HUMAN_INTERACTION",
+  "HUMAN_SOLITARY",
+];
+
 const CHANNEL_FUNCTION_PREFERENCES: Readonly<Record<VisualArgumentChannel, readonly VisualFunction[]>> = {
   instagram: ["TENSION", "REVEAL", "HUMANIZE", "PROVOKE_REFLECTION", "SHOW_CONSEQUENCE"],
   "linkedin-legalmente": ["EXPLAIN", "SEPARATE", "COMPARE", "SHOW_PROCESS", "SHOW_CONSEQUENCE", "WARN"],
@@ -53,6 +72,10 @@ export type VisualArgumentPlan = {
   imageArgument: string;
   dominantVisualLogic: string;
   expectedPerception: string;
+  subjectMode: SubjectMode;
+  sceneSignature: string;
+  legalAnchorKeys: readonly string[];
+  castPattern?: string;
   motifKeys?: readonly string[];
   incompatibleFamilies?: readonly string[];
 };
@@ -63,6 +86,7 @@ export type VisualArgumentBatchResult = {
   warnings: readonly string[];
   distinctFunctions: number;
   distinctSceneStrategies: number;
+  distinctSubjectModes: number;
 };
 
 const normalize = (value: string): string => value
@@ -101,11 +125,15 @@ export function validateVisualArgumentPlan(plan: VisualArgumentPlan): string[] {
     imageArgument: plan.imageArgument,
     dominantVisualLogic: plan.dominantVisualLogic,
     expectedPerception: plan.expectedPerception,
+    sceneSignature: plan.sceneSignature,
   })) {
     if (!nonEmpty(value)) errors.push(`${plan.contentId || "UNKNOWN"}: ${field} is required.`);
   }
   if (!VISUAL_FUNCTIONS.includes(plan.visualFunction)) errors.push(`${plan.contentId || "UNKNOWN"}: unsupported visualFunction.`);
   if (!SCENE_STRATEGIES.includes(plan.sceneStrategy)) errors.push(`${plan.contentId || "UNKNOWN"}: unsupported sceneStrategy.`);
+  if (!SUBJECT_MODES.includes(plan.subjectMode)) errors.push(`${plan.contentId || "UNKNOWN"}: unsupported subjectMode.`);
+  if (!plan.legalAnchorKeys?.length || plan.legalAnchorKeys.some((key) => !nonEmpty(key))) errors.push(`${plan.contentId || "UNKNOWN"}: at least one legalAnchorKey is required so the scene is anchored to the topic.`);
+  if (HUMAN_CENTERED_SUBJECT_MODES.includes(plan.subjectMode) && !nonEmpty(plan.castPattern)) errors.push(`${plan.contentId || "UNKNOWN"}: human-centered scenes require castPattern so repeated people arrangements can be blocked.`);
   if (plan.channel && !VISUAL_ARGUMENT_CHANNELS.includes(plan.channel)) errors.push(`${plan.contentId || "UNKNOWN"}: unsupported channel.`);
   if (nonEmpty(plan.imageArgument) && normalize(plan.imageArgument) === normalize(plan.learningGoal)) {
     errors.push(`${plan.contentId}: imageArgument must translate the learning goal into a visual relation, not repeat it.`);
@@ -118,7 +146,14 @@ export function validateVisualArgumentPlan(plan: VisualArgumentPlan): string[] {
 
 export function validateVisualArgumentBatch(
   plans: readonly VisualArgumentPlan[],
-  options: { expectedSize?: number; minimumDistinctFunctions?: number; minimumDistinctSceneStrategies?: number; maximumMetaphorShare?: number } = {},
+  options: {
+    expectedSize?: number;
+    minimumDistinctFunctions?: number;
+    minimumDistinctSceneStrategies?: number;
+    minimumDistinctSubjectModes?: number;
+    maximumMetaphorShare?: number;
+    maximumGeneralHumanCenteredShare?: number;
+  } = {},
 ): VisualArgumentBatchResult {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -126,6 +161,8 @@ export function validateVisualArgumentBatch(
   const minimumDistinctFunctions = options.minimumDistinctFunctions ?? (expectedSize >= 10 ? 5 : Math.min(3, expectedSize));
   const minimumDistinctSceneStrategies = options.minimumDistinctSceneStrategies ?? (expectedSize >= 10 ? 5 : Math.min(3, expectedSize));
   const maximumMetaphorShare = options.maximumMetaphorShare ?? 0.3;
+  const minimumDistinctSubjectModes = options.minimumDistinctSubjectModes ?? (expectedSize >= 10 ? 6 : Math.min(3, expectedSize));
+  const maximumGeneralHumanCenteredShare = options.maximumGeneralHumanCenteredShare ?? 0.4;
 
   if (plans.length !== expectedSize) errors.push(`Expected ${expectedSize} visual argument plans; received ${plans.length}.`);
   if (new Set(plans.map((plan) => plan.contentId)).size !== plans.length) errors.push("Visual argument plans require unique contentId values.");
@@ -139,6 +176,26 @@ export function validateVisualArgumentBatch(
 
   const distinctSceneStrategies = new Set(plans.map((plan) => plan.sceneStrategy)).size;
   if (plans.length > 1 && distinctSceneStrategies < minimumDistinctSceneStrategies) errors.push(`Batch uses only ${distinctSceneStrategies} scene strategies; at least ${minimumDistinctSceneStrategies} are required.`);
+
+  const distinctSubjectModes = new Set(plans.map((plan) => plan.subjectMode)).size;
+  if (plans.length > 1 && distinctSubjectModes < minimumDistinctSubjectModes) errors.push(`Batch uses only ${distinctSubjectModes} subject modes; at least ${minimumDistinctSubjectModes} are required so people, objects, evidence, architecture and process do not collapse into the same visual grammar.`);
+
+  const sceneSignatures = plans.map((plan) => normalize(plan.sceneSignature)).filter(Boolean);
+  if (new Set(sceneSignatures).size !== sceneSignatures.length) errors.push("Batch repeats the same scene signature; changing people, gender or style does not make the scene new.");
+
+  const castPatterns = plans
+    .filter((plan) => HUMAN_CENTERED_SUBJECT_MODES.includes(plan.subjectMode))
+    .map((plan) => normalize(plan.castPattern ?? ""))
+    .filter(Boolean);
+  if (new Set(castPatterns).size !== castPatterns.length) errors.push("Batch repeats a human cast pattern; do not recycle the same pair, trio or meeting arrangement.");
+
+  const generalPlans = plans.filter((plan) => normalize(plan.audience).includes("legalmente general"));
+  if (generalPlans.length >= 5) {
+    const humanCenteredCount = generalPlans.filter((plan) => HUMAN_CENTERED_SUBJECT_MODES.includes(plan.subjectMode)).length;
+    if (humanCenteredCount / generalPlans.length > maximumGeneralHumanCenteredShare) {
+      errors.push(`LegalMente general overuses people-centered scenes (${humanCenteredCount}/${generalPlans.length}); maximum share is ${maximumGeneralHumanCenteredShare} unless the batch explicitly overrides it.`);
+    }
+  }
 
   const metaphorCount = plans.filter((plan) => plan.sceneStrategy === "METAPHOR").length;
   if (plans.length >= 4 && metaphorCount / plans.length > maximumMetaphorShare) errors.push(`Metaphor is overused (${metaphorCount}/${plans.length}); it is one scene strategy, not the default visual grammar.`);
@@ -156,7 +213,7 @@ export function validateVisualArgumentBatch(
     if (plan.channel && visualFunctionChannelFit(plan.visualFunction, plan.channel) === "COMPATIBLE") warnings.push(`${plan.contentId}: visual function ${plan.visualFunction} is compatible but not preferred for ${plan.channel}; human review should confirm the choice.`);
   });
   warnings.push("This preflight validates bindings, intent and diversity only; legal review, rendered-image QA and Founder curation remain mandatory.");
-  return { ok: errors.length === 0, errors, warnings, distinctFunctions, distinctSceneStrategies };
+  return { ok: errors.length === 0, errors, warnings, distinctFunctions, distinctSceneStrategies, distinctSubjectModes };
 }
 
 export const VISUAL_ARGUMENT_INVARIANTS = Object.freeze({
@@ -168,6 +225,9 @@ export const VISUAL_ARGUMENT_INVARIANTS = Object.freeze({
   metaphorIsOptionalNotDefault: true,
   channelProfileGuidesFunctionChoice: true,
   nominalStyleChangeDoesNotProveNovelty: true,
+  subjectModeVarietyRequired: true,
+  repeatedHumanArrangementIsNotNovelty: true,
+  legalAnchorMustCarryTopicMeaning: true,
   renderedQaStillRequired: true,
   humanCurationStillRequired: true,
 });
