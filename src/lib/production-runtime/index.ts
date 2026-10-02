@@ -2,6 +2,7 @@ import { memoryReviewErrors, type MemorySnapshot } from "./memory";
 import { artifactErrors, compileProductionPrompt, validateEditorialContract, type ArtifactEvidence } from "./contract";
 import {
   validateProductionBatch,
+  historyItemIsActive,
   type ProductionBatchPolicy,
   type ProductionHistoryItem,
   type ProductionPiece,
@@ -16,6 +17,7 @@ import {
 } from "@/lib/visual-factory";
 import {
   validateVisualArgumentBatch,
+  representationFingerprint,
   type VisualArgumentPlan,
 } from "@/lib/visual-argument";
 
@@ -114,8 +116,12 @@ export function prepareVisualBatch(input: VisualBatchInput): VisualBatchExecutio
     };
   }
 
+  if ((input.history ?? []).some(item => !item.representationFingerprint)) policyResult.warnings = [...policyResult.warnings, "Historical physical scene coverage is incomplete; compare real images semantically before acceptance."];
   const visualArgumentResult = validateVisualArgumentBatch(input.visualArguments, {
     expectedSize: input.pieces.length,
+    mode: input.policy.mode,
+    carousel: input.policy.unit === "CAROUSEL_PAGES",
+    humanNeedJustification: input.policy.humanNeedJustification,
   });
   if (!visualArgumentResult.ok) {
     return {
@@ -128,7 +134,19 @@ export function prepareVisualBatch(input: VisualBatchInput): VisualBatchExecutio
     };
   }
 
+  const causalBindings = input.pieces.flatMap(piece => {
+    const plan = input.visualArguments.find(p => p.contentId === piece.id);
+    if (!plan) return [`${piece.id}: missing visual argument binding.`];
+    const errors: string[] = [];
+    if (plan.causalScene.concept !== piece.topic || plan.learningGoal !== piece.centralIdea || plan.causalScene.legalRelation !== piece.legalRelation || plan.causalScene.scene !== piece.scenario) errors.push(`${piece.id}: CONCEPT_FIT: topic, learning, relation or scene drifted before compilation.`);
+    const now = input.policy.now ?? new Date().toISOString();
+    for (const previous of input.history ?? []) {
+      if (historyItemIsActive(previous, now, input.policy.shortMemoryDays) && previous.representationFingerprint === representationFingerprint(plan.causalScene)) errors.push(`${piece.id}: REPRESENTATIONAL_NOVELTY: physical scene already exists in active history ${previous.id}.`);
+    }
+    return errors;
+  });
   const bindings = [
+    ...causalBindings,
     ...bindingErrors(input.pieces, input.units),
     ...visualArgumentBindingErrors(input.visualArguments, input.units),
   ];
@@ -160,7 +178,7 @@ export function prepareVisualBatch(input: VisualBatchInput): VisualBatchExecutio
   }
 
   return { status: "GENERATION_READY", errors: [], warnings: [...policyResult.warnings, ...visualArgumentResult.warnings],
-    units: input.units.map((unit) => ({ ...unit, GENERATION_PROMPT: compileProductionPrompt(input.pieces.find((piece) => piece.id === unit.CONTENT_ID)!, unit, input.visualArguments.find((plan) => plan.contentId === unit.CONTENT_ID)!, input.adapter.capabilities.text) })),
+    units: input.units.map((unit) => ({ ...unit, REPRESENTATION_FINGERPRINT: representationFingerprint(input.visualArguments.find(plan => plan.contentId === unit.CONTENT_ID)!.causalScene), VISUAL_ARGUMENT: input.visualArguments.find(plan => plan.contentId === unit.CONTENT_ID)!, GENERATION_PROMPT: compileProductionPrompt(input.pieces.find((piece) => piece.id === unit.CONTENT_ID)!, unit, input.visualArguments.find((plan) => plan.contentId === unit.CONTENT_ID)!, input.adapter.capabilities.text) })),
     receipts: [], publicationAuthorized: false };
 }
 

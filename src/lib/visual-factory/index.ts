@@ -1,3 +1,4 @@
+import { validateVisualArgumentPlan, type VisualArgumentPlan } from "../visual-argument";
 import { artifactErrors, boxInside, formatContract, type ArtifactEvidence, type Box } from "../production-runtime/contract";
 
 export type VisualProductionState =
@@ -54,6 +55,8 @@ export type VisualProductionUnit = {
   STATE: VisualProductionState;
   DRIVE_ID?: string;
   HASH?: string;
+  REPRESENTATION_FINGERPRINT?: string;
+  VISUAL_ARGUMENT?: VisualArgumentPlan;
   PROVENANCE: {
     promptVersion: string;
     referenceAssets: readonly string[];
@@ -68,6 +71,10 @@ export type VisualQaResult = {
     reviewedBy: string;
     reviewedAt: string;
     observedCopy: string;
+    observedRelation: string;
+    observedLegalAnchors: readonly string[];
+    comprehensionWithoutText: string;
+    counterfactuals: readonly { otherConcept: string; reusableByChangingTextOnly: boolean; reason: string }[];
     essentialBoxes: Record<"matter" | "concept" | "answer" | "brand" | "focus", Box> & { reflection?: Box };
     textAlignment: "CENTER" | "OTHER";
   };
@@ -107,7 +114,7 @@ const requiredScoreKeys = [
   "LIGHTING", "COLOR_BALANCE", "MOBILE_READABILITY", "TEXT_HIERARCHY", "TYPOGRAPHY",
   "TEXT_DENSITY", "SAFE_AREA", "BRAND_INTEGRATION", "PSEUDOTEXT_ZERO", "LEGAL_COPY_EXACT",
   "TERRITORY_VISIBLE_WHEN_REQUIRED", "ANIMATION_POTENTIAL", "SCENE_SPECIFICITY",
-  "REPRESENTATIONAL_NOVELTY", "LEGAL_ANCHOR_CLARITY",
+  "REPRESENTATIONAL_NOVELTY", "LEGAL_ANCHOR_CLARITY", "CONCEPT_VISUAL_CAUSALITY",
 ] as const;
 
 const hardGateKeys = [
@@ -117,6 +124,7 @@ const hardGateKeys = [
   "MATTER_CONCEPT_ANSWER_VISIBLE", "CENTERED_TEXT", "CENTRAL_4X5_SAFE",
   "NO_NORMATIVE_CITATIONS", "NO_COMMERCIAL_ART", "CONCEPT_SPECIFIC_SCENE",
   "NO_GENERIC_CAST_FILLER", "LEGAL_ANCHOR_VISIBLE", "SUBJECT_MODE_COHERENT",
+  "INTERCHANGEABILITY_TEST", "CONCEPT_VISUAL_CAUSALITY", "NO_DECORATIVE_DOCUMENTS",
 ] as const;
 
 export function createEmptyQa(): VisualQaResult {
@@ -149,6 +157,10 @@ export function deriveQaDisposition(qa: VisualQaResult): VisualQaDisposition {
   const copyPass = (qa.scores.LEGAL_COPY_EXACT ?? 0) >= 4 && (qa.scores.PSEUDOTEXT_ZERO ?? 0) >= 4;
   if (!qa.mobilePreviews.includes(335) || !qa.mobilePreviews.includes(270)) reasons.push("MOBILE_PREVIEWS_NOT_REVIEWED");
 
+  const causalScores = ["CONCEPT_FIT", "SCENE_SPECIFICITY", "LEGAL_ANCHOR_CLARITY", "CONCEPT_VISUAL_CAUSALITY", "REPRESENTATIONAL_NOVELTY"];
+  const causalGates = ["NO_COMMERCIAL_ART", "NO_GENERIC_CAST_FILLER", "SUBJECT_MODE_COHERENT", "INTERCHANGEABILITY_TEST", "CONCEPT_VISUAL_CAUSALITY", "CONCEPT_SPECIFIC_SCENE", "LEGAL_ANCHOR_VISIBLE", "NO_DECORATIVE_DOCUMENTS"];
+  const causalPass = causalScores.every(key => Number.isFinite(qa.scores[key]) && qa.scores[key] >= 4) && causalGates.every(key => qa.hardGates[key] === "PASS");
+  if (!causalPass) reasons.push("CAUSAL_SCENE_REQUIRES_REGENERATION");
   if (!scoresReady) reasons.push("SCORES_INCOMPLETE_OR_INVALID");
   if (!hardGatesReady) reasons.push("HARD_GATES_INCOMPLETE_OR_FAILED");
   if (!artPass) reasons.push("ART_OR_EDITORIAL_QA_NOT_PASSED");
@@ -159,7 +171,7 @@ export function deriveQaDisposition(qa: VisualQaResult): VisualQaDisposition {
     return {
       state: "REWORK_REQUIRED",
       classification: "C_REWORK",
-      nextAction: copyPass ? "LOCAL_FIX" : "COPY_BLOCK",
+      nextAction: !causalPass ? "REGENERATE" : copyPass ? "LOCAL_FIX" : "COPY_BLOCK",
       reasons,
     };
   }
@@ -195,11 +207,16 @@ export function evaluateQa(unit: VisualProductionUnit, qa: VisualQaResult): Visu
   const normalizedQa = normalizeQaResult(qa);
   const evidence = qa.evidence;
   const errors: string[] = [];
+  if (!unit.VISUAL_ARGUMENT || validateVisualArgumentPlan(unit.VISUAL_ARGUMENT).length) errors.push("MISSING_OR_INVALID_VISUAL_ARGUMENT");
   if (!evidence) errors.push("MISSING_ARTIFACT_EVIDENCE");
   else {
     errors.push(...artifactErrors(evidence, unit));
     if (!unit.HASH || evidence.sha256 !== unit.HASH || evidence.asset !== unit.COMPOSED_ASSET) errors.push("QA_ARTIFACT_MISMATCH");
     if (!evidence.reviewedBy.trim() || !Number.isFinite(Date.parse(evidence.reviewedAt))) errors.push("MISSING_REVIEW_RECEIPT");
+    const present = (v: unknown): v is string => typeof v === "string" && v.trim().length > 0;
+    if (!present(evidence.observedRelation) || !present(evidence.comprehensionWithoutText) || !evidence.observedLegalAnchors?.length || evidence.observedLegalAnchors.some(a => !present(a))) errors.push("MISSING_OBSERVED_CAUSAL_EVIDENCE");
+    const comparisons = evidence.counterfactuals ?? [];
+    if (comparisons.length < 3 || new Set(comparisons.map(c => c.otherConcept.trim().toLowerCase())).size < 3 || comparisons.some(c => !present(c.otherConcept) || !present(c.reason) || c.reusableByChangingTextOnly !== false || c.otherConcept.trim().toLowerCase() === unit.TOPIC.trim().toLowerCase())) errors.push("INTERCHANGEABILITY_TEST_FAILED");
     if (evidence.observedCopy !== unit.COPY_EXACT) errors.push("COPY_NOT_EXACT");
     if (evidence.textAlignment !== "CENTER") errors.push("TEXT_NOT_CENTERED");
     const safe = formatContract(unit.FORMAT).safe;

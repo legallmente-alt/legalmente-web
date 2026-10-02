@@ -1,3 +1,4 @@
+import { causalFixture } from "./test-fixtures";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { validateVisualArgumentBatch, validateVisualArgumentPlan, visualFunctionChannelFit, type VisualArgumentPlan } from "./index";
@@ -15,6 +16,7 @@ const plan = (
   sceneStrategy: VisualArgumentPlan["sceneStrategy"] = "REAL_SITUATION",
   subjectMode: VisualArgumentPlan["subjectMode"] = "LEGAL_OBJECT",
 ): VisualArgumentPlan => ({
+  causalScene: causalFixture(suffix, subjectMode),
   contentId, legalBindingId: `CLAIM-${suffix}`, audience: "LegalMente general", realQuestion: `question-${suffix}`,
   conflict: `conflict-${suffix}`, consequence: `consequence-${suffix}`, learningGoal: `learning-${suffix}`,
   visualFunction, sceneStrategy, imageArgument: `A visible relation that makes ${suffix} understandable before reading the copy.`,
@@ -46,17 +48,17 @@ test("rejects a learning goal copied verbatim into imageArgument", () => {
   assert.match(validateVisualArgumentPlan(candidate).join("\n"), /translate the learning goal/i);
 });
 
-test("rejects a ten-piece batch with too little functional or scene diversity", () => {
+test("reports low functional diversity without forcing an unsuitable scene", () => {
   const plans = Array.from({ length: 10 }, (_, i) => plan(`LM-${i}`, i % 2 ? "EXPLAIN" : "SEPARATE", String(i), i % 2 ? "REAL_SITUATION" : "PROCESS"));
   const result = validateVisualArgumentBatch(plans, { expectedSize: 10 });
-  assert.equal(result.ok, false); assert.match(result.errors.join("\n"), /only 2 visual functions; at least 5/i); assert.match(result.errors.join("\n"), /only 2 scene strategies; at least 5/i);
+  assert.equal(result.ok, true); assert.match(result.warnings.join("\n"), /only 2 visual functions; at least 5/i); assert.match(result.warnings.join("\n"), /only 2 scene strategies/i);
 });
 
 test("rejects metaphor as the default grammar and repeated motifs", () => {
   const plans = Array.from({ length: 4 }, (_, i) => plan(`LM-${i}`, ["EXPLAIN", "SEPARATE", "COMPARE", "REVEAL"][i] as VisualArgumentPlan["visualFunction"], String(i), "METAPHOR"));
   plans[1].motifKeys = plans[0].motifKeys;
   const result = validateVisualArgumentBatch(plans, { expectedSize: 4, minimumDistinctSceneStrategies: 1 });
-  assert.equal(result.ok, false); assert.match(result.errors.join("\n"), /metaphor is overused/i); assert.match(result.errors.join("\n"), /repeats a motif key/i);
+  assert.equal(result.ok, false); assert.match(result.warnings.join("\n"), /metaphor is overused/i); assert.match(result.errors.join("\n"), /repeats a motif key/i);
 });
 
 test("requires an explicit motif key for every metaphor", () => {
@@ -67,7 +69,7 @@ test("requires an explicit motif key for every metaphor", () => {
 test("keeps LinkedIn LegalMente operational instead of allegorical", () => {
   const plans = Array.from({ length: 4 }, (_, i) => ({ ...plan(`LI-${i}`, "EXPLAIN", String(i), i < 2 ? "METAPHOR" : "PROCESS"), channel: "linkedin-legalmente" as const }));
   const result = validateVisualArgumentBatch(plans, { expectedSize: 4, minimumDistinctFunctions: 1, minimumDistinctSceneStrategies: 1, maximumMetaphorShare: 1 });
-  assert.equal(result.ok, false); assert.match(result.errors.join("\n"), /at least 75% operational scenes/i);
+  assert.equal(result.ok, true); assert.match(result.warnings.join("\n"), /75% operational scenes/i);
 });
 
 test("channel profiles guide without forbidding compatible choices", () => {

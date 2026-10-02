@@ -64,3 +64,17 @@ Para lotes de LegalMente General:
 - si el QA detecta personas de relleno, ancla jurídica débil o modo de sujeto incoherente, la pieza se regenera o se corrige antes de continuar.
 
 Esta regla complementa, no sustituye, memoria temática, causalidad visual, safe area, exactitud del copy y revisión humana.
+
+## PR #62: causal scene contract
+
+Each `visualArguments[]` now requires `causalScene` (see the exported `CausalScene` type): exact concept, legal relation and scene; visible mechanism; comprehension without copy; necessary physical elements with legal functions and observable actions; directed physical relations; anchor element IDs; three distinct counterfactual concepts with reasons; accountable semantic preflight review. Missing data blocks generation. Do not fill these with generic defaults to migrate older jobs.
+
+The runtime compares concept/learning/relation/scene against the selected piece before compiling. `createVisualDirection` carries subject mode, signature, legal anchors and causal scene. Art follows the visible relation in the executable prompt. The prepared unit preserves `VISUAL_ARGUMENT` and `REPRESENTATION_FINGERPRINT` for later QA.
+
+Real-image QA needs observed relation, observed legal anchors, comprehension without text and three counterfactual comparisons in the existing artifact-bound evidence. These are observations of the actual pixels, not copied prompt intentions. All strong causal scores must be at least 4/5; failed causal gates produce `REGENERATE`, never filler. This numerical implementation threshold is a review aid, not a model-computed semantic score. No automatic retry can repair an idea without redesign.
+
+General mode comes from `policy.mode`, not the free-text audience. Six subject modes is a diversity target; the 40% human-centered limit permits `policy.humanNeedJustification` only for an explicit conceptual need. LinkedIn/carousel continuity is preserved. Historic numerical heuristics for functions, strategies and metaphor share are warnings; they cannot force an unsuitable scene.
+
+Pass the verified visual argument as the fourth argument to `buildLearningMemoryItem` to retain the physical fingerprint in existing history. Old history without it is reported as incomplete. This graph-based comparison excludes style, cast labels, camera and free-form scene signature, but is not a synonym-proof semantic detector. Compare the nearest actual images and persist observed descriptions privately with the canonical memory. No private master export belongs in this public repository.
+
+The CLI still prepares/inspects/reviews; it does not call ChatGPT's generator automatically. Use the compiled prompt through an authorized provider and inspect the first real image before continuing. `READY_FOR_HUMAN_VISUAL_REVIEW` is never legal/editorial approval, publication, merge or deployment.

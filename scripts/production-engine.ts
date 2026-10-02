@@ -60,7 +60,7 @@ async function main() {
     const measured = inspectPngBytes(await readFile(asset), asset);
     const result = evaluateQa({ ...unit, COMPOSED_ASSET: asset, HASH: measured.sha256 }, qa);
     // Actual bytes override claims supplied by the QA receipt.
-    const errors = artifactErrors(measured, unit);
+    const errors = [...(result.QA_RESULTS?.technicalErrors ?? []), ...artifactErrors(measured, unit)];
     if (qa.evidence?.width !== measured.width || qa.evidence?.height !== measured.height) errors.push("QA dimensions do not match measured bytes.");
     if (errors.length) result.STATE = "REWORK_REQUIRED";
     await save(output, { ...result, technicalErrors: errors, publicationAuthorized: false });

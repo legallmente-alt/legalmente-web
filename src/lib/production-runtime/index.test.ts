@@ -1,3 +1,4 @@
+import { causalFixture } from "../visual-argument/test-fixtures";
 import { exactCopy } from "./contract";
 import { importMasterMemory } from "./memory";
 import assert from "node:assert/strict";
@@ -68,13 +69,14 @@ const unit: VisualProductionUnit = {
 };
 
 const visualArgument: VisualArgumentPlan = {
+  causalScene: { ...causalFixture(piece.topic, "PROCESS_MECHANISM"), legalRelation: piece.legalRelation, scene: piece.scenario },
   contentId: piece.id,
   legalBindingId: "CLAIM-1",
   audience: "LegalMente general",
   realQuestion: "¿Qué protege la imparcialidad?",
   conflict: "Una decisión parece neutral aunque el proceso no lo sea.",
   consequence: "La persona puede confiar en una decisión producida sin garantías.",
-  learningGoal: "Distinguir apariencia institucional de garantía procesal.",
+  learningGoal: piece.centralIdea,
   visualFunction: "SEPARATE",
   sceneStrategy: "PROCESS",
   imageArgument: "Dos recorridos idénticos se separan cuando uno pierde un control verificable.",
@@ -205,4 +207,33 @@ it("cannot bypass the current memory", async () => {
   const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fake.adapter, ...context, memoryReview: { ...context.memoryReview, digest: "stale" } });
   assert.equal(result.status, "MEMORY_BLOCKED");
   assert.equal(fake.getCalls(), 0);
+});
+
+it("blocks changed learning, relation, topic or scene before the provider", async () => {
+  for (const field of ["concept", "legalRelation", "scene"] as const) {
+    const fake = fakeAdapter(true);
+    const result = await executeVisualBatch({ pieces: [piece], units: [unit], visualArguments: [{ ...visualArgument, causalScene: { ...visualArgument.causalScene, [field]: "different" } }], policy, adapter: fake.adapter, ...context });
+    assert.equal(result.status, "BINDING_BLOCKED"); assert.equal(fake.getCalls(), 0);
+  }
+  assert.equal(prepareVisualBatch({ pieces: [piece], units: [unit], visualArguments: [{ ...visualArgument, learningGoal: "different" }], policy, adapter: fakeAdapter(true).adapter, ...context }).status, "BINDING_BLOCKED");
+});
+it("preserves causal plan and fingerprint for rendered QA and memory", () => {
+  const result = prepareVisualBatch({ pieces: [piece], units: [unit], visualArguments: [visualArgument], policy, adapter: fakeAdapter(true).adapter, ...context });
+  assert.deepEqual(result.units[0].VISUAL_ARGUMENT, visualArgument);
+  assert.ok(result.units[0].REPRESENTATION_FINGERPRINT);
+  assert.ok(result.units[0].GENERATION_PROMPT.indexOf("Relación jurídica:") < result.units[0].GENERATION_PROMPT.indexOf("Técnica principal:"));
+});
+it("fails closed for a plan with the wrong content ID instead of throwing", () => {
+  const result = prepareVisualBatch({ pieces: [piece], units: [unit], visualArguments: [{ ...visualArgument, contentId: "other" }], policy, adapter: fakeAdapter(true).adapter, ...context });
+  assert.equal(result.status, "BINDING_BLOCKED");
+});
+it("stops the batch after the first failed rendered review", async () => {
+  const { createEmptyQa } = await import("../visual-factory");
+  const other = { ...piece, id: "LM-RUNTIME-002", topic: "otra garantia", centralIdea: "Otra respuesta.", angle: "otro ángulo", legalRelation: "otro límite", artisticStyle: "grabado", visualMetaphor: "mecanismo", scenario: "archivo", material: "tinta", lighting: "difusa", humanPresence: "none", framing: "frontal", composition: "eje", brandObject: "funda" };
+  const otherUnit = { ...unit, CONTENT_ID: other.id, TOPIC: other.topic, COPY_EXACT: exactCopy(other), ART_DIRECTION: other.artisticStyle, VISUAL_METAPHOR: other.visualMetaphor, SCENE: other.scenario, BRAND_OBJECT: other.brandObject };
+  const otherArgument = { ...visualArgument, contentId: other.id, learningGoal: other.centralIdea, sceneSignature: "otro mecanismo", imageArgument: "otra relación", causalScene: { ...causalFixture(other.topic, "PROCESS_MECHANISM"), legalRelation: other.legalRelation, scene: other.scenario } };
+  const fake = fakeAdapter(true);
+  const result = await executeVisualBatch({ pieces: [piece, other], units: [unit, otherUnit], visualArguments: [visualArgument, otherArgument], policy: { ...policy, expectedSize: 2 }, adapter: fake.adapter, ...context, memoryReview: { ...context.memoryReview, comparedTopics: [piece.topic, other.topic] }, reviewArtifact: async () => createEmptyQa() });
+  assert.equal(result.status, "QA_BLOCKED", result.errors.join());
+  assert.equal(fake.getCalls(), 1);
 });

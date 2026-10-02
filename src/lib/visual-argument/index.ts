@@ -1,3 +1,5 @@
+import { validateCausalScene, representationFingerprint, type CausalScene } from "./causality";
+export { validateCausalScene, representationFingerprint, type CausalScene } from "./causality";
 export const VISUAL_FUNCTIONS = [
   "EXPLAIN", "SEPARATE", "COMPARE", "REVEAL", "WARN", "TENSION",
   "HUMANIZE", "SHOW_PROCESS", "SHOW_CONSEQUENCE", "MATERIALIZE_ABSTRACTION",
@@ -59,6 +61,7 @@ const LINKEDIN_OPERATIONAL_STRATEGIES: readonly SceneStrategy[] = [
 ];
 
 export type VisualArgumentPlan = {
+  causalScene: CausalScene;
   contentId: string;
   legalBindingId: string;
   channel?: VisualArgumentChannel;
@@ -113,7 +116,7 @@ export function visualFunctionChannelFit(
 }
 
 export function validateVisualArgumentPlan(plan: VisualArgumentPlan): string[] {
-  const errors: string[] = [];
+  const errors: string[] = validateCausalScene(plan.causalScene, plan.subjectMode);
   for (const [field, value] of Object.entries({
     contentId: plan.contentId,
     legalBindingId: plan.legalBindingId,
@@ -153,32 +156,38 @@ export function validateVisualArgumentBatch(
     minimumDistinctSubjectModes?: number;
     maximumMetaphorShare?: number;
     maximumGeneralHumanCenteredShare?: number;
+    mode?: string;
+    carousel?: boolean;
+    humanNeedJustification?: string;
   } = {},
 ): VisualArgumentBatchResult {
   const errors: string[] = [];
   const warnings: string[] = [];
   const expectedSize = options.expectedSize ?? plans.length;
-  const minimumDistinctFunctions = options.minimumDistinctFunctions ?? (expectedSize >= 10 ? 5 : Math.min(3, expectedSize));
-  const minimumDistinctSceneStrategies = options.minimumDistinctSceneStrategies ?? (expectedSize >= 10 ? 5 : Math.min(3, expectedSize));
+  const continuity = options.carousel || options.mode?.startsWith("LINKEDIN_");
+  const minimumDistinctFunctions = options.minimumDistinctFunctions ?? (continuity ? 1 : expectedSize >= 10 ? 5 : Math.min(3, expectedSize));
+  const minimumDistinctSceneStrategies = options.minimumDistinctSceneStrategies ?? (continuity ? 1 : expectedSize >= 10 ? 5 : Math.min(3, expectedSize));
   const maximumMetaphorShare = options.maximumMetaphorShare ?? 0.3;
-  const minimumDistinctSubjectModes = options.minimumDistinctSubjectModes ?? (expectedSize >= 10 ? 6 : Math.min(3, expectedSize));
+  const minimumDistinctSubjectModes = options.minimumDistinctSubjectModes ?? (options.mode && options.mode !== "LEGALMENTE_GENERAL" ? 1 : expectedSize >= 10 ? 6 : 1);
   const maximumGeneralHumanCenteredShare = options.maximumGeneralHumanCenteredShare ?? 0.4;
 
   if (plans.length !== expectedSize) errors.push(`Expected ${expectedSize} visual argument plans; received ${plans.length}.`);
   if (new Set(plans.map((plan) => plan.contentId)).size !== plans.length) errors.push("Visual argument plans require unique contentId values.");
   plans.forEach((plan) => errors.push(...validateVisualArgumentPlan(plan)));
 
+  const physicalFingerprints = plans.filter(p => validateCausalScene(p.causalScene, p.subjectMode).length === 0).map(p => representationFingerprint(p.causalScene));
+  if (new Set(physicalFingerprints).size !== physicalFingerprints.length) errors.push("REPRESENTATIONAL_NOVELTY: the same physical scene is reused across concepts; changing cast or style is insufficient.");
   const fingerprints = plans.map(visualArgumentFingerprint);
   if (new Set(fingerprints).size !== fingerprints.length) errors.push("Batch repeats the same visual argument; changing style later would not create substantive visual variety.");
 
   const distinctFunctions = new Set(plans.map((plan) => plan.visualFunction)).size;
-  if (plans.length > 1 && distinctFunctions < minimumDistinctFunctions) errors.push(`Batch uses only ${distinctFunctions} visual functions; at least ${minimumDistinctFunctions} are required for this preflight.`);
+  if (plans.length > 1 && distinctFunctions < minimumDistinctFunctions) warnings.push(`Batch uses only ${distinctFunctions} visual functions; at least ${minimumDistinctFunctions} are the exploratory target; concept fit takes precedence.`);
 
   const distinctSceneStrategies = new Set(plans.map((plan) => plan.sceneStrategy)).size;
-  if (plans.length > 1 && distinctSceneStrategies < minimumDistinctSceneStrategies) errors.push(`Batch uses only ${distinctSceneStrategies} scene strategies; at least ${minimumDistinctSceneStrategies} are required.`);
+  if (plans.length > 1 && distinctSceneStrategies < minimumDistinctSceneStrategies) warnings.push(`Batch uses only ${distinctSceneStrategies} scene strategies; exploratory target ${minimumDistinctSceneStrategies}, never force variety.`);
 
   const distinctSubjectModes = new Set(plans.map((plan) => plan.subjectMode)).size;
-  if (plans.length > 1 && distinctSubjectModes < minimumDistinctSubjectModes) errors.push(`Batch uses only ${distinctSubjectModes} subject modes; at least ${minimumDistinctSubjectModes} are required so people, objects, evidence, architecture and process do not collapse into the same visual grammar.`);
+  if (plans.length > 1 && distinctSubjectModes < minimumDistinctSubjectModes) warnings.push(`Batch uses only ${distinctSubjectModes} subject modes; at least ${minimumDistinctSubjectModes} are the diversity target. Do not force an unsuitable subject: record the conceptual need and inspect the real batch.`);
 
   const sceneSignatures = plans.map((plan) => normalize(plan.sceneSignature)).filter(Boolean);
   if (new Set(sceneSignatures).size !== sceneSignatures.length) errors.push("Batch repeats the same scene signature; changing people, gender or style does not make the scene new.");
@@ -189,16 +198,16 @@ export function validateVisualArgumentBatch(
     .filter(Boolean);
   if (new Set(castPatterns).size !== castPatterns.length) errors.push("Batch repeats a human cast pattern; do not recycle the same pair, trio or meeting arrangement.");
 
-  const generalPlans = plans.filter((plan) => normalize(plan.audience).includes("legalmente general"));
+  const generalPlans = plans.filter((plan) => options.mode === "LEGALMENTE_GENERAL" || (!options.mode && normalize(plan.audience).includes("legalmente general")));
   if (generalPlans.length >= 5) {
     const humanCenteredCount = generalPlans.filter((plan) => HUMAN_CENTERED_SUBJECT_MODES.includes(plan.subjectMode)).length;
-    if (humanCenteredCount / generalPlans.length > maximumGeneralHumanCenteredShare) {
+    if (humanCenteredCount / generalPlans.length > maximumGeneralHumanCenteredShare && !nonEmpty(options.humanNeedJustification)) {
       errors.push(`LegalMente general overuses people-centered scenes (${humanCenteredCount}/${generalPlans.length}); maximum share is ${maximumGeneralHumanCenteredShare} unless the batch explicitly overrides it.`);
     }
   }
 
   const metaphorCount = plans.filter((plan) => plan.sceneStrategy === "METAPHOR").length;
-  if (plans.length >= 4 && metaphorCount / plans.length > maximumMetaphorShare) errors.push(`Metaphor is overused (${metaphorCount}/${plans.length}); it is one scene strategy, not the default visual grammar.`);
+  if (plans.length >= 4 && metaphorCount / plans.length > maximumMetaphorShare) warnings.push(`Metaphor is overused (${metaphorCount}/${plans.length}); it is one scene strategy, not the default visual grammar.`);
 
   const motifs = plans.flatMap((plan) => plan.motifKeys ?? []).map(normalize).filter(Boolean);
   if (new Set(motifs).size !== motifs.length) errors.push("Batch repeats a motif key; use cooldown/history before reusing keys, doors, shadows, cracks, scales or equivalent devices.");
@@ -206,7 +215,7 @@ export function validateVisualArgumentBatch(
   const linkedInPlans = plans.filter((plan) => plan.channel === "linkedin-legalmente");
   if (linkedInPlans.length >= 4) {
     const operationalCount = linkedInPlans.filter((plan) => LINKEDIN_OPERATIONAL_STRATEGIES.includes(plan.sceneStrategy)).length;
-    if (operationalCount / linkedInPlans.length < 0.75) errors.push("LinkedIn LegalMente requires at least 75% operational scenes: assets, processes, governance, evidence, consequences or real decisions.");
+    if (operationalCount / linkedInPlans.length < 0.75) warnings.push("Legacy heuristic suggests 75% operational scenes for LinkedIn LegalMente; inspect conceptual fit: assets, processes, governance, evidence, consequences or real decisions.");
   }
 
   plans.forEach((plan) => {

@@ -1,3 +1,4 @@
+import { causalFixture } from "../visual-argument/test-fixtures";
 import assert from "node:assert/strict";
 import { mkdtemp, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -119,11 +120,11 @@ test("blocks visual direction before canonical legal readiness", () => {
     consequence: "una actuación sin facultad puede ser impugnable",
   });
   const candidate = createTopicCandidate(signal, classification, { signalId: signal.id, classificationId: classification.id, question: "¿Qué facultad existe?" });
-  assert.throws(() => createVisualDirection(candidate, { legalBindingId: "CLAIM-1", visualFunction: "SEPARATE", sceneStrategy: "ARCHITECTURE", imageArgument: "A visible threshold separates two scopes.", dominantVisualLogic: "architectural editorial photography", expectedPerception: "The viewer sees a scope boundary." }), /legal readiness/i);
+  assert.throws(() => createVisualDirection(candidate, { causalScene: causalFixture("representación", "ARCHITECTURE_SPACE"), subjectMode: "ARCHITECTURE_SPACE", sceneSignature: "umbral-de-facultades", legalAnchorKeys: ["poder-limitado"], legalBindingId: "CLAIM-1", visualFunction: "SEPARATE", sceneStrategy: "ARCHITECTURE", imageArgument: "A visible threshold separates two scopes.", dominantVisualLogic: "architectural editorial photography", expectedPerception: "The viewer sees a scope boundary." }), /legal readiness/i);
   candidate.legalReadiness = "CANONICAL_BOUND_PENDING";
   candidate.sourceReadiness = "READY";
   candidate.editorialStatus = "READY_FOR_CANONICAL_REVIEW";
-  const direction = createVisualDirection(candidate, { legalBindingId: "CLAIM-1", visualFunction: "SEPARATE", sceneStrategy: "ARCHITECTURE", imageArgument: "A visible threshold separates two scopes.", dominantVisualLogic: "architectural editorial photography", expectedPerception: "The viewer sees a scope boundary." });
+  const direction = createVisualDirection(candidate, { causalScene: causalFixture("representación", "ARCHITECTURE_SPACE"), subjectMode: "ARCHITECTURE_SPACE", sceneSignature: "umbral-de-facultades", legalAnchorKeys: ["poder-limitado"], legalBindingId: "CLAIM-1", visualFunction: "SEPARATE", sceneStrategy: "ARCHITECTURE", imageArgument: "A visible threshold separates two scopes.", dominantVisualLogic: "architectural editorial photography", expectedPerception: "The viewer sees a scope boundary." });
   assert.equal(direction.contentId, candidate.id);
   assert.equal(direction.legalBindingId, "CLAIM-1");
 });

@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import type { SceneStrategy, VisualArgumentChannel, VisualArgumentPlan, VisualFunction } from "../visual-argument";
+import { validateVisualArgumentPlan, type VisualArgumentPlan } from "../visual-argument";
 
 export const SIGNAL_CHANNELS = ["HUMAN", "MARKET", "EDITORIAL", "INTERNAL"] as const;
 export type SignalChannel = (typeof SIGNAL_CHANNELS)[number];
@@ -132,16 +132,11 @@ export type RouteRadarInput = {
   evidenceClass: RadarSignal["evidenceClass"];
 };
 
-export type VisualDirectionInput = {
-  legalBindingId: string;
-  channel?: VisualArgumentChannel;
-  visualFunction: VisualFunction;
-  sceneStrategy: SceneStrategy;
-  imageArgument: string;
-  dominantVisualLogic: string;
-  expectedPerception: string;
-  motifKeys?: readonly string[];
-};
+export type VisualDirectionInput = Pick<VisualArgumentPlan,
+  "legalBindingId" | "channel" | "visualFunction" | "sceneStrategy" | "imageArgument" |
+  "dominantVisualLogic" | "expectedPerception" | "motifKeys" | "subjectMode" |
+  "sceneSignature" | "legalAnchorKeys" | "castPattern" | "causalScene"
+>;
 
 const isOneOf = <T extends readonly string[]>(values: T, value: string): value is T[number] => values.includes(value);
 const nonEmpty = (value: string | undefined): value is string => typeof value === "string" && value.trim().length > 0;
@@ -253,7 +248,8 @@ export function routeToRadar(signal: Signal, candidate: TopicCandidate, input: R
 export function createVisualDirection(candidate: TopicCandidate, input: VisualDirectionInput): VisualArgumentPlan {
   if (candidate.legalReadiness !== "CANONICAL_BOUND_PENDING" || candidate.sourceReadiness !== "READY" || candidate.editorialStatus !== "READY_FOR_CANONICAL_REVIEW") throw new Error("Visual direction requires legal readiness and source-ready canonical binding; research pending is not legal clearance.");
   if (!nonEmpty(input.legalBindingId)) throw new Error("Visual direction requires a canonical legal binding.");
-  return {
+  const plan: VisualArgumentPlan = {
+    ...input,
     contentId: candidate.id,
     legalBindingId: input.legalBindingId,
     channel: input.channel,
@@ -269,6 +265,9 @@ export function createVisualDirection(candidate: TopicCandidate, input: VisualDi
     expectedPerception: input.expectedPerception,
     motifKeys: input.motifKeys,
   };
+  const errors = validateVisualArgumentPlan(plan);
+  if (errors.length) throw new Error(errors.join(" "));
+  return plan;
 }
 
 export function storeDigest(store: IntelligenceFrontStore): string {

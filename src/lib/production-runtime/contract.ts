@@ -3,7 +3,7 @@ import type { ProductionPiece } from "../production-policy";
 import type { VisualProductionUnit } from "../visual-factory";
 import type { VisualArgumentPlan } from "../visual-argument";
 
-export const CONTRACT_VERSION = "2026-10-01";
+export const CONTRACT_VERSION = "2026-10-02";
 export type Box = { x: number; y: number; width: number; height: number };
 export type ArtifactEvidence = {
   asset: string;
@@ -46,6 +46,8 @@ export function compileProductionPrompt(piece: ProductionPiece, unit: VisualProd
   return [
     `LegalMente. Contrato ${CONTRACT_VERSION}. Una pieza individual ${spec.width}×${spec.height}, ${piece.format}.`,
     `Materia: ${piece.matterLabel}. Concepto: ${piece.topicLabel}. Aprendizaje: ${piece.centralIdea}.`,
+    `Relación jurídica: ${argument.causalScene.legalRelation}. Mecanismo físico: ${argument.causalScene.visibleMechanism}. Comprensión sin texto: ${argument.causalScene.comprehensionWithoutText}.`,
+    `Elementos necesarios: ${argument.causalScene.elements.map(e => `${e.physicalIdentity}: ${e.observableAction}; función jurídica: ${e.legalFunction}`).join(". ")}.`,
     `Tensión: ${argument.conflict}. Consecuencia: ${argument.consequence}.`,
     `Escena única: ${piece.scenario}. Acción y relación visible: ${argument.imageArgument}.`,
     `Modo de sujeto: ${argument.subjectMode}. Firma de escena: ${argument.sceneSignature}. Anclas jurídicas visibles: ${argument.legalAnchorKeys.join(", ")}.`,
