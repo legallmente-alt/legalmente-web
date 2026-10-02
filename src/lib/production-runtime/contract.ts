@@ -3,7 +3,7 @@ import type { ProductionPiece } from "../production-policy";
 import type { VisualProductionUnit } from "../visual-factory";
 import type { VisualArgumentPlan } from "../visual-argument";
 
-export const CONTRACT_VERSION = "2026-09-26";
+export const CONTRACT_VERSION = "2026-10-02";
 export type Box = { x: number; y: number; width: number; height: number };
 export type ArtifactEvidence = {
   asset: string;
@@ -46,17 +46,21 @@ export function compileProductionPrompt(piece: ProductionPiece, unit: VisualProd
   return [
     `LegalMente. Contrato ${CONTRACT_VERSION}. Una pieza individual ${spec.width}×${spec.height}, ${piece.format}.`,
     `Materia: ${piece.matterLabel}. Concepto: ${piece.topicLabel}. Aprendizaje: ${piece.centralIdea}.`,
+    `Relación jurídica: ${argument.causalScene.legalRelation}. Mecanismo físico: ${argument.causalScene.visibleMechanism}. Comprensión sin texto: ${argument.causalScene.comprehensionWithoutText}.`,
+    `Elementos necesarios: ${argument.causalScene.elements.map(e => `${e.physicalIdentity}: ${e.observableAction}; función jurídica: ${e.legalFunction}`).join(". ")}.`,
     `Tensión: ${argument.conflict}. Consecuencia: ${argument.consequence}.`,
     `Escena única: ${piece.scenario}. Acción y relación visible: ${argument.imageArgument}.`,
+    `Modo de sujeto: ${argument.subjectMode}. Firma de escena: ${argument.sceneSignature}. Anclas jurídicas visibles: ${argument.legalAnchorKeys.join(", ")}.`,
+    argument.castPattern ? `Patrón humano autorizado para esta pieza: ${argument.castPattern}. No repetirlo en otra pieza del lote.` : "Las personas no son el sujeto principal de esta pieza: no convertirla en retrato, reunión o pareja genérica.",
     `Técnica principal: ${piece.artisticStyle}. Material: ${piece.material}. Luz: ${piece.lighting}.`,
     `Composición: ${piece.composition}. Cámara: ${piece.framing}. Presencia humana: ${piece.humanPresence}.`,
-    `La imagen debe explicar el tema. Rechazar arte intercambiable, publicidad, producto de lujo y decoración sin función jurídica.`,
+    `La imagen debe explicar el tema. Rechazar arte intercambiable, publicidad, producto de lujo y decoración sin función jurídica. Evitar la fórmula repetida de hombre+mujer, persona aislada o trío alrededor de una mesa salvo necesidad jurídica explícita.`,
     `LegalMente pertenece físicamente a ${piece.brandObject}, con textura, perspectiva y luz coherentes.`,
     `Todo elemento esencial —texto, foco causal y marca— dentro de x=${spec.safe.x}–${spec.safe.x + spec.safe.width}, y=${spec.safe.y}–${spec.safe.y + spec.safe.height}.`,
     piece.format === "9:16" ? "El recorte central 4:5 elimina 285px arriba y abajo. Esas franjas sólo contienen fondo prescindible. Dejar márgenes adicionales holgados." : "Componer 4:5 nativo, con márgenes holgados.",
     "Texto horizontal estrictamente centrado sobre x=540; equilibrio axial. Materia secundaria, concepto dominante, respuesta completa; reflexión sólo si cabe sin encoger.",
     hasText ? `Texto literal, sin añadir ni alterar palabras:\n${exactCopy(piece)}` : "Generar arte base sin texto editorial. Reservar zona natural lisa para la composición posterior; no colocar texto inventado.",
-    "No collage, grid, mazo, balanza genérica, sepia, oscuridad ilegible, logo flotante, referencias normativas, recuadros o bandas comerciales.",
+    "No collage, grid, mazo, balanza genérica, sepia, oscuridad ilegible, logo flotante, referencias normativas, recuadros o bandas comerciales. No usar personas como relleno visual; el objeto, evidencia, documento, proceso o espacio jurídico debe cargar significado cuando el modo de sujeto no sea humano.",
     `Exclusiones específicas: ${unit.NEGATIVE_PROMPT}`,
   ].join("\n\n");
 }

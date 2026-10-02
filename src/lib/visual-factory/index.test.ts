@@ -1,3 +1,4 @@
+import { causalFixture } from "../visual-argument/test-fixtures";
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -13,6 +14,9 @@ import {
 } from "./index";
 
 const unit: VisualProductionUnit = {
+  VISUAL_ARGUMENT: {
+    contentId: "LM-PC-B1-01", legalBindingId: "claim", audience: "general", realQuestion: "pregunta", conflict: "conflicto", consequence: "consecuencia", learningGoal: "aprendizaje", visualFunction: "REVEAL", sceneStrategy: "DOCUMENT_EVIDENCE", imageArgument: "el sello roto revela acceso", dominantVisualLogic: "revelación material", expectedPerception: "apertura altera el cierre", subjectMode: "LEGAL_OBJECT", sceneSignature: "recipiente sellado", legalAnchorKeys: ["sello"], causalScene: causalFixture(),
+  },
   CONTENT_ID: "LM-PC-B1-01",
   SERIES: "Bloque 1",
   TOPIC: "10 cosas que tu jefe no puede exigirte",
@@ -56,7 +60,7 @@ const adapter: ImageGeneratorAdapter = {
 function passingQa(): VisualQaResult {
   const qa = createEmptyQa();
   qa.mobilePreviews = [335, 270];
-  qa.evidence = { asset: "verified.png", sha256: "a".repeat(64), width: 1080, height: 1920, reviewedBy: "test reviewer", reviewedAt: "2026-09-26T12:00:00Z", observedCopy: unit.COPY_EXACT, textAlignment: "CENTER", essentialBoxes: {
+  qa.evidence = { asset: "verified.png", sha256: "a".repeat(64), width: 1080, height: 1920, observedRelation: "sello une tapa y recipiente", observedLegalAnchors: ["sello íntegro"], comprehensionWithoutText: "la apertura altera el sello", counterfactuals: causalFixture().counterfactuals, reviewedBy: "test reviewer", reviewedAt: "2026-09-26T12:00:00Z", observedCopy: unit.COPY_EXACT, textAlignment: "CENTER", essentialBoxes: {
     matter: { x: 140, y: 380, width: 800, height: 50 }, concept: { x: 140, y: 460, width: 800, height: 100 }, answer: { x: 140, y: 620, width: 800, height: 180 }, brand: { x: 380, y: 1350, width: 300, height: 60 }, focus: { x: 200, y: 850, width: 600, height: 450 },
   } };
   qa.scores = Object.fromEntries(Object.keys(qa.scores).map((key) => [key, 4]));
@@ -131,5 +135,28 @@ it("rejects QA copied from another image or text outside central crop", () => {
   assert.equal(evaluateQa(unit, qa).STATE, "REWORK_REQUIRED");
   qa = passingQa();
   qa.evidence!.essentialBoxes.answer.x = 100;
+  assert.equal(evaluateQa(unit, qa).STATE, "REWORK_REQUIRED");
+});
+
+for (const score of ["SCENE_SPECIFICITY", "LEGAL_ANCHOR_CLARITY", "CONCEPT_VISUAL_CAUSALITY", "CONCEPT_FIT", "REPRESENTATIONAL_NOVELTY"]) {
+  it(`regenerates when ${score} is weak even with beautiful art and passing booleans`, () => {
+    const qa = passingQa(); qa.scores[score] = 0;
+    const result = evaluateQa(unit, qa);
+    assert.equal(result.STATE, "REWORK_REQUIRED");
+    assert.equal(result.QA_RESULTS?.nextAction, "REGENERATE");
+  });
+}
+for (const gate of ["NO_COMMERCIAL_ART", "NO_GENERIC_CAST_FILLER", "INTERCHANGEABILITY_TEST", "NO_DECORATIVE_DOCUMENTS", "SUBJECT_MODE_COHERENT"]) {
+  it(`regenerates for failed ${gate}`, () => {
+    const qa = passingQa(); qa.hardGates[gate] = "FAIL";
+    assert.equal(evaluateQa(unit, qa).QA_RESULTS?.nextAction, "REGENERATE");
+  });
+}
+it("cannot approve an image with no observed causal evidence", () => {
+  const qa = passingQa(); qa.evidence!.observedRelation = "";
+  assert.equal(evaluateQa(unit, qa).STATE, "REWORK_REQUIRED");
+});
+it("cannot approve an interchangeable real image through all-PASS score fields", () => {
+  const qa = passingQa(); qa.evidence!.counterfactuals = qa.evidence!.counterfactuals.map(c => ({ ...c, reusableByChangingTextOnly: true }));
   assert.equal(evaluateQa(unit, qa).STATE, "REWORK_REQUIRED");
 });

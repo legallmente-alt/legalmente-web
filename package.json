@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "NODE_ENV=production next build",
-    "build:public": "NODE_ENV=production npm run build && node scripts/prepare-public-pages.mjs",
+    "build:public": "NODE_ENV=production npm run build && node scripts/prepare-public-pages.mjs && node scripts/verify-public-artifact.mjs",
     "verify:public-artifact": "node scripts/verify-public-artifact.mjs",
     "start": "next start",
     "lint": "next lint",

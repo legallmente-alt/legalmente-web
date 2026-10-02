@@ -48,3 +48,33 @@ Los archivos de salida son exclusivos: usar una ruta nueva para cada recibo. `.p
 `npm run lint`
 
 Mantener la decisión de release en `release-readiness`: las pruebas simuladas no sustituyen un lote real revisado ni los requisitos de lanzamiento existentes.
+
+
+## Diversidad representacional — 1 oct 2026
+
+La diversidad visual no se acredita cambiando solamente estilo, género de los personajes o paleta.
+
+Para lotes de LegalMente General:
+- usar al menos seis modos de sujeto en una tanda de diez cuando el contenido lo permita;
+- las escenas centradas en personas no deben superar 40% por defecto;
+- toda escena humana declara un `castPattern` y no puede repetir la misma pareja, trío, junta o disposición;
+- toda pieza declara `sceneSignature` y al menos un `legalAnchorKey`;
+- objetos, documentos, evidencia, arquitectura, procesos, mecanismos y entornos deben cargar significado jurídico real cuando la escena no sea humana;
+- una pareja hombre+mujer, una persona sola o tres personas alrededor de una mesa no son variedad por sí mismas;
+- si el QA detecta personas de relleno, ancla jurídica débil o modo de sujeto incoherente, la pieza se regenera o se corrige antes de continuar.
+
+Esta regla complementa, no sustituye, memoria temática, causalidad visual, safe area, exactitud del copy y revisión humana.
+
+## PR #62: causal scene contract
+
+Each `visualArguments[]` now requires `causalScene` (see the exported `CausalScene` type): exact concept, legal relation and scene; visible mechanism; comprehension without copy; necessary physical elements with legal functions and observable actions; directed physical relations; anchor element IDs; three distinct counterfactual concepts with reasons; accountable semantic preflight review. Missing data blocks generation. Do not fill these with generic defaults to migrate older jobs.
+
+The runtime compares concept/learning/relation/scene against the selected piece before compiling. `createVisualDirection` carries subject mode, signature, legal anchors and causal scene. Art follows the visible relation in the executable prompt. The prepared unit preserves `VISUAL_ARGUMENT` and `REPRESENTATION_FINGERPRINT` for later QA.
+
+Real-image QA needs observed relation, observed legal anchors, comprehension without text and three counterfactual comparisons in the existing artifact-bound evidence. These are observations of the actual pixels, not copied prompt intentions. All strong causal scores must be at least 4/5; failed causal gates produce `REGENERATE`, never filler. This numerical implementation threshold is a review aid, not a model-computed semantic score. No automatic retry can repair an idea without redesign.
+
+General mode comes from `policy.mode`, not the free-text audience. Six subject modes is a diversity target; the 40% human-centered limit permits `policy.humanNeedJustification` only for an explicit conceptual need. LinkedIn/carousel continuity is preserved. Historic numerical heuristics for functions, strategies and metaphor share are warnings; they cannot force an unsuitable scene.
+
+Pass the verified visual argument as the fourth argument to `buildLearningMemoryItem` to retain the physical fingerprint in existing history. Old history without it is reported as incomplete. This graph-based comparison excludes style, cast labels, camera and free-form scene signature, but is not a synonym-proof semantic detector. Compare the nearest actual images and persist observed descriptions privately with the canonical memory. No private master export belongs in this public repository.
+
+The CLI still prepares/inspects/reviews; it does not call ChatGPT's generator automatically. Use the compiled prompt through an authorized provider and inspect the first real image before continuing. `READY_FOR_HUMAN_VISUAL_REVIEW` is never legal/editorial approval, publication, merge or deployment.

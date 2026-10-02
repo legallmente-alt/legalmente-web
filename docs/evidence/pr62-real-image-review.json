@@ -1,0 +1,60 @@
+[
+  {
+    "asset": "public/internal-assets/legalmente/wave-01a/LM-PC-031_visual.png",
+    "sha256": "87a58ab030280ad5e40652da3835d0f02871a259812cac324181ec177434f3e4",
+    "width": 1440,
+    "height": 2560,
+    "status": "REGENERATE_REQUIRED",
+    "role": "Historical base art reviewed as diagnostic; not output of corrected engine",
+    "observed": "tools, apron and blank label; no visible subordination or salary",
+    "scores": {
+      "SCENE_SPECIFICITY": 1,
+      "LEGAL_ANCHOR_CLARITY": 0,
+      "CONCEPT_VISUAL_CAUSALITY": 0,
+      "REPRESENTATIONAL_NOVELTY": 1
+    },
+    "hardGates": {
+      "CONCEPT_SPECIFIC_SCENE": "FAIL",
+      "NO_COMMERCIAL_ART": "FAIL",
+      "LEGAL_ANCHOR_VISIBLE": "FAIL",
+      "INTERCHANGEABILITY_TEST": "FAIL"
+    },
+    "substitutionTest": [
+      "custody",
+      "sale",
+      "service contract"
+    ],
+    "brandObserved": false,
+    "finalCopyObserved": false,
+    "publicationAuthorized": false
+  },
+  {
+    "asset": "public/internal-assets/legalmente/wave-01a/LM-PC-065_visual.png",
+    "sha256": "c7ee7186e35df7f34458968ceaad075c50d427fdfe180585fc680a5da962ca80",
+    "width": 1440,
+    "height": 2560,
+    "status": "REGENERATE_REQUIRED",
+    "role": "Historical base art reviewed as diagnostic; not output of corrected engine",
+    "observed": "material samples, folder and blank plate; no visible corporate relation",
+    "scores": {
+      "SCENE_SPECIFICITY": 1,
+      "LEGAL_ANCHOR_CLARITY": 0,
+      "CONCEPT_VISUAL_CAUSALITY": 0,
+      "REPRESENTATIONAL_NOVELTY": 1
+    },
+    "hardGates": {
+      "CONCEPT_SPECIFIC_SCENE": "FAIL",
+      "NO_COMMERCIAL_ART": "FAIL",
+      "LEGAL_ANCHOR_VISIBLE": "FAIL",
+      "INTERCHANGEABILITY_TEST": "FAIL"
+    },
+    "substitutionTest": [
+      "custody",
+      "sale",
+      "service contract"
+    ],
+    "brandObserved": false,
+    "finalCopyObserved": false,
+    "publicationAuthorized": false
+  }
+]

@@ -63,12 +63,14 @@ export type ProductionPiece = {
 };
 
 export type ProductionHistoryItem = ProductionPiece & {
+  representationFingerprint?: string;
   state: CurationState;
   recordedAt: string;
 };
 
 export type ProductionBatchPolicy = {
   mode: ProductionMode;
+  humanNeedJustification?: string;
   expectedSize?: number;
   requestedDomainId?: string;
   now?: string;

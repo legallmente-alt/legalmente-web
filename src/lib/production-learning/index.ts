@@ -1,3 +1,4 @@
+import { representationFingerprint, validateVisualArgumentPlan, type VisualArgumentPlan } from "../visual-argument";
 import type { CurationState, ProductionHistoryItem, ProductionPiece } from "@/lib/production-policy";
 
 export type PerformanceObservation = {
@@ -109,6 +110,7 @@ export function buildLearningMemoryItem(
   piece: ProductionPiece,
   curation: HumanCurationSignal,
   observation?: PerformanceObservation,
+  visualArgument?: VisualArgumentPlan,
 ): LearningMemoryItem {
   if (piece.id !== curation.contentId) {
     throw new Error(`CURATION_ID_MISMATCH: ${piece.id} != ${curation.contentId}`);
@@ -117,8 +119,10 @@ export function buildLearningMemoryItem(
     throw new Error(`PERFORMANCE_ID_MISMATCH: ${piece.id} != ${observation.contentId}`);
   }
 
+  if (visualArgument && (visualArgument.contentId !== piece.id || validateVisualArgumentPlan(visualArgument).length)) throw new Error("INVALID_VISUAL_MEMORY_BINDING");
   return {
     ...piece,
+    representationFingerprint: visualArgument ? representationFingerprint(visualArgument.causalScene) : undefined,
     state: curation.state,
     recordedAt: curation.recordedAt,
     performance: observation ? derivePerformanceSignal(observation) : undefined,
