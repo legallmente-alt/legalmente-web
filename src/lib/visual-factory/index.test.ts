@@ -160,3 +160,9 @@ it("cannot approve an interchangeable real image through all-PASS score fields",
   const qa = passingQa(); qa.evidence!.counterfactuals = qa.evidence!.counterfactuals.map(c => ({ ...c, reusableByChangingTextOnly: true }));
   assert.equal(evaluateQa(unit, qa).STATE, "REWORK_REQUIRED");
 });
+
+it("rejects an invented logo despite otherwise passing QA", () => {
+  const qa = passingQa();
+  qa.hardGates.NO_INVENTED_LOGO = "FAIL";
+  assert.equal(evaluateQa(unit, qa).STATE, "REWORK_REQUIRED");
+});
