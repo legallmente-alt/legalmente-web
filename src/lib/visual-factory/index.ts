@@ -60,6 +60,10 @@ export type VisualProductionUnit = {
   PROVENANCE: {
     promptVersion: string;
     referenceAssets: readonly string[];
+    /** Approved logo asset; it must also occur in referenceAssets. */
+    officialLogoReference?: string;
+    /** Human who verified the reference, not a substitute for real-image QA. */
+    officialLogoApprovedBy?: string;
     copySource: string;
     createdBy: string;
   };
@@ -119,7 +123,7 @@ const requiredScoreKeys = [
 
 const hardGateKeys = [
   "NO_SEPIA_GENERIC", "NO_MURKY_DARK", "NO_CANVA_SCHOOL_SLIDE", "NO_COLLAGE", "NO_GRID",
-  "NO_GENERIC_LEGAL_CLICHE", "NO_FLOATING_LOGO", "NO_REPEATED_COMPOSITION", "NO_TINY_BODY_COPY",
+  "NO_GENERIC_LEGAL_CLICHE", "NO_FLOATING_LOGO", "NO_INVENTED_LOGO", "NO_REPEATED_COMPOSITION", "NO_TINY_BODY_COPY",
   "NO_TEXT_OVER_KEY_OBJECT", "NO_FAKE_LEGAL_TEXT", "NO_UNREADABLE_MOBILE_COPY",
   "MATTER_CONCEPT_ANSWER_VISIBLE", "CENTERED_TEXT", "CENTRAL_4X5_SAFE",
   "NO_NORMATIVE_CITATIONS", "NO_COMMERCIAL_ART", "CONCEPT_SPECIFIC_SCENE",
