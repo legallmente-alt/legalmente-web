@@ -65,7 +65,7 @@ const unit: VisualProductionUnit = {
   GENERATION_DATE: "2026-09-11",
   REGEN_COUNT: 0,
   STATE: "DRAFT",
-  PROVENANCE: { promptVersion: "v1", referenceAssets: [], copySource: "claim-packet", createdBy: "system" },
+  PROVENANCE: { promptVersion: "v1", referenceAssets: ["test://official-logo.svg"], officialLogoReference: "test://official-logo.svg", officialLogoApprovedBy: "fixture reviewer", copySource: "claim-packet", createdBy: "system" },
 };
 
 const visualArgument: VisualArgumentPlan = {
@@ -236,4 +236,19 @@ it("stops the batch after the first failed rendered review", async () => {
   const result = await executeVisualBatch({ pieces: [piece, other], units: [unit, otherUnit], visualArguments: [visualArgument, otherArgument], policy: { ...policy, expectedSize: 2 }, adapter: fake.adapter, ...context, memoryReview: { ...context.memoryReview, comparedTopics: [piece.topic, other.topic] }, reviewArtifact: async () => createEmptyQa() });
   assert.equal(result.status, "QA_BLOCKED", result.errors.join());
   assert.equal(fake.getCalls(), 1);
+});
+
+it("blocks missing official logo reference before calling a provider", async () => {
+  const fake = fakeAdapter(true);
+  const noLogo = { ...unit, PROVENANCE: { ...unit.PROVENANCE, referenceAssets: [], officialLogoReference: undefined, officialLogoApprovedBy: undefined } };
+  const result = await executeVisualBatch({ pieces: [piece], units: [noLogo], visualArguments: [visualArgument], policy, adapter: fake.adapter, ...context });
+  assert.equal(result.status, "BINDING_BLOCKED");
+  assert.match(result.errors.join(" "), /OFFICIAL_LOGO_REFERENCE_REQUIRED/);
+  assert.equal(fake.getCalls(), 0);
+});
+it("compiles only three text levels in original editorial copy", () => {
+  const copy = exactCopy(piece);
+  assert.equal(copy.includes(piece.topicLabel), false);
+  assert.equal(copy.startsWith(piece.matterLabel), true);
+  assert.equal(copy.endsWith(piece.centralIdea), true);
 });
