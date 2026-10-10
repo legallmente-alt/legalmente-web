@@ -46,7 +46,17 @@ const findings = [];
 for (const file of files) {
   const content = await readFile(file, "utf8");
   for (const pattern of guardedPatterns) {
-    if (pattern.re.test(content)) findings.push({ file, id: pattern.id, note: pattern.note });
+    if (!pattern.re.test(content)) continue;
+    // Explicitly reviewed local-only catalog search. Any new input, network,
+    // storage or form use fails closed and requires another privacy review.
+    const localOnlyCatalogSearch =
+      pattern.id === "INPUT" &&
+      file.replaceAll("\\", "/") === "src/components/catalog/CatalogExplorer.tsx" &&
+      (content.match(/<input\b/gi) || []).length === 1 &&
+      /<input\b[^>]*\btype\s*=\s*["']search["']/i.test(content) &&
+      /filterCatalog\(entries, query, kind, worldId\)/.test(content) &&
+      !/\b(fetch|XMLHttpRequest|sendBeacon|localStorage|sessionStorage)\b|<form\b|<textarea\b/i.test(content);
+    if (!localOnlyCatalogSearch) findings.push({ file, id: pattern.id, note: pattern.note });
   }
 }
 
