@@ -19,7 +19,7 @@ export function formatContract(format: string) {
 }
 
 export function exactCopy(piece: ProductionPiece): string {
-  return [piece.matterLabel, piece.topicLabel, piece.centralIdea, piece.reflection].filter(Boolean).join("\n\n");
+  return [piece.matterLabel, piece.centralIdea, piece.reflection].filter(Boolean).join("\n\n");
 }
 
 export function containsNormativeCitation(text: string): boolean {
@@ -31,7 +31,10 @@ export function validateEditorialContract(piece: ProductionPiece, unit: VisualPr
   let spec;
   try { spec = formatContract(piece.format); } catch (error) { return [String(error)]; }
   if (unit.WIDTH !== spec.width || unit.HEIGHT !== spec.height) errors.push(`${piece.id}: requested dimensions must be ${spec.width}x${spec.height}.`);
-  if (unit.COPY_EXACT !== exactCopy(piece)) errors.push(`${piece.id}: COPY_EXACT must bind matter, concept, answer and optional reflection exactly.`);
+  if (unit.COPY_EXACT !== exactCopy(piece)) errors.push(`${piece.id}: COPY_EXACT must bind matter, legal explanation and optional reflection (three visible levels).`);
+  const logo = unit.PROVENANCE?.officialLogoReference;
+  if (!logo?.trim() || !unit.PROVENANCE.referenceAssets.includes(logo)) errors.push(`${piece.id}: OFFICIAL_LOGO_REFERENCE_REQUIRED: attach a verified official logo file; never invent an emblem.`);
+  if (!unit.PROVENANCE?.officialLogoApprovedBy?.trim()) errors.push(`${piece.id}: OFFICIAL_LOGO_APPROVAL_REQUIRED: identify the person who verified the brand reference.`);
   if (containsNormativeCitation(unit.COPY_EXACT)) errors.push(`${piece.id}: normative citations belong outside the image.`);
   if (!piece.sourceIds?.length || !unit.SOURCE_REFS.length || !unit.CLAIM_REFS.length || !unit.TERRITORY.trim()) errors.push(`${piece.id}: source, claim and scope bindings are required for every channel.`);
   if (piece.sourceIds?.some((source) => !unit.SOURCE_REFS.includes(source))) errors.push(`${piece.id}: sources changed between candidate and visual unit.`);
@@ -55,12 +58,12 @@ export function compileProductionPrompt(piece: ProductionPiece, unit: VisualProd
     `Técnica principal: ${piece.artisticStyle}. Material: ${piece.material}. Luz: ${piece.lighting}.`,
     `Composición: ${piece.composition}. Cámara: ${piece.framing}. Presencia humana: ${piece.humanPresence}.`,
     `La imagen debe explicar el tema. Rechazar arte intercambiable, publicidad, producto de lujo y decoración sin función jurídica. Evitar la fórmula repetida de hombre+mujer, persona aislada o trío alrededor de una mesa salvo necesidad jurídica explícita.`,
-    `LegalMente pertenece físicamente a ${piece.brandObject}, con textura, perspectiva y luz coherentes.`,
+    `Usar exclusivamente el LOGOTIPO OFICIAL de LegalMente adjunto como referencia (${unit.PROVENANCE.officialLogoReference ?? "SIN_REFERENCIA"}); conservar su forma y proporciones. Integrarlo físicamente una sola vez en ${piece.brandObject} con textura, perspectiva y luz coherentes. Prohibido inventar una balanza, libro o isotipo sustituto.`,
     `Todo elemento esencial —texto, foco causal y marca— dentro de x=${spec.safe.x}–${spec.safe.x + spec.safe.width}, y=${spec.safe.y}–${spec.safe.y + spec.safe.height}.`,
     piece.format === "9:16" ? "El recorte central 4:5 elimina 285px arriba y abajo. Esas franjas sólo contienen fondo prescindible. Dejar márgenes adicionales holgados." : "Componer 4:5 nativo, con márgenes holgados.",
-    "Texto horizontal estrictamente centrado sobre x=540; equilibrio axial. Materia secundaria, concepto dominante, respuesta completa; reflexión sólo si cabe sin encoger.",
+    "Texto horizontal estrictamente centrado sobre x=540; equilibrio axial. Materia como TITULAR principal de mayor escala; frase técnica jurídica como segundo nivel y reflexión mínima como tercero opcional. No añadir topicLabel como cuarto rótulo.",
     hasText ? `Texto literal, sin añadir ni alterar palabras:\n${exactCopy(piece)}` : "Generar arte base sin texto editorial. Reservar zona natural lisa para la composición posterior; no colocar texto inventado.",
-    "No collage, grid, mazo, balanza genérica, sepia, oscuridad ilegible, logo flotante, referencias normativas, recuadros o bandas comerciales. No usar personas como relleno visual; el objeto, evidencia, documento, proceso o espacio jurídico debe cargar significado cuando el modo de sujeto no sea humano.",
+    "No portada, anuncio de servicios, retrato corporativo, mockup, publicidad de despacho, collage, grid, mazo, balanza genérica, sepia, oscuridad ilegible, logo flotante o inventado, referencias normativas, recuadros ni bandas comerciales. No usar personas como relleno visual; el objeto, evidencia, documento, proceso o espacio jurídico debe cargar significado cuando el modo de sujeto no sea humano.",
     `Exclusiones específicas: ${unit.NEGATIVE_PROMPT}`,
   ].join("\n\n");
 }
