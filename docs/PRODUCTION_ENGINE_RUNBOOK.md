@@ -78,3 +78,13 @@ General mode comes from `policy.mode`, not the free-text audience. Six subject m
 Pass the verified visual argument as the fourth argument to `buildLearningMemoryItem` to retain the physical fingerprint in existing history. Old history without it is reported as incomplete. This graph-based comparison excludes style, cast labels, camera and free-form scene signature, but is not a synonym-proof semantic detector. Compare the nearest actual images and persist observed descriptions privately with the canonical memory. No private master export belongs in this public repository.
 
 The CLI still prepares/inspects/reviews; it does not call ChatGPT's generator automatically. Use the compiled prompt through an authorized provider and inspect the first real image before continuing. `READY_FOR_HUMAN_VISUAL_REVIEW` is never legal/editorial approval, publication, merge or deployment.
+
+## Corrección por rechazo visual — 10 oct 2026 (rama en revisión)
+
+Se detectó que una imagen promocional horizontal podía salir de una generación directa de ChatGPT sin pasar por `prepareVisualBatch`. Esa llamada **no forma parte del motor** y nunca debe declararse prueba del motor. No hay conexión automática autenticada web → ChatGPT ImageGen en este repositorio.
+
+Para originales, el copy visible ahora tiene tres niveles: **materia como titular mayor**, **frase técnica que explique una institución** y **reflexión mínima** opcional. `topicLabel` identifica el concepto en la ficha pero no se imprime como cuarto encabezado. La cita de autor pertenece al motor de frases separado, con frase como titular.
+
+Antes de emitir `GENERATION_READY`, `PROVENANCE.officialLogoReference` debe identificar el archivo real aprobado y aparecer en `PROVENANCE.referenceAssets`; `officialLogoApprovedBy` identifica quién comprobó su procedencia. Si falta, el motor bloquea la generación. Ningún agente debe recrear el logo con balanzas, libros u otro emblema genérico. La revisión real exige además `NO_INVENTED_LOGO=PASS`, `NO_FLOATING_LOGO=PASS`, `NO_COMMERCIAL_ART=PASS` y todos los gates causales; la autoría del registro por sí sola no acredita la inspección de la imagen.
+
+No declarar `QA_CONFORME`, `APROBADA` ni `PUBLICADA` con un prompt o prueba simulada. Los errores de formato real 9:16, recorte 4:5, texto y marca deben comprobarse sobre los bytes y píxeles del archivo final. Esta corrección no autoriza merge, publicación ni despliegue.
