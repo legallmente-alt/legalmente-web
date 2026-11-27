@@ -9,7 +9,7 @@ Implementación sobre `chore/convergence-pr43-58` (PR #59), pendiente de integra
 
    `npm run production:engine -- memory .production/master.md .production/memory.json <fecha-ISO-de-lectura>`
 
-   Se indexan JSON con o sin delimitadores, títulos, alias y tablas posteriores. La revisión semántica debe leer también las adendas completas: el buscador literal no prueba novedad.
+   Se indexan JSON con o sin delimitadores, títulos, alias, tablas posteriores, encabezados numerados/con ID y campos Tema/Concepto. Los ejemplos dentro de bloques de prompts no se indexan como nuevos registros. La revisión semántica debe leer también las adendas completas: el buscador literal no prueba novedad. Consultar `EDITORIAL_CONTINUITY_2026_10_20.md` para la reconciliación de LinkedIn, General y Frases.
 3. Consultar un tema: `npm run production:engine -- check-topic .production/memory.json <tema>`. Resolver coincidencias y rechazos en el registro canónico. No reactivar un tema cambiándole el título.
 4. Preparar un job JSON con `candidates`, `pieces`, `units`, `visualArguments`, `policy`, `memoryReview` y `provider`. Los tipos están en `intelligence-front`, `production-policy`, `visual-factory` y `production-runtime`. La revisión identifica digest, revisor, hora, temas comparados y decisión CLEAR o REWORK. Se bloquean lecturas de más de 24 horas. No inventar una aprobación para pasar el control.
 

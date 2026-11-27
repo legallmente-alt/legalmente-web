@@ -1,0 +1,74 @@
+{
+  "sourceId": "1ISuXre1tVsSPNC3b6Tzjz-eAiOmv1FFr",
+  "sourceDigest": "4956267394faacd083f9a84542631e722d8e0c43c7254653dba5862ce434fc30",
+  "fetchedAt": "2026-10-21T00:29:38.982Z",
+  "oldTerms": 1244,
+  "newTerms": 1268,
+  "termsAreNotUniqueTopics": true,
+  "regressionChecks": [
+    {
+      "topic": "Injusticia testimonial",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "topic": "Integridad contextual de la privacidad",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "topic": "Debido proceso tecnológico",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "topic": "Acuerdos insuficientemente teorizados",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "topic": "Reforma estructural",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "topic": "Regulación mediante arquitectura informática",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "topic": "Fianza de urbanización",
+      "before": 1,
+      "after": 1
+    },
+    {
+      "topic": "PDU y POEL",
+      "before": 1,
+      "after": 1
+    },
+    {
+      "topic": "Deslinde catastral",
+      "before": 1,
+      "after": 1
+    }
+  ],
+  "newCandidate": [],
+  "state": "REQUIRES_SEMANTIC_REVIEW",
+  "removed": [
+    "HISTORIAL_PREVIO_CONSERVADO"
+  ],
+  "validation": {
+    "runtime_tests_passed": 27,
+    "typecheck": "PASS",
+    "private_master_committed": false,
+    "main_merged": false,
+    "deployed": false,
+    "Psyche_modified": false,
+    "external_agents_executed": false
+  },
+  "coverage": {
+    "linkedin_reconciled_topics": 27,
+    "professional_increment_sources": 23,
+    "existing_modern_contemporary_pieces_preserved": 15
+  }
+}

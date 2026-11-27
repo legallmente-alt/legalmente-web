@@ -31,12 +31,26 @@ export function importMasterMemory(markdown: string, fetchedAt: string, sourceId
       for (const alias of entry.aliases ?? []) if (typeof alias === "string") terms.add(alias);
     }
   }
-  let topicColumns: number[] = [];
+  // Recent canonical addenda also use numbered/ID headings and explicit fields.
+  // Preserve them as search evidence; never infer approval from their presence.
+  let fenced = false;
   for (const line of markdown.split(/\r?\n/)) {
+    if (/^\s*```/.test(line)) { fenced = !fenced; continue; }
+    if (fenced) continue;
+    const heading = line.match(/^#{2,6}\s+(?:LM-[A-Z0-9-]+\s+[—–|]\s+|\d+[.)]\s+)(.+)$/i);
+    const field = line.match(/^\s*(?:[-*]\s+)?(?:Concepto(?: normalizado)?|Tema)\s*:\s*(.+)$/i);
+    if (heading) terms.add(heading[1].trim());
+    if (field) terms.add(field[1].trim());
+  }
+  let topicColumns: number[] = [];
+  fenced = false;
+  for (const line of markdown.split(/\r?\n/)) {
+    if (/^\s*```/.test(line)) { fenced = !fenced; topicColumns = []; continue; }
+    if (fenced) continue;
     if (!line.trim().startsWith("|")) { topicColumns = []; continue; }
     const cells = line.split("|").slice(1, -1).map((cell) => cell.trim());
     const header = cells.flatMap((cell, index) => /(?:tema|concepto|materia.*normalizad)/i.test(cell) && !/fuente|estado|imagen/i.test(cell) ? [index] : []);
-    if (header.length && cells.some((cell) => /^(ID|Canal|Materia|Tema|Concepto)/i.test(cell))) { topicColumns = header; continue; }
+    if (header.length && cells.some((cell) => /^(?:ID|Pieza|Canal|Materia|Tema|Concepto(?: normalizado)?)$/i.test(cell))) { topicColumns = header; continue; }
     if (cells.every((cell) => /^[-:\s]*$/.test(cell))) continue;
     for (const column of topicColumns) if (cells[column]) terms.add(cells[column]);
   }
@@ -59,7 +73,7 @@ export function memoryReviewErrors(snapshot: MemorySnapshot, review: { digest: s
   const errors: string[] = [];
   const current = Date.parse(now), fetched = Date.parse(snapshot.fetchedAt), reviewed = Date.parse(review.reviewedAt);
   if (![current, fetched, reviewed].every(Number.isFinite) || fetched > current || current - fetched > 86400000) errors.push("Memory snapshot is missing, future-dated or older than 24 hours; fetch Drive again.");
-  if (review.digest !== snapshot.digest || !review.reviewedBy.trim() || reviewed < fetched || reviewed > current) errors.push("Semantic memory review must bind the current complete document digest and follow its fetch.");
+  if (!Number.isFinite(reviewed) || review.digest !== snapshot.digest || !review.reviewedBy.trim() || reviewed < fetched || reviewed > current) errors.push("Semantic memory review must bind the current complete document digest and follow its fetch.");
   if (review.decision !== "CLEAR") errors.push("Semantic review requires rework.");
   for (const topic of topics) {
     if (!review.comparedTopics.some((item) => normalizeTopic(item) === normalizeTopic(topic))) errors.push(`${topic}: missing semantic novelty review.`);
