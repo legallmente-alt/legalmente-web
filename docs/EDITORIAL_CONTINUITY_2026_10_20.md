@@ -42,3 +42,23 @@ La introducción inmobiliaria figura publicada según declaración del fundador,
 `legallmente-alt/legalmente-web` permite escritura. `contratoslegales848-design/Psyche-creation` es público y la conexión sólo permite lectura: no se modificó ni se fingió sincronización. Los contratos externos para Gemini/Manus/Grok no demuestran que esos agentes hayan leído esta actualización.
 
 Ver el recibo de importación en `docs/evidence/continuity-2026-10-20.json`. Sus cifras son términos de búsqueda, no temas únicos. Pruebas del runtime y TypeScript ejecutadas; la prueba real de datos demuestra recuperación de los seis conceptos antes omitidos. No acredita calidad visual de una nueva tanda.
+
+
+## Adenda de continuidad — 27 noviembre 2026
+
+- La referencia de una página externa de citas sirve exclusivamente para entender la amplitud de materias y autores jurídicos; no es un banco de citas autorizado ni una plantilla visual. Buscar autores y obras de distintas jurisdicciones, cotejar el pasaje original, traducción, derechos y alcance. No copiar publicaciones ni presentar frases motivacionales genéricas como doctrina.
+- El carril de frases debe explorar civil, familiar, mercantil, penal, procesal, laboral, administrativo, constitucional, fiscal, internacional, ambiental, marítimo e inmobiliario, entre otras materias. Una cita requiere fuente y revisión antirrepetición; la lista de materias no constituye aprobación de contenido.
+- La entrada canónica vigente se resuelve desde el índice privado de Drive (motor único vigente del 15 de noviembre); la referencia histórica de raíz citada arriba es duplicada y no debe utilizarse como autoridad. La documentación vigente y el registro único prevalecen sobre presets obsoletos.
+- El banco artístico de 50 artistas ya existe en esta rama como referencia en revisión; no afirmar que el runtime lo consume ni que se han aprobado imágenes. Integrar rasgos visuales autónomos sin copiar obras, conservar el logo oficial, variar medio, composición y luz conforme a las decisiones editoriales vigentes. El canal Frases utiliza cita y autor; LinkedIn utiliza su contrato propio de contenido ejecutivo y 4:5.
+
+### Temas de investigación de LinkedIn (no publicaciones ni historial de piezas)
+
+Recuperar primero el inventario corporativo privado y los expedientes existentes. Estos rótulos son una guía genérica de recuperación, no un segundo registro de memoria ni una afirmación de experiencia profesional. Cotejar antes de preparar un candidato y mantener los datos identificables, casos, cifras y documentos internos fuera del repositorio público.
+
+- Beneficiario controlador; KYC, due diligence y PLD; suministro internacional; cumplimiento aduanero; clasificación de colaboradores.
+- Servicios intragrupo; préstamos mercantiles intercompañía; arrendamiento puro y comodato de equipo; consignación mercantil; arrendamiento comercial.
+- Intermediación inmobiliaria; escrow y liberación de fondos; ZOFEMAT, concesiones marítimas y copropiedad; poderes y facultades; cesión de derechos.
+- Reembolsos y cupones; NDA y tecnología/IA; contratos de adhesión de proveedores; asuntos transfronterizos; monitoreo normativo; gestión jurídica; IA en práctica jurídica.
+- Recuperar también los dossiers de INAH, derecho marítimo (embarcaciones, marinas, permisos y concesiones) y responsabilidad médica/eje penal, y el acervo de desarrollo inmobiliario. Diferenciar preguntas relacionadas antes de repetir.
+
+Estado: temas para investigación y cotejo, no aprobados; fuente jurídica oficial vigente, territorio, hipótesis, riesgo empresarial, evidencia, tratamiento de datos y revisión individual antes de producción. No activar cobros ni publicación; no se acredita integración automática por esta adenda. La revisión de la memoria rechaza ahora fechas de revisión inválidas (NaN), con prueba de regresión añadida.
