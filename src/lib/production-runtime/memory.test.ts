@@ -70,3 +70,9 @@ it("indexes the live document's unfenced JSON and later addenda together", () =>
   assert.equal(memoryMatches(memory, "apostilla").length, 1);
   assert.match(memory.addenda, /Adenda/);
 });
+
+it("blocks invalid semantic review timestamps instead of treating NaN comparisons as clear", () => {
+  const memory = importMasterMemory(markdown, "2026-09-26T12:00:00Z");
+  const review = { digest: memory.digest, reviewedBy: "editor", reviewedAt: "not-a-date", comparedTopics: ["nuevo tema"], decision: "CLEAR" as const };
+  assert.ok(memoryReviewErrors(memory, review, ["nuevo tema"], "2026-09-26T13:00:00Z").some((error) => error.includes("Semantic memory review")));
+});
