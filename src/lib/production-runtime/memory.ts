@@ -73,7 +73,7 @@ export function memoryReviewErrors(snapshot: MemorySnapshot, review: { digest: s
   const errors: string[] = [];
   const current = Date.parse(now), fetched = Date.parse(snapshot.fetchedAt), reviewed = Date.parse(review.reviewedAt);
   if (![current, fetched, reviewed].every(Number.isFinite) || fetched > current || current - fetched > 86400000) errors.push("Memory snapshot is missing, future-dated or older than 24 hours; fetch Drive again.");
-  if (review.digest !== snapshot.digest || !review.reviewedBy.trim() || reviewed < fetched || reviewed > current) errors.push("Semantic memory review must bind the current complete document digest and follow its fetch.");
+  if (!Number.isFinite(reviewed) || review.digest !== snapshot.digest || !review.reviewedBy.trim() || reviewed < fetched || reviewed > current) errors.push("Semantic memory review must bind the current complete document digest and follow its fetch.");
   if (review.decision !== "CLEAR") errors.push("Semantic review requires rework.");
   for (const topic of topics) {
     if (!review.comparedTopics.some((item) => normalizeTopic(item) === normalizeTopic(topic))) errors.push(`${topic}: missing semantic novelty review.`);
